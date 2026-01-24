@@ -7,6 +7,9 @@ _book/
 site_libs/
 **/*.quarto_ipynb
 
+# Keep docs/ for GitHub Pages (don't ignore it)
+# docs/
+
 # Julia
 Manifest.toml
 *.jl.cov

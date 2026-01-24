@@ -42,7 +42,20 @@ Opens in browser at `http://localhost:4916/` (port may vary).
 quarto render
 ```
 
-Output is generated in `_site/` folder.
+Output is generated in `docs/` folder.
+
+## Deploy to GitHub Pages
+
+This book is deployed locally (no GitHub Actions). After rendering:
+
+```bash
+quarto render
+git add .
+git commit -m "Build book"
+git push
+```
+
+GitHub Pages is configured to serve from the `docs/` folder on the `main` branch.
 
 ## Generate PDF
 

@@ -1,0 +1,172 @@
+/*-- Two color scheme: dark grey titles + blue links --*/
+:root {
+  --dark-grey: #404040;
+  --link-blue: #1F51FF;
+}
+
+/*-- Sidebar title bold, centered with fancy box --*/
+.sidebar-title,
+#quarto-sidebar .sidebar-title {
+  color: var(--dark-grey) !important;
+  font-weight: bold !important;
+  font-size: 1.2rem !important;
+  text-align: center !important;
+  background: linear-gradient(135deg, #e8f4fc 0%, #f0e6ff 50%, #e6f7ff 100%) !important;
+  border: 2px solid var(--link-blue) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  margin: 10px 15px !important;
+  box-shadow: 0 4px 12px rgba(31, 81, 255, 0.15) !important;
+}
+
+.sidebar-title a,
+#quarto-sidebar .sidebar-title a {
+  color: var(--dark-grey) !important;
+  font-weight: bold !important;
+}
+
+/*-- PDF download icon blue --*/
+.quarto-book .sidebar-tools-main a[href$=".pdf"],
+.quarto-book .sidebar-tools-main a[href$=".pdf"] i,
+.quarto-book .sidebar-tools-main a[href$=".pdf"] svg,
+a.sidebar-tools-main-item[href$=".pdf"],
+a.sidebar-tools-main-item[href$=".pdf"] i,
+a.sidebar-tools-main-item[href$=".pdf"] svg,
+.sidebar-tools a[title*="PDF"],
+.sidebar-tools a[title*="PDF"] i,
+.sidebar-tools a[title*="PDF"] svg,
+.sidebar-tools a[title*="Download"],
+.sidebar-tools a[title*="Download"] i,
+.sidebar-tools a[title*="Download"] svg,
+.bi-file-earmark-pdf,
+.bi-file-pdf {
+  color: var(--link-blue) !important;
+  fill: var(--link-blue) !important;
+}
+
+.sidebar-tools-main {
+  margin-top: 0.5rem !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/*-- Make sidebar icons bigger and blue --*/
+.sidebar-tools-main a i,
+.sidebar-tools-main a svg,
+.sidebar-tools-main .bi {
+  font-size: 1.3rem !important;
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  color: var(--link-blue) !important;
+  fill: var(--link-blue) !important;
+}
+
+/*-- Sidebar items not bold --*/
+.sidebar-item .sidebar-item-text {
+  font-weight: 400 !important;
+}
+
+.sidebar-item.active .sidebar-item-text {
+  color: var(--link-blue) !important;
+  font-weight: 400 !important;
+}
+
+/*-- Part headers - not bold --*/
+.sidebar-item-section .sidebar-item-text {
+  color: var(--dark-grey) !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+}
+
+/*-- Headings dark grey, reduced size --*/
+h1, .h1 {
+  color: var(--dark-grey);
+  font-size: 1.75rem !important;
+}
+
+h2, .h2 {
+  color: var(--dark-grey);
+  font-size: 1.4rem !important;
+}
+
+h3, .h3 {
+  color: var(--dark-grey);
+  font-size: 1.15rem !important;
+}
+
+h4, .h4 {
+  color: var(--dark-grey);
+  font-size: 1rem !important;
+}
+
+/*-- Links blue --*/
+a {
+  color: var(--link-blue);
+}
+
+a:hover {
+  color: #0033cc;
+}
+
+/*-- Bottom page navigation links --*/
+.page-navigation a,
+.page-navigation .nav-page-text,
+.page-navigation .nav-page-next,
+.page-navigation .nav-page-previous {
+  color: var(--link-blue) !important;
+}
+
+/*-- Code --*/
+pre {
+  background-color: #f8f9fa !important;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+}
+
+/*-- TOC title - not bold --*/
+.toc-title {
+  color: var(--dark-grey);
+  font-weight: 400 !important;
+  text-transform: none !important;
+}
+
+/*-- Move sidebar icons centered below title --*/
+.sidebar-title-brand {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+.sidebar-title-brand .sidebar-tools-main {
+  margin-top: 0.5em !important;
+  margin-left: 0 !important;
+}
+
+.sidebar-tools-main {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin-top: 0.5em !important;
+}
+
+.sidebar-navigation .sidebar-tools {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/*-- Page margins on left and right like R4DS --*/
+body {
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+}
+
+#quarto-content {
+  max-width: 1600px;
+  margin: 0 auto;
+}
