@@ -4,6 +4,29 @@
   --link-blue: #1F51FF;
 }
 
+/*-- Sidebar scrollbar --*/
+#quarto-sidebar {
+  overflow-y: auto !important;
+  max-height: 100vh !important;
+}
+
+#quarto-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+#quarto-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#quarto-sidebar::-webkit-scrollbar-thumb {
+  background: var(--link-blue);
+  border-radius: 3px;
+}
+
+#quarto-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #1a44d9;
+}
+
 /*-- Sidebar title bold, centered with fancy box --*/
 .sidebar-title,
 #quarto-sidebar .sidebar-title {
