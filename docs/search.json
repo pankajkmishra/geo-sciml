@@ -254,27 +254,7 @@
     "href": "chapters/05-inverse-modeling.html",
     "title": "6  Inverse Modeling",
     "section": "",
-    "text": "6.0.1 Coordinate-based Networks\nThis section is currently being developed. :::",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/05-inverse-modeling.html#bayesian-inversion",
-    "href": "chapters/05-inverse-modeling.html#bayesian-inversion",
-    "title": "6  Inverse Modeling",
-    "section": "6.1 Bayesian Inversion",
-    "text": "6.1 Bayesian Inversion\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nBayesian formulation\nPrior distributions\nMCMC methods\nUncertainty quantification",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/05-inverse-modeling.html#gradient-based-inversion",
-    "href": "chapters/05-inverse-modeling.html#gradient-based-inversion",
-    "title": "6  Inverse Modeling",
-    "section": "6.2 Gradient-Based Inversion",
-    "text": "6.2 Gradient-Based Inversion\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nAutomatic differentiation\nAdjoint methods\nOptimization algorithms",
+    "text": "WarningUnder Construction\n\n\n\nThis chapter is currently being developed.",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
     ]

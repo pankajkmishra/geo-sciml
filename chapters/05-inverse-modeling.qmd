@@ -3,45 +3,6 @@ title: "Inverse Modeling"
 ---
 
 ::: {.callout-warning}
-## 🚧 Under Construction
+## Under Construction
 This chapter is currently being developed.
-:::
-This section is currently being developed.
-:::
-
-### Coordinate-based Networks
-
-::: {.callout-note}
-## Coming Soon
-- SIREN (Sinusoidal Representation Networks)
-- Fourier feature networks
-- Representing geophysical fields
-:::
-
-### Applications in Geoscience
-
-::: {.callout-note}
-## Coming Soon
-- Velocity model representation
-- Density field inversion
-- Multi-scale features
-:::
-
-## Bayesian Inversion
-
-::: {.callout-note}
-## Coming Soon
-- Bayesian formulation
-- Prior distributions
-- MCMC methods
-- Uncertainty quantification
-:::
-
-## Gradient-Based Inversion
-
-::: {.callout-note}
-## Coming Soon
-- Automatic differentiation
-- Adjoint methods
-- Optimization algorithms
 :::
