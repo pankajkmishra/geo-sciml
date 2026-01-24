@@ -100,10 +100,9 @@ ul.task-list li input[type="checkbox"] {
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Geoscientific Machine Learning</a> 
-        <div class="sidebar-tools-main tools-wide">
+        <div class="sidebar-tools-main">
     <a href="https://www.linkedin.com/in/pankajkmishra01/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
     <a href="https://github.com/pankajkmishra/geo-sciml" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../geo-sciml.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -172,16 +171,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction-to-surrogate-models" id="toc-introduction-to-surrogate-models" class="nav-link active" data-scroll-target="#introduction-to-surrogate-models"><span class="header-section-number">7.1</span> Introduction to Surrogate Models</a></li>
-  <li><a href="#neural-operators" id="toc-neural-operators" class="nav-link" data-scroll-target="#neural-operators"><span class="header-section-number">7.2</span> Neural Operators</a>
-  <ul class="collapse">
-  <li><a href="#fourier-neural-operators-fno" id="toc-fourier-neural-operators-fno" class="nav-link" data-scroll-target="#fourier-neural-operators-fno"><span class="header-section-number">7.2.1</span> Fourier Neural Operators (FNO)</a></li>
-  <li><a href="#deeponet" id="toc-deeponet" class="nav-link" data-scroll-target="#deeponet"><span class="header-section-number">7.2.2</span> DeepONet</a></li>
-  </ul></li>
-  <li><a href="#gaussian-processes" id="toc-gaussian-processes" class="nav-link" data-scroll-target="#gaussian-processes"><span class="header-section-number">7.3</span> Gaussian Processes</a></li>
-  <li><a href="#reduced-order-models" id="toc-reduced-order-models" class="nav-link" data-scroll-target="#reduced-order-models"><span class="header-section-number">7.4</span> Reduced-Order Models</a></li>
-  <li><a href="#uncertainty-quantification" id="toc-uncertainty-quantification" class="nav-link" data-scroll-target="#uncertainty-quantification"><span class="header-section-number">7.5</span> Uncertainty Quantification</a></li>
-  <li><a href="#multi-fidelity-modeling" id="toc-multi-fidelity-modeling" class="nav-link" data-scroll-target="#multi-fidelity-modeling"><span class="header-section-number">7.6</span> Multi-Fidelity Modeling</a></li>
+  <li><a href="#deeponet" id="toc-deeponet" class="nav-link active" data-scroll-target="#deeponet"><span class="header-section-number">7.0.1</span> DeepONet</a></li>
+  <li><a href="#gaussian-processes" id="toc-gaussian-processes" class="nav-link" data-scroll-target="#gaussian-processes"><span class="header-section-number">7.1</span> Gaussian Processes</a></li>
+  <li><a href="#reduced-order-models" id="toc-reduced-order-models" class="nav-link" data-scroll-target="#reduced-order-models"><span class="header-section-number">7.2</span> Reduced-Order Models</a></li>
+  <li><a href="#uncertainty-quantification" id="toc-uncertainty-quantification" class="nav-link" data-scroll-target="#uncertainty-quantification"><span class="header-section-number">7.3</span> Uncertainty Quantification</a></li>
+  <li><a href="#multi-fidelity-modeling" id="toc-multi-fidelity-modeling" class="nav-link" data-scroll-target="#multi-fidelity-modeling"><span class="header-section-number">7.4</span> Multi-Fidelity Modeling</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/pankajkmishra/geo-sciml/edit/main/chapters/06-ai-surrogates.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/pankajkmishra/geo-sciml/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -217,54 +211,11 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter is currently being developed. Check back soon for updates!</p>
+<p>This chapter is currently being developed.</p>
 </div>
 </div>
-<section id="introduction-to-surrogate-models" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="introduction-to-surrogate-models"><span class="header-section-number">7.1</span> Introduction to Surrogate Models</h2>
-<p>Surrogate models (also called emulators or metamodels) are approximations of expensive computational models that enable fast predictions and uncertainty quantification.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>When to use surrogates</li>
-<li>Types of surrogate models</li>
-<li>Trade-offs and limitations</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="neural-operators" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="neural-operators"><span class="header-section-number">7.2</span> Neural Operators</h2>
-<section id="fourier-neural-operators-fno" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="fourier-neural-operators-fno"><span class="header-section-number">7.2.1</span> Fourier Neural Operators (FNO)</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Spectral convolutions</li>
-<li>Learning solution operators</li>
-<li>Applications to PDEs</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="deeponet" class="level3" data-number="7.2.2">
-<h3 data-number="7.2.2" class="anchored" data-anchor-id="deeponet"><span class="header-section-number">7.2.2</span> DeepONet</h3>
+<section id="deeponet" class="level3" data-number="7.0.1">
+<h3 data-number="7.0.1" class="anchored" data-anchor-id="deeponet"><span class="header-section-number">7.0.1</span> DeepONet</h3>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -283,9 +234,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-</section>
-<section id="gaussian-processes" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="gaussian-processes"><span class="header-section-number">7.3</span> Gaussian Processes</h2>
+<section id="gaussian-processes" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="gaussian-processes"><span class="header-section-number">7.1</span> Gaussian Processes</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -304,8 +254,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="reduced-order-models" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="reduced-order-models"><span class="header-section-number">7.4</span> Reduced-Order Models</h2>
+<section id="reduced-order-models" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="reduced-order-models"><span class="header-section-number">7.2</span> Reduced-Order Models</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -324,8 +274,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="uncertainty-quantification" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="uncertainty-quantification"><span class="header-section-number">7.5</span> Uncertainty Quantification</h2>
+<section id="uncertainty-quantification" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="uncertainty-quantification"><span class="header-section-number">7.3</span> Uncertainty Quantification</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -344,8 +294,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="multi-fidelity-modeling" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="multi-fidelity-modeling"><span class="header-section-number">7.6</span> Multi-Fidelity Modeling</h2>
+<section id="multi-fidelity-modeling" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="multi-fidelity-modeling"><span class="header-section-number">7.4</span> Multi-Fidelity Modeling</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

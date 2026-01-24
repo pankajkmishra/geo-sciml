@@ -2,32 +2,10 @@
 title: "Inverse Modeling"
 ---
 
-## Introduction to Inverse Problems
-
-Inverse problems involve inferring model parameters from observed data. In geosciences, this includes determining subsurface properties from surface measurements.
-
-::: {.callout-note}
-## Coming Soon
-- Forward vs inverse problems
-- Well-posed and ill-posed problems
-- Regularization theory
-:::
-
-## Physics-Informed Neural Networks (PINNs)
-
-::: {.callout-note}
-## Coming Soon
-- Embedding physical laws in neural networks
-- Loss function design
-- Examples in geophysics
-:::
-
-## Implicit Neural Representations (INR)
-
-Implicit Neural Representations use neural networks to represent continuous functions, enabling compact and differentiable representations of complex fields.
-
 ::: {.callout-warning}
 ## 🚧 Under Construction
+This chapter is currently being developed.
+:::
 This section is currently being developed.
 :::
 

@@ -13,7 +13,6 @@ book:
   repo-url: "https://github.com/pankajkmishra/geo-sciml"
   repo-actions: [edit, issue]
   output-file: "geo-sciml"
-  downloads: ["pdf"]
   search: true
   sidebar:
     style: docked

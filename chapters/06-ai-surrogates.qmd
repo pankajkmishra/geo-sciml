@@ -4,29 +4,7 @@ title: "AI Surrogates"
 
 ::: {.callout-warning}
 ## 🚧 Under Construction
-This chapter is currently being developed. Check back soon for updates!
-:::
-
-## Introduction to Surrogate Models
-
-Surrogate models (also called emulators or metamodels) are approximations of expensive computational models that enable fast predictions and uncertainty quantification.
-
-::: {.callout-note}
-## Coming Soon
-- When to use surrogates
-- Types of surrogate models
-- Trade-offs and limitations
-:::
-
-## Neural Operators
-
-### Fourier Neural Operators (FNO)
-
-::: {.callout-note}
-## Coming Soon
-- Spectral convolutions
-- Learning solution operators
-- Applications to PDEs
+This chapter is currently being developed.
 :::
 
 ### DeepONet

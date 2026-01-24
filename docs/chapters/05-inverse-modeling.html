@@ -100,10 +100,9 @@ ul.task-list li input[type="checkbox"] {
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Geoscientific Machine Learning</a> 
-        <div class="sidebar-tools-main tools-wide">
+        <div class="sidebar-tools-main">
     <a href="https://www.linkedin.com/in/pankajkmishra01/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
     <a href="https://github.com/pankajkmishra/geo-sciml" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../geo-sciml.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -172,15 +171,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction-to-inverse-problems" id="toc-introduction-to-inverse-problems" class="nav-link active" data-scroll-target="#introduction-to-inverse-problems"><span class="header-section-number">6.1</span> Introduction to Inverse Problems</a></li>
-  <li><a href="#physics-informed-neural-networks-pinns" id="toc-physics-informed-neural-networks-pinns" class="nav-link" data-scroll-target="#physics-informed-neural-networks-pinns"><span class="header-section-number">6.2</span> Physics-Informed Neural Networks (PINNs)</a></li>
-  <li><a href="#implicit-neural-representations-inr" id="toc-implicit-neural-representations-inr" class="nav-link" data-scroll-target="#implicit-neural-representations-inr"><span class="header-section-number">6.3</span> Implicit Neural Representations (INR)</a>
-  <ul class="collapse">
-  <li><a href="#coordinate-based-networks" id="toc-coordinate-based-networks" class="nav-link" data-scroll-target="#coordinate-based-networks"><span class="header-section-number">6.3.1</span> Coordinate-based Networks</a></li>
-  <li><a href="#applications-in-geoscience" id="toc-applications-in-geoscience" class="nav-link" data-scroll-target="#applications-in-geoscience"><span class="header-section-number">6.3.2</span> Applications in Geoscience</a></li>
-  </ul></li>
-  <li><a href="#bayesian-inversion" id="toc-bayesian-inversion" class="nav-link" data-scroll-target="#bayesian-inversion"><span class="header-section-number">6.4</span> Bayesian Inversion</a></li>
-  <li><a href="#gradient-based-inversion" id="toc-gradient-based-inversion" class="nav-link" data-scroll-target="#gradient-based-inversion"><span class="header-section-number">6.5</span> Gradient-Based Inversion</a></li>
+  <li><a href="#coordinate-based-networks" id="toc-coordinate-based-networks" class="nav-link active" data-scroll-target="#coordinate-based-networks"><span class="header-section-number">6.0.1</span> Coordinate-based Networks</a></li>
+  <li><a href="#applications-in-geoscience" id="toc-applications-in-geoscience" class="nav-link" data-scroll-target="#applications-in-geoscience"><span class="header-section-number">6.0.2</span> Applications in Geoscience</a></li>
+  <li><a href="#bayesian-inversion" id="toc-bayesian-inversion" class="nav-link" data-scroll-target="#bayesian-inversion"><span class="header-section-number">6.1</span> Bayesian Inversion</a></li>
+  <li><a href="#gradient-based-inversion" id="toc-gradient-based-inversion" class="nav-link" data-scroll-target="#gradient-based-inversion"><span class="header-section-number">6.2</span> Gradient-Based Inversion</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/pankajkmishra/geo-sciml/edit/main/chapters/05-inverse-modeling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/pankajkmishra/geo-sciml/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -206,50 +200,6 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="introduction-to-inverse-problems" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="introduction-to-inverse-problems"><span class="header-section-number">6.1</span> Introduction to Inverse Problems</h2>
-<p>Inverse problems involve inferring model parameters from observed data. In geosciences, this includes determining subsurface properties from surface measurements.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Forward vs inverse problems</li>
-<li>Well-posed and ill-posed problems</li>
-<li>Regularization theory</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="physics-informed-neural-networks-pinns" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="physics-informed-neural-networks-pinns"><span class="header-section-number">6.2</span> Physics-Informed Neural Networks (PINNs)</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Embedding physical laws in neural networks</li>
-<li>Loss function design</li>
-<li>Examples in geophysics</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="implicit-neural-representations-inr" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="implicit-neural-representations-inr"><span class="header-section-number">6.3</span> Implicit Neural Representations (INR)</h2>
-<p>Implicit Neural Representations use neural networks to represent continuous functions, enabling compact and differentiable representations of complex fields.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -260,11 +210,12 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This section is currently being developed.</p>
+<p>This chapter is currently being developed.</p>
 </div>
 </div>
-<section id="coordinate-based-networks" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="coordinate-based-networks"><span class="header-section-number">6.3.1</span> Coordinate-based Networks</h3>
+<p>This section is currently being developed. :::</p>
+<section id="coordinate-based-networks" class="level3" data-number="6.0.1">
+<h3 data-number="6.0.1" class="anchored" data-anchor-id="coordinate-based-networks"><span class="header-section-number">6.0.1</span> Coordinate-based Networks</h3>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -283,8 +234,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="applications-in-geoscience" class="level3" data-number="6.3.2">
-<h3 data-number="6.3.2" class="anchored" data-anchor-id="applications-in-geoscience"><span class="header-section-number">6.3.2</span> Applications in Geoscience</h3>
+<section id="applications-in-geoscience" class="level3" data-number="6.0.2">
+<h3 data-number="6.0.2" class="anchored" data-anchor-id="applications-in-geoscience"><span class="header-section-number">6.0.2</span> Applications in Geoscience</h3>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -303,9 +254,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-</section>
-<section id="bayesian-inversion" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="bayesian-inversion"><span class="header-section-number">6.4</span> Bayesian Inversion</h2>
+<section id="bayesian-inversion" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="bayesian-inversion"><span class="header-section-number">6.1</span> Bayesian Inversion</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -325,8 +275,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="gradient-based-inversion" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="gradient-based-inversion"><span class="header-section-number">6.5</span> Gradient-Based Inversion</h2>
+<section id="gradient-based-inversion" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="gradient-based-inversion"><span class="header-section-number">6.2</span> Gradient-Based Inversion</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
