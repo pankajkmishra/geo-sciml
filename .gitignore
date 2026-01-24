@@ -4,10 +4,9 @@ _site/
 _book/
 *_cache/
 *_files/
-site_libs/
 **/*.quarto_ipynb
 
-# Keep docs/ for GitHub Pages (don't ignore it)
+# Keep docs/ for GitHub Pages (don't ignore site_libs inside docs)
 # docs/
 
 # Julia
