@@ -1,0 +1,75 @@
+---
+title: "AI Surrogates"
+---
+
+::: {.callout-warning}
+## 🚧 Under Construction
+This chapter is currently being developed. Check back soon for updates!
+:::
+
+## Introduction to Surrogate Models
+
+Surrogate models (also called emulators or metamodels) are approximations of expensive computational models that enable fast predictions and uncertainty quantification.
+
+::: {.callout-note}
+## Coming Soon
+- When to use surrogates
+- Types of surrogate models
+- Trade-offs and limitations
+:::
+
+## Neural Operators
+
+### Fourier Neural Operators (FNO)
+
+::: {.callout-note}
+## Coming Soon
+- Spectral convolutions
+- Learning solution operators
+- Applications to PDEs
+:::
+
+### DeepONet
+
+::: {.callout-note}
+## Coming Soon
+- Branch and trunk networks
+- Operator learning framework
+- Geophysical applications
+:::
+
+## Gaussian Processes
+
+::: {.callout-note}
+## Coming Soon
+- GP fundamentals
+- Kernel selection
+- Scalable GPs
+:::
+
+## Reduced-Order Models
+
+::: {.callout-note}
+## Coming Soon
+- Proper Orthogonal Decomposition (POD)
+- Dynamic Mode Decomposition (DMD)
+- Neural network-enhanced ROM
+:::
+
+## Uncertainty Quantification
+
+::: {.callout-note}
+## Coming Soon
+- Epistemic vs aleatoric uncertainty
+- Ensemble methods
+- Bayesian neural networks
+:::
+
+## Multi-Fidelity Modeling
+
+::: {.callout-note}
+## Coming Soon
+- Combining cheap and expensive models
+- Transfer learning
+- Active learning for surrogates
+:::

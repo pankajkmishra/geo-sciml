@@ -1,0 +1,100 @@
+---
+title: "Plotting & Maps"
+---
+
+## Basic Plotting with Plots.jl
+
+```{julia}
+using Plots
+
+x = 0:0.1:2π
+y = sin.(x)
+plot(x, y, label="sin(x)", xlabel="x", ylabel="y", lw=2)
+```
+
+### Multiple Series
+
+```{julia}
+plot(x, sin.(x), label="sin(x)", lw=2)
+plot!(x, cos.(x), label="cos(x)", lw=2, ls=:dash)
+```
+
+### Scatter Plots
+
+```{julia}
+x = randn(50)
+y = randn(50)
+scatter(x, y, xlabel="X", ylabel="Y", title="Random Points", 
+        markersize=5, alpha=0.7)
+```
+
+### Heatmaps
+
+```{julia}
+z = [sin(x) * cos(y) for x in 0:0.1:2π, y in 0:0.1:2π]
+heatmap(z, xlabel="X", ylabel="Y", title="2D Function", 
+        color=:viridis)
+```
+
+## Subplots
+
+```{julia}
+p1 = plot(x, sin.(x), title="Sine")
+p2 = plot(x, cos.(x), title="Cosine")
+p3 = plot(x, tan.(x), title="Tangent", ylims=(-5, 5))
+p4 = scatter(randn(20), randn(20), title="Random")
+
+plot(p1, p2, p3, p4, layout=(2, 2), size=(700, 500))
+```
+
+## Contour Plots
+
+```{julia}
+x = -2:0.1:2
+y = -2:0.1:2
+z = [exp(-(xi^2 + yi^2)) for xi in x, yi in y]
+
+contour(x, y, z', levels=10, fill=true, 
+        xlabel="X", ylabel="Y", title="Gaussian")
+```
+
+## Geographic Maps
+
+::: {.callout-note}
+## Under Construction
+Geographic mapping examples with GeoMakie.jl and GMT.jl will be added soon.
+:::
+
+### Coordinate Systems
+
+```{julia}
+#| eval: false
+# Example with projected coordinates
+using CoordinateTransformations
+using Proj4
+
+# Transform from WGS84 to UTM
+wgs84 = Proj4.Projection("+proj=longlat +datum=WGS84")
+utm35 = Proj4.Projection("+proj=utm +zone=35 +datum=WGS84")
+```
+
+### Plotting Geophysical Data
+
+```{julia}
+#| eval: false
+# Gravity anomaly map example
+using Plots
+
+# Create synthetic gravity data
+nx, ny = 50, 50
+x = range(0, 10, length=nx)
+y = range(0, 10, length=ny)
+gz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x, yi in y]
+
+heatmap(x, y, gz', 
+        xlabel="Easting (km)", 
+        ylabel="Northing (km)",
+        title="Bouguer Gravity Anomaly",
+        colorbar_title="mGal",
+        color=:RdBu)
+```

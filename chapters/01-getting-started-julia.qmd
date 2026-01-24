@@ -1,0 +1,100 @@
+---
+title: "Getting started with Julia"
+---
+
+## Setting up VS Code
+
+1. Download and install [Visual Studio Code](https://code.visualstudio.com/)
+2. Install the **Julia** extension from the VS Code marketplace
+3. Configure the Julia path in VS Code settings if needed
+
+### Recommended Extensions
+
+- **Julia Language Support** - syntax highlighting, code completion
+- **Quarto** - for rendering notebooks and documents
+
+## Installing Julia
+
+Download Julia from [julialang.org](https://julialang.org/downloads/).
+
+### Windows
+
+1. Download the Windows installer (.exe)
+2. Run the installer and follow the prompts
+3. Add Julia to your PATH (optional but recommended)
+
+### macOS
+
+1. Download the macOS .dmg file
+2. Drag Julia to Applications
+3. Add to PATH: `export PATH="$PATH:/Applications/Julia-1.x.app/Contents/Resources/julia/bin"`
+
+### Linux
+
+```bash
+# Using juliaup (recommended)
+curl -fsSL https://install.julialang.org | sh
+```
+
+## Basic numerics
+
+```{julia}
+1 + 2, sin(1.0)
+```
+
+### Arithmetic
+
+```{julia}
+a = 10
+b = 3
+a + b, a - b, a * b, a / b
+```
+
+### Arrays
+
+```{julia}
+x = [1, 2, 3, 4, 5]
+sum(x), length(x)
+```
+
+## Functions
+
+```{julia}
+f(x) = x^2 + 2x + 1
+f(3)
+```
+
+## Control Flow
+
+### Conditionals
+
+```{julia}
+x = 5
+if x > 0
+    println("positive")
+elseif x < 0
+    println("negative")
+else
+    println("zero")
+end
+```
+
+### Loops
+
+```{julia}
+for i in 1:5
+    println(i^2)
+end
+```
+
+## Types and Structs
+
+```{julia}
+struct Point
+    x::Float64
+    y::Float64
+end
+
+p = Point(1.0, 2.0)
+p.x, p.y
+```

@@ -1,0 +1,19 @@
+---
+title: "Applications"
+---
+
+::: {.callout-warning}
+## 🚧 Under Construction
+This chapter will feature real-world geoscientific case studies.
+:::
+
+## Planned Topics
+
+- Seismic Inversion
+- Gravity and Magnetic Inversion
+- Magnetotelluric (MT) Modeling
+- Electromagnetic Methods
+- Geothermal Exploration
+- Mining Exploration
+- Carbon Storage
+- Hazard Assessment

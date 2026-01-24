@@ -1,0 +1,54 @@
+project:
+  type: book
+  output-dir: _site
+
+engines: ["julia"]
+
+execute:
+  freeze: auto
+
+book:
+  title: "Geoscientific Machine Learning"
+  site-url: "https://pankajkmishra.github.io/geo-sciml/"
+  repo-url: "https://github.com/pankajkmishra/geo-sciml"
+  repo-actions: [edit, issue]
+  output-file: "geo-sciml"
+  downloads: ["pdf"]
+  search: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+    tools:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/pankajkmishra01/
+  page-navigation: true
+  chapters:
+    - text: "Home"
+      file: index.md
+    - chapters/01-getting-started-julia.qmd
+    - chapters/02-files-data.qmd
+    - chapters/03-plotting-maps.qmd
+    - chapters/04-neural-networks.qmd
+    - chapters/05-inverse-modeling.qmd
+    - chapters/06-ai-surrogates.qmd
+    - chapters/07-applications.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    number-sections: true
+    code-link: true
+    code-copy: true
+    code-overflow: wrap
+    grid:
+      sidebar-width: 450px
+      body-width: 800px
+      margin-width: 250px
+      gutter-width: 1.5em
+  pdf:
+    number-sections: true

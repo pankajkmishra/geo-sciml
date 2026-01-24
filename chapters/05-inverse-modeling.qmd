@@ -1,0 +1,69 @@
+---
+title: "Inverse Modeling"
+---
+
+## Introduction to Inverse Problems
+
+Inverse problems involve inferring model parameters from observed data. In geosciences, this includes determining subsurface properties from surface measurements.
+
+::: {.callout-note}
+## Coming Soon
+- Forward vs inverse problems
+- Well-posed and ill-posed problems
+- Regularization theory
+:::
+
+## Physics-Informed Neural Networks (PINNs)
+
+::: {.callout-note}
+## Coming Soon
+- Embedding physical laws in neural networks
+- Loss function design
+- Examples in geophysics
+:::
+
+## Implicit Neural Representations (INR)
+
+Implicit Neural Representations use neural networks to represent continuous functions, enabling compact and differentiable representations of complex fields.
+
+::: {.callout-warning}
+## 🚧 Under Construction
+This section is currently being developed.
+:::
+
+### Coordinate-based Networks
+
+::: {.callout-note}
+## Coming Soon
+- SIREN (Sinusoidal Representation Networks)
+- Fourier feature networks
+- Representing geophysical fields
+:::
+
+### Applications in Geoscience
+
+::: {.callout-note}
+## Coming Soon
+- Velocity model representation
+- Density field inversion
+- Multi-scale features
+:::
+
+## Bayesian Inversion
+
+::: {.callout-note}
+## Coming Soon
+- Bayesian formulation
+- Prior distributions
+- MCMC methods
+- Uncertainty quantification
+:::
+
+## Gradient-Based Inversion
+
+::: {.callout-note}
+## Coming Soon
+- Automatic differentiation
+- Adjoint methods
+- Optimization algorithms
+:::

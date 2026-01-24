@@ -1,0 +1,103 @@
+---
+title: "Files and Data Manipulation"
+---
+
+## Reading and Writing Files
+
+### Text Files
+
+```{julia}
+# Writing to a file
+open("example.txt", "w") do f
+    write(f, "Hello, Julia!")
+end
+
+# Reading from a file
+content = read("example.txt", String)
+println(content)
+```
+
+### CSV Files
+
+```{julia}
+#| eval: false
+using CSV, DataFrames
+
+# Read CSV
+df = CSV.read("data.csv", DataFrame)
+
+# Write CSV
+CSV.write("output.csv", df)
+```
+
+## DataFrames
+
+DataFrames are tabular data structures similar to pandas in Python or data.frames in R.
+
+### Creating DataFrames
+
+```{julia}
+using DataFrames
+
+# Create from columns
+df = DataFrame(
+    name = ["Alice", "Bob", "Charlie"],
+    age = [25, 30, 35],
+    city = ["Helsinki", "Espoo", "Tampere"]
+)
+```
+
+### Basic Operations
+
+```{julia}
+# Select columns
+df[:, :name]
+```
+
+```{julia}
+# Filter rows
+filter(row -> row.age > 25, df)
+```
+
+```{julia}
+# Add new column
+df.country = ["Finland", "Finland", "Finland"]
+df
+```
+
+### Grouping and Aggregation
+
+```{julia}
+using Statistics
+
+# Group by and summarize
+gdf = groupby(df, :country)
+combine(gdf, :age => mean => :avg_age)
+```
+
+## Working with Geoscientific Data
+
+### Loading Geophysical Data
+
+```{julia}
+#| eval: false
+using DelimitedFiles
+
+# Read space-delimited data
+data = readdlm("gravity_data.txt")
+
+# Extract columns
+x, y, gz = data[:, 1], data[:, 2], data[:, 3]
+```
+
+### NetCDF Files
+
+```{julia}
+#| eval: false
+using NCDatasets
+
+# Read NetCDF
+ds = Dataset("climate_data.nc")
+temp = ds["temperature"][:]
+close(ds)
+```
