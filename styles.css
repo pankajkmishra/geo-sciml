@@ -1,7 +1,7 @@
 /*-- Two color scheme: dark grey titles + blue links --*/
 :root {
   --dark-grey: #404040;
-  --link-blue: #1F51FF;
+  --link-blue: #00008B;
 }
 
 /*-- Sidebar scrollbar - thin line style --*/
@@ -29,14 +29,27 @@
   background: #a0a0a0;
 }
 
-/*-- Book title bold with fancy box --*/
+/*-- Book title styling with box --*/
 .navbar-brand-container .navbar-brand {
-  background: linear-gradient(135deg, #e8f4fc 0%, #f0e6ff 50%, #e6f7ff 100%) !important;
-  border: 2px solid var(--link-blue) !important;
-  border-radius: 12px !important;
-  padding: 8px 16px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f5f0ff 100%) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  padding: 12px 20px !important;
   margin: 10px !important;
-  box-shadow: 0 4px 12px rgba(31, 81, 255, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.navbar-brand-container .navbar-brand::after {
+  content: "Geoscience \2764 SciML \2764 Julia" !important;
+  display: block !important;
+  font-size: 0.85rem !important;
+  color: #00008B !important;
+  font-weight: 400 !important;
+  margin-top: 4px !important;
+  letter-spacing: 0.05em !important;
 }
 
 .navbar-brand-container {
@@ -51,23 +64,38 @@
 .navbar-brand .navbar-title {
   color: var(--dark-grey) !important;
   font-weight: 700 !important;
-  font-size: 1.1rem !important;
+  font-size: 1.2rem !important;
 }
 
-/*-- Sidebar title with fancy box --*/
+/*-- Sidebar title styling with box --*/
 .sidebar-title,
 #quarto-sidebar .sidebar-title {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   color: var(--dark-grey) !important;
   font-weight: 700 !important;
-  font-size: 1.1rem !important;
+  font-size: 1.2rem !important;
   text-align: center !important;
-  background: linear-gradient(135deg, #e8f4fc 0%, #f0e6ff 50%, #e6f7ff 100%) !important;
-  border: 2px solid var(--link-blue) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  margin: 10px 15px !important;
-  box-shadow: 0 4px 12px rgba(31, 81, 255, 0.15) !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f5f0ff 100%) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  padding: 12px 20px !important;
+  margin: 10px 5px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  white-space: nowrap !important;
+  width: calc(100% - 10px) !important;
+}
+
+.sidebar-title::after,
+#quarto-sidebar .sidebar-title::after {
+  content: "Geoscience \2764 SciML \2764 Julia" !important;
+  display: block !important;
+  font-size: 0.85rem !important;
+  color: #00008B !important;
+  font-weight: 400 !important;
+  margin-top: 6px !important;
+  letter-spacing: 0.03em !important;
 }
 
 .sidebar-title a {
@@ -140,7 +168,7 @@ a {
 }
 
 a:hover {
-  color: #0033cc;
+  color: #000066;
 }
 
 /*-- Bottom page navigation links --*/
@@ -192,8 +220,8 @@ pre {
 .navbar-nav .nav-link:hover svg,
 .quarto-navbar-tools a:hover i,
 .quarto-navbar-tools a:hover svg {
-  color: #0033cc !important;
-  fill: #0033cc !important;
+  color: #000066 !important;
+  fill: #000066 !important;
 }
 
 /*-- No side margins --*/

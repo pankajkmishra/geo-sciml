@@ -2,67 +2,94 @@
 title: "Plotting & Maps"
 ---
 
-## Basic Plotting with Plots.jl
+## Basic Plotting with CairoMakie
+
+CairoMakie is a powerful plotting package that produces high-quality vector graphics and supports direct PDF output.
 
 ```{julia}
-using Plots
+#| output: false
+using CairoMakie
+CairoMakie.activate!(type = "png")
+```
 
+```{julia}
 x = 0:0.1:2π
 y = sin.(x)
-plot(x, y, label="sin(x)", xlabel="x", ylabel="y", lw=2)
+fig = lines(x, y, axis=(xlabel="x", ylabel="y", title="Sine Wave"), 
+            label="sin(x)", linewidth=2)
+fig
 ```
 
 ### Multiple Series
 
 ```{julia}
-plot(x, sin.(x), label="sin(x)", lw=2)
-plot!(x, cos.(x), label="cos(x)", lw=2, ls=:dash)
+fig = Figure()
+ax = Axis(fig[1, 1], xlabel="x", ylabel="y")
+lines!(ax, x, sin.(x), label="sin(x)", linewidth=2)
+lines!(ax, x, cos.(x), label="cos(x)", linewidth=2, linestyle=:dash)
+axislegend(ax)
+fig
 ```
 
 ### Scatter Plots
 
 ```{julia}
-x = randn(50)
-y = randn(50)
-scatter(x, y, xlabel="X", ylabel="Y", title="Random Points", 
-        markersize=5, alpha=0.7)
+xs = randn(50)
+ys = randn(50)
+fig = scatter(xs, ys, 
+              axis=(xlabel="X", ylabel="Y", title="Random Points"),
+              markersize=12, alpha=0.7)
+fig
 ```
 
 ### Heatmaps
 
 ```{julia}
-z = [sin(x) * cos(y) for x in 0:0.1:2π, y in 0:0.1:2π]
-heatmap(z, xlabel="X", ylabel="Y", title="2D Function", 
-        color=:viridis)
+z = [sin(xi) * cos(yi) for xi in 0:0.1:2π, yi in 0:0.1:2π]
+fig = heatmap(z, axis=(xlabel="X", ylabel="Y", title="2D Function"),
+              colormap=:viridis)
+fig
 ```
 
 ## Subplots
 
 ```{julia}
-p1 = plot(x, sin.(x), title="Sine")
-p2 = plot(x, cos.(x), title="Cosine")
-p3 = plot(x, tan.(x), title="Tangent", ylims=(-5, 5))
-p4 = scatter(randn(20), randn(20), title="Random")
+fig = Figure(size=(700, 500))
 
-plot(p1, p2, p3, p4, layout=(2, 2), size=(700, 500))
+ax1 = Axis(fig[1, 1], title="Sine")
+lines!(ax1, x, sin.(x))
+
+ax2 = Axis(fig[1, 2], title="Cosine")
+lines!(ax2, x, cos.(x))
+
+ax3 = Axis(fig[2, 1], title="Tangent", limits=(nothing, (-5, 5)))
+lines!(ax3, x, tan.(x))
+
+ax4 = Axis(fig[2, 2], title="Random")
+scatter!(ax4, randn(20), randn(20))
+
+fig
 ```
 
 ## Contour Plots
 
 ```{julia}
-x = -2:0.1:2
-y = -2:0.1:2
-z = [exp(-(xi^2 + yi^2)) for xi in x, yi in y]
+x_cont = -2:0.1:2
+y_cont = -2:0.1:2
+z_cont = [exp(-(xi^2 + yi^2)) for xi in x_cont, yi in y_cont]
 
-contour(x, y, z', levels=10, fill=true, 
-        xlabel="X", ylabel="Y", title="Gaussian")
+fig = Figure()
+ax = Axis(fig[1, 1], xlabel="X", ylabel="Y", title="Gaussian")
+co = contourf!(ax, x_cont, y_cont, z_cont, levels=10)
+Colorbar(fig[1, 2], co)
+fig
 ```
 
 ## Geographic Maps
 
 ::: {.callout-note}
 ## Under Construction
-Geographic mapping examples with GeoMakie.jl and GMT.jl will be added soon.
+Geographic mapping examples with GeoMakie.jl will be added soon.
 :::
 
 ### Coordinate Systems
@@ -83,18 +110,20 @@ utm35 = Proj4.Projection("+proj=utm +zone=35 +datum=WGS84")
 ```{julia}
 #| eval: false
 # Gravity anomaly map example
-using Plots
+using CairoMakie
 
 # Create synthetic gravity data
 nx, ny = 50, 50
-x = range(0, 10, length=nx)
-y = range(0, 10, length=ny)
-gz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x, yi in y]
+x_grav = range(0, 10, length=nx)
+y_grav = range(0, 10, length=ny)
+gz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]
 
-heatmap(x, y, gz', 
-        xlabel="Easting (km)", 
-        ylabel="Northing (km)",
-        title="Bouguer Gravity Anomaly",
-        colorbar_title="mGal",
-        color=:RdBu)
+fig = Figure()
+ax = Axis(fig[1, 1], 
+          xlabel="Easting (km)", 
+          ylabel="Northing (km)",
+          title="Bouguer Gravity Anomaly")
+hm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)
+Colorbar(fig[1, 2], hm, label="mGal")
+fig
 ```

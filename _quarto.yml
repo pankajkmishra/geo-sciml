@@ -9,6 +9,7 @@ execute:
 
 book:
   title: "Geoscientific Machine Learning"
+  author: "Pankaj K Mishra"
   site-url: "https://pankajkmishra.github.io/geo-sciml/"
   output-file: "geo-sciml"
   downloads: [pdf]
@@ -55,3 +56,19 @@ format:
       gutter-width: 1.5em
   pdf:
     number-sections: true
+    number-depth: 3
+    toc: true
+    toc-depth: 3
+    toc-title: "Table of Contents"
+    colorlinks: true
+    linkcolor: blue
+    toccolor: blue
+    urlcolor: blue
+    citecolor: blue
+    mainfont: "Libertinus Serif"
+    sansfont: "Libertinus Sans"
+    monofont: "JuliaMono"
+    mathfont: "Libertinus Math"
+    include-in-header:
+      text: |
+        \setcounter{secnumdepth}{3}
