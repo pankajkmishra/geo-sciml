@@ -16,19 +16,16 @@ title-block-banner: false
 </style>
 
 
-Welcome to the book **Geoscientific Machine Learning**. This book will teach you how to apply machine learning techniques to geoscientific problems using Julia.
+Welcome to the book **Geoscientific Machine Learning**. 
+This book will teach you basics of Julia programming, machine learning, 
+and how to mix geoscience domain knowledge with machine learning methods.
 
-In this book, you will find a practicum of skills for scientific machine learning in geosciences. You'll learn how to process geophysical data, build neural networks, and apply physics-informed approaches to inverse problems.
+This book is free for everyone! 
 
-## How this book is organised {.unnumbered}
+## This book is under construction 
 
-- **Getting Started with Julia** covers Julia installation, VS Code setup, and language fundamentals
-- **Files and Data Manipulation** introduces file I/O and DataFrames
-- **Plotting & Maps** covers visualization with Plots.jl and geographic mapping
-- **Neural Networks** introduces deep learning concepts and implementations
-- **Inverse Modeling** covers physics-informed approaches including Implicit Neural Representations
-- **AI Surrogates** explores surrogate modeling techniques
-- **Applications** presents real-world geoscientific case studies
+Contents are not ready for readers. If you want me to include something specific while I work on this book part-time 
+Please open an issue and I'll try to add it. 
 
 ## Acknowledgements {.unnumbered}
 

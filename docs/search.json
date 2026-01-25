@@ -4,17 +4,7 @@
     "href": "index.html",
     "title": "Geoscientific Machine Learning",
     "section": "",
-    "text": "How this book is organised\nWelcome to the book Geoscientific Machine Learning. This book will teach you how to apply machine learning techniques to geoscientific problems using Julia.\nIn this book, you will find a practicum of skills for scientific machine learning in geosciences. You’ll learn how to process geophysical data, build neural networks, and apply physics-informed approaches to inverse problems.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#how-this-book-is-organised",
-    "href": "index.html#how-this-book-is-organised",
-    "title": "Geoscientific Machine Learning",
-    "section": "",
-    "text": "Getting Started with Julia covers Julia installation, VS Code setup, and language fundamentals\nFiles and Data Manipulation introduces file I/O and DataFrames\nPlotting & Maps covers visualization with Plots.jl and geographic mapping\nNeural Networks introduces deep learning concepts and implementations\nInverse Modeling covers physics-informed approaches including Implicit Neural Representations\nAI Surrogates explores surrogate modeling techniques\nApplications presents real-world geoscientific case studies",
+    "text": "This book is under construction\nWelcome to the book Geoscientific Machine Learning. This book will teach you basics of Julia programming, machine learning, and how to mix geoscience domain knowledge with machine learning methods.\nThis book is free for everyone!\nContents are not ready for readers. If you want me to include something specific while I work on this book part-time Please open an issue and I’ll try to add it.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
     ]
