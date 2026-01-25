@@ -4,35 +4,63 @@
   --link-blue: #1F51FF;
 }
 
-/*-- Sidebar scrollbar --*/
+/*-- Sidebar scrollbar - thin line style --*/
 #quarto-sidebar {
   overflow-y: auto !important;
   max-height: 100vh !important;
+  scrollbar-width: thin;
+  scrollbar-color: #c0c0c0 transparent;
 }
 
 #quarto-sidebar::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 #quarto-sidebar::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 #quarto-sidebar::-webkit-scrollbar-thumb {
-  background: var(--link-blue);
-  border-radius: 3px;
+  background: #c0c0c0;
+  border-radius: 2px;
 }
 
 #quarto-sidebar::-webkit-scrollbar-thumb:hover {
-  background: #1a44d9;
+  background: #a0a0a0;
 }
 
-/*-- Sidebar title bold, centered with fancy box --*/
+/*-- Book title bold with fancy box --*/
+.navbar-brand-container .navbar-brand {
+  background: linear-gradient(135deg, #e8f4fc 0%, #f0e6ff 50%, #e6f7ff 100%) !important;
+  border: 2px solid var(--link-blue) !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  margin: 10px !important;
+  box-shadow: 0 4px 12px rgba(31, 81, 255, 0.15) !important;
+}
+
+.navbar-brand-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.navbar-title,
+.navbar-brand .navbar-title {
+  color: var(--dark-grey) !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+/*-- Sidebar title with fancy box --*/
 .sidebar-title,
 #quarto-sidebar .sidebar-title {
+  display: block !important;
   color: var(--dark-grey) !important;
-  font-weight: bold !important;
-  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
   text-align: center !important;
   background: linear-gradient(135deg, #e8f4fc 0%, #f0e6ff 50%, #e6f7ff 100%) !important;
   border: 2px solid var(--link-blue) !important;
@@ -42,37 +70,19 @@
   box-shadow: 0 4px 12px rgba(31, 81, 255, 0.15) !important;
 }
 
-.sidebar-title a,
-#quarto-sidebar .sidebar-title a {
+.sidebar-title a {
   color: var(--dark-grey) !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
 }
 
-/*-- PDF download icon blue --*/
-.quarto-book .sidebar-tools-main a[href$=".pdf"],
-.quarto-book .sidebar-tools-main a[href$=".pdf"] i,
-.quarto-book .sidebar-tools-main a[href$=".pdf"] svg,
-a.sidebar-tools-main-item[href$=".pdf"],
-a.sidebar-tools-main-item[href$=".pdf"] i,
-a.sidebar-tools-main-item[href$=".pdf"] svg,
-.sidebar-tools a[title*="PDF"],
-.sidebar-tools a[title*="PDF"] i,
-.sidebar-tools a[title*="PDF"] svg,
-.sidebar-tools a[title*="Download"],
-.sidebar-tools a[title*="Download"] i,
-.sidebar-tools a[title*="Download"] svg,
-.bi-file-earmark-pdf,
-.bi-file-pdf {
-  color: var(--link-blue) !important;
-  fill: var(--link-blue) !important;
-}
-
+/*-- Icons centered below title --*/
 .sidebar-tools-main {
-  margin-top: 0.5rem !important;
   display: flex !important;
   justify-content: center !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
+  width: 100% !important;
+  margin-top: 0.5rem !important;
+  gap: 1rem !important;
 }
 
 /*-- Make sidebar icons bigger and blue --*/
@@ -148,48 +158,94 @@ pre {
   border-radius: 4px;
 }
 
-/*-- TOC title - not bold --*/
+/*-- TOC title with list icon --*/
 .toc-title {
   color: var(--dark-grey);
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   text-transform: none !important;
 }
 
-/*-- Move sidebar icons centered below title --*/
-.sidebar-title-brand {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
+.toc-title::before {
+  content: "\f0ca";
+  font-family: "Bootstrap Icons";
+  margin-right: 0.5em;
+  color: var(--link-blue);
 }
 
-.sidebar-title-brand .sidebar-tools-main {
-  margin-top: 0.5em !important;
-  margin-left: 0 !important;
+/*-- Navbar icons styling - all same size --*/
+.navbar-nav .nav-link i,
+.navbar-nav .nav-link svg,
+.navbar .bi,
+.navbar a i,
+.navbar a svg,
+.quarto-navbar-tools .bi,
+.quarto-navbar-tools i,
+.quarto-navbar-tools svg {
+  font-size: 1.25rem !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  color: var(--link-blue) !important;
+  fill: var(--link-blue) !important;
 }
 
-.sidebar-tools-main {
-  display: flex !important;
-  justify-content: center !important;
-  width: 100% !important;
-  margin-top: 0.5em !important;
+.navbar-nav .nav-link:hover i,
+.navbar-nav .nav-link:hover svg,
+.quarto-navbar-tools a:hover i,
+.quarto-navbar-tools a:hover svg {
+  color: #0033cc !important;
+  fill: #0033cc !important;
 }
 
-.sidebar-navigation .sidebar-tools {
-  position: relative !important;
-  top: auto !important;
-  right: auto !important;
-  width: 100% !important;
-  display: flex !important;
-  justify-content: center !important;
-}
-
-/*-- Page margins on left and right like R4DS --*/
+/*-- No side margins --*/
 body {
-  padding-left: 50px !important;
-  padding-right: 50px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 #quarto-content {
-  max-width: 1600px;
+  max-width: 100%;
   margin: 0 auto;
+}
+
+/*-- Responsive figures and images --*/
+img,
+.quarto-figure img,
+.cell-output img,
+.cell-output-display img,
+figure img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+.quarto-figure,
+figure,
+.cell-output-display {
+  max-width: 100% !important;
+  overflow-x: auto;
+}
+
+/*-- Mobile responsiveness --*/
+@media (max-width: 768px) {
+  img,
+  .quarto-figure img,
+  .cell-output img,
+  figure img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  .quarto-figure,
+  figure,
+  .cell-output-display {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
 }

@@ -36,6 +36,7 @@
     "section": "",
     "text": "2.1 Setting up VS Code",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -46,6 +47,7 @@
     "section": "",
     "text": "Download and install Visual Studio Code\nInstall the Julia extension from the VS Code marketplace\nConfigure the Julia path in VS Code settings if needed\n\n\n2.1.1 Recommended Extensions\n\nJulia Language Support - syntax highlighting, code completion\nQuarto - for rendering notebooks and documents",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -56,6 +58,7 @@
     "section": "2.2 Installing Julia",
     "text": "2.2 Installing Julia\nDownload Julia from julialang.org.\n\n2.2.1 Windows\n\nDownload the Windows installer (.exe)\nRun the installer and follow the prompts\nAdd Julia to your PATH (optional but recommended)\n\n\n\n2.2.2 macOS\n\nDownload the macOS .dmg file\nDrag Julia to Applications\nAdd to PATH: export PATH=\"$PATH:/Applications/Julia-1.x.app/Contents/Resources/julia/bin\"\n\n\n\n2.2.3 Linux\n# Using juliaup (recommended)\ncurl -fsSL https://install.julialang.org | sh",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -66,6 +69,7 @@
     "section": "2.3 Basic numerics",
     "text": "2.3 Basic numerics\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\n\n2.3.1 Arithmetic\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\n\n\n2.3.2 Arrays\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -76,6 +80,7 @@
     "section": "2.4 Functions",
     "text": "2.4 Functions\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -86,6 +91,7 @@
     "section": "2.5 Control Flow",
     "text": "2.5 Control Flow\n\n2.5.1 Conditionals\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\n\n\n2.5.2 Loops\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
@@ -96,6 +102,7 @@
     "section": "2.6 Types and Structs",
     "text": "2.6 Types and Structs\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)",
     "crumbs": [
+      "Fundamentals",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
