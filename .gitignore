@@ -6,7 +6,7 @@ _book/
 *_files/
 **/*.quarto_ipynb
 
-# Keep docs/ for GitHub Pages (don't ignore site_libs inside docs)
+# Keep docs/ for GitHub Pages - faster than rendering in Actions
 # docs/
 
 # Julia
