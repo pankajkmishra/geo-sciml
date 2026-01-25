@@ -1,0 +1,322 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Geoscientific Machine Learning",
+    "section": "",
+    "text": "How this book is organised\nWelcome to the book Geoscientific Machine Learning. This book will teach you how to apply machine learning techniques to geoscientific problems using Julia.\nIn this book, you will find a practicum of skills for scientific machine learning in geosciences. You’ll learn how to process geophysical data, build neural networks, and apply physics-informed approaches to inverse problems.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#how-this-book-is-organised",
+    "href": "index.html#how-this-book-is-organised",
+    "title": "Geoscientific Machine Learning",
+    "section": "",
+    "text": "Getting Started with Julia covers Julia installation, VS Code setup, and language fundamentals\nFiles and Data Manipulation introduces file I/O and DataFrames\nPlotting & Maps covers visualization with Plots.jl and geographic mapping\nNeural Networks introduces deep learning concepts and implementations\nInverse Modeling covers physics-informed approaches including Implicit Neural Representations\nAI Surrogates explores surrogate modeling techniques\nApplications presents real-world geoscientific case studies",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Geoscientific Machine Learning",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThis is a living book, continuously updated with new content and examples.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html",
+    "href": "chapters/01-getting-started-julia.html",
+    "title": "2  Getting started with Julia",
+    "section": "",
+    "text": "2.1 Setting up VS Code",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#setting-up-vs-code",
+    "href": "chapters/01-getting-started-julia.html#setting-up-vs-code",
+    "title": "2  Getting started with Julia",
+    "section": "",
+    "text": "Download and install Visual Studio Code\nInstall the Julia extension from the VS Code marketplace\nConfigure the Julia path in VS Code settings if needed\n\n\n2.1.1 Recommended Extensions\n\nJulia Language Support - syntax highlighting, code completion\nQuarto - for rendering notebooks and documents",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#installing-julia",
+    "href": "chapters/01-getting-started-julia.html#installing-julia",
+    "title": "2  Getting started with Julia",
+    "section": "2.2 Installing Julia",
+    "text": "2.2 Installing Julia\nDownload Julia from julialang.org.\n\n2.2.1 Windows\n\nDownload the Windows installer (.exe)\nRun the installer and follow the prompts\nAdd Julia to your PATH (optional but recommended)\n\n\n\n2.2.2 macOS\n\nDownload the macOS .dmg file\nDrag Julia to Applications\nAdd to PATH: export PATH=\"$PATH:/Applications/Julia-1.x.app/Contents/Resources/julia/bin\"\n\n\n\n2.2.3 Linux\n# Using juliaup (recommended)\ncurl -fsSL https://install.julialang.org | sh",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#basic-numerics",
+    "href": "chapters/01-getting-started-julia.html#basic-numerics",
+    "title": "2  Getting started with Julia",
+    "section": "2.3 Basic numerics",
+    "text": "2.3 Basic numerics\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\n\n2.3.1 Arithmetic\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\n\n\n2.3.2 Arrays\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#functions",
+    "href": "chapters/01-getting-started-julia.html#functions",
+    "title": "2  Getting started with Julia",
+    "section": "2.4 Functions",
+    "text": "2.4 Functions\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#control-flow",
+    "href": "chapters/01-getting-started-julia.html#control-flow",
+    "title": "2  Getting started with Julia",
+    "section": "2.5 Control Flow",
+    "text": "2.5 Control Flow\n\n2.5.1 Conditionals\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\n\n\n2.5.2 Loops\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#types-and-structs",
+    "href": "chapters/01-getting-started-julia.html#types-and-structs",
+    "title": "2  Getting started with Julia",
+    "section": "2.6 Types and Structs",
+    "text": "2.6 Types and Structs\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html",
+    "href": "chapters/02-files-data.html",
+    "title": "3  Files and Data Manipulation",
+    "section": "",
+    "text": "3.1 Reading and Writing Files",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#reading-and-writing-files",
+    "href": "chapters/02-files-data.html#reading-and-writing-files",
+    "title": "3  Files and Data Manipulation",
+    "section": "",
+    "text": "3.1.1 Text Files\n\n# Writing to a file\nopen(\"example.txt\", \"w\") do f\n    write(f, \"Hello, Julia!\")\nend\n\n# Reading from a file\ncontent = read(\"example.txt\", String)\nprintln(content)\n\nHello, Julia!\n\n\n\n\n3.1.2 CSV Files\n\nusing CSV, DataFrames\n\n# Read CSV\ndf = CSV.read(\"data.csv\", DataFrame)\n\n# Write CSV\nCSV.write(\"output.csv\", df)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#dataframes",
+    "href": "chapters/02-files-data.html#dataframes",
+    "title": "3  Files and Data Manipulation",
+    "section": "3.2 DataFrames",
+    "text": "3.2 DataFrames\nDataFrames are tabular data structures similar to pandas in Python or data.frames in R.\n\n3.2.1 Creating DataFrames\n\nusing DataFrames\n\n# Create from columns\ndf = DataFrame(\n    name = [\"Alice\", \"Bob\", \"Charlie\"],\n    age = [25, 30, 35],\n    city = [\"Helsinki\", \"Espoo\", \"Tampere\"]\n)\n\n3×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\n\n\n2\nBob\n30\nEspoo\n\n\n3\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n\n3.2.2 Basic Operations\n\n# Select columns\ndf[:, :name]\n\n3-element Vector{String}:\n \"Alice\"\n \"Bob\"\n \"Charlie\"\n\n\n\n# Filter rows\nfilter(row -&gt; row.age &gt; 25, df)\n\n2×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nBob\n30\nEspoo\n\n\n2\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n# Add new column\ndf.country = [\"Finland\", \"Finland\", \"Finland\"]\ndf\n\n3×4 DataFrame\n\n\n\nRow\nname\nage\ncity\ncountry\n\n\n\nString\nInt64\nString\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\nFinland\n\n\n2\nBob\n30\nEspoo\nFinland\n\n\n3\nCharlie\n35\nTampere\nFinland\n\n\n\n\n\n\n\n\n3.2.3 Grouping and Aggregation\n\nusing Statistics\n\n# Group by and summarize\ngdf = groupby(df, :country)\ncombine(gdf, :age =&gt; mean =&gt; :avg_age)\n\n1×2 DataFrame\n\n\n\nRow\ncountry\navg_age\n\n\n\nString\nFloat64\n\n\n\n\n1\nFinland\n30.0",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#working-with-geoscientific-data",
+    "href": "chapters/02-files-data.html#working-with-geoscientific-data",
+    "title": "3  Files and Data Manipulation",
+    "section": "3.3 Working with Geoscientific Data",
+    "text": "3.3 Working with Geoscientific Data\n\n3.3.1 Loading Geophysical Data\n\nusing DelimitedFiles\n\n# Read space-delimited data\ndata = readdlm(\"gravity_data.txt\")\n\n# Extract columns\nx, y, gz = data[:, 1], data[:, 2], data[:, 3]\n\n\n\n3.3.2 NetCDF Files\n\nusing NCDatasets\n\n# Read NetCDF\nds = Dataset(\"climate_data.nc\")\ntemp = ds[\"temperature\"][:]\nclose(ds)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html",
+    "href": "chapters/03-plotting-maps.html",
+    "title": "4  Plotting & Maps",
+    "section": "",
+    "text": "4.1 Basic Plotting with CairoMakie\nCairoMakie is a powerful plotting package that produces high-quality vector graphics and supports direct PDF output.\nusing CairoMakie\nCairoMakie.activate!(type = \"png\")\nx = 0:0.1:2π\ny = sin.(x)\nfig = lines(x, y, axis=(xlabel=\"x\", ylabel=\"y\", title=\"Sine Wave\"), \n            label=\"sin(x)\", linewidth=2)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#basic-plotting-with-cairomakie",
+    "href": "chapters/03-plotting-maps.html#basic-plotting-with-cairomakie",
+    "title": "4  Plotting & Maps",
+    "section": "",
+    "text": "4.1.1 Multiple Series\n\nfig = Figure()\nax = Axis(fig[1, 1], xlabel=\"x\", ylabel=\"y\")\nlines!(ax, x, sin.(x), label=\"sin(x)\", linewidth=2)\nlines!(ax, x, cos.(x), label=\"cos(x)\", linewidth=2, linestyle=:dash)\naxislegend(ax)\nfig\n\n\n\n\n\n\n4.1.2 Scatter Plots\n\nxs = randn(50)\nys = randn(50)\nfig = scatter(xs, ys, \n              axis=(xlabel=\"X\", ylabel=\"Y\", title=\"Random Points\"),\n              markersize=12, alpha=0.7)\nfig\n\n\n\n\n\n\n4.1.3 Heatmaps\n\nz = [sin(xi) * cos(yi) for xi in 0:0.1:2π, yi in 0:0.1:2π]\nfig = heatmap(z, axis=(xlabel=\"X\", ylabel=\"Y\", title=\"2D Function\"),\n              colormap=:viridis)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#subplots",
+    "href": "chapters/03-plotting-maps.html#subplots",
+    "title": "4  Plotting & Maps",
+    "section": "4.2 Subplots",
+    "text": "4.2 Subplots\n\nfig = Figure(size=(700, 500))\n\nax1 = Axis(fig[1, 1], title=\"Sine\")\nlines!(ax1, x, sin.(x))\n\nax2 = Axis(fig[1, 2], title=\"Cosine\")\nlines!(ax2, x, cos.(x))\n\nax3 = Axis(fig[2, 1], title=\"Tangent\", limits=(nothing, (-5, 5)))\nlines!(ax3, x, tan.(x))\n\nax4 = Axis(fig[2, 2], title=\"Random\")\nscatter!(ax4, randn(20), randn(20))\n\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#contour-plots",
+    "href": "chapters/03-plotting-maps.html#contour-plots",
+    "title": "4  Plotting & Maps",
+    "section": "4.3 Contour Plots",
+    "text": "4.3 Contour Plots\n\nx_cont = -2:0.1:2\ny_cont = -2:0.1:2\nz_cont = [exp(-(xi^2 + yi^2)) for xi in x_cont, yi in y_cont]\n\nfig = Figure()\nax = Axis(fig[1, 1], xlabel=\"X\", ylabel=\"Y\", title=\"Gaussian\")\nco = contourf!(ax, x_cont, y_cont, z_cont, levels=10)\nColorbar(fig[1, 2], co)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#geographic-maps",
+    "href": "chapters/03-plotting-maps.html#geographic-maps",
+    "title": "4  Plotting & Maps",
+    "section": "4.4 Geographic Maps",
+    "text": "4.4 Geographic Maps\n\n\n\n\n\n\nNoteUnder Construction\n\n\n\nGeographic mapping examples with GeoMakie.jl will be added soon.\n\n\n\n4.4.1 Coordinate Systems\n\n# Example with projected coordinates\nusing CoordinateTransformations\nusing Proj4\n\n# Transform from WGS84 to UTM\nwgs84 = Proj4.Projection(\"+proj=longlat +datum=WGS84\")\nutm35 = Proj4.Projection(\"+proj=utm +zone=35 +datum=WGS84\")\n\n\n\n4.4.2 Plotting Geophysical Data\n\n# Gravity anomaly map example\nusing CairoMakie\n\n# Create synthetic gravity data\nnx, ny = 50, 50\nx_grav = range(0, 10, length=nx)\ny_grav = range(0, 10, length=ny)\ngz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]\n\nfig = Figure()\nax = Axis(fig[1, 1], \n          xlabel=\"Easting (km)\", \n          ylabel=\"Northing (km)\",\n          title=\"Bouguer Gravity Anomaly\")\nhm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)\nColorbar(fig[1, 2], hm, label=\"mGal\")\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html",
+    "href": "chapters/04-neural-networks.html",
+    "title": "5  Neural Networks",
+    "section": "",
+    "text": "5.1 Introduction to Neural Networks",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html#introduction-to-neural-networks",
+    "href": "chapters/04-neural-networks.html#introduction-to-neural-networks",
+    "title": "5  Neural Networks",
+    "section": "",
+    "text": "NoteComing Soon\n\n\n\n\nPerceptrons and activation functions\nFeedforward networks\nBackpropagation",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html#flux.jl-basics",
+    "href": "chapters/04-neural-networks.html#flux.jl-basics",
+    "title": "5  Neural Networks",
+    "section": "5.2 Flux.jl Basics",
+    "text": "5.2 Flux.jl Basics\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nInstalling Flux.jl\nBuilding your first neural network\nTraining loops",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html#deep-learning-architectures",
+    "href": "chapters/04-neural-networks.html#deep-learning-architectures",
+    "title": "5  Neural Networks",
+    "section": "5.3 Deep Learning Architectures",
+    "text": "5.3 Deep Learning Architectures\n\n5.3.1 Convolutional Neural Networks (CNNs)\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nConvolution operations\nPooling layers\nImage classification for geoscience\n\n\n\n\n\n5.3.2 Recurrent Neural Networks (RNNs)\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nLSTM and GRU cells\nTime series prediction\nSequence modeling for seismic data\n\n\n\n\n\n5.3.3 Autoencoders\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nEncoder-decoder architecture\nVariational autoencoders\nDimensionality reduction",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html#training-best-practices",
+    "href": "chapters/04-neural-networks.html#training-best-practices",
+    "title": "5  Neural Networks",
+    "section": "5.4 Training Best Practices",
+    "text": "5.4 Training Best Practices\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nData preprocessing and normalization\nBatch training\nLearning rate scheduling\nRegularization techniques",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04-neural-networks.html#gpu-computing-with-cuda.jl",
+    "href": "chapters/04-neural-networks.html#gpu-computing-with-cuda.jl",
+    "title": "5  Neural Networks",
+    "section": "5.5 GPU Computing with CUDA.jl",
+    "text": "5.5 GPU Computing with CUDA.jl\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nGPU setup\nMoving data to GPU\nPerformance optimization",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05-inverse-modeling.html",
+    "href": "chapters/05-inverse-modeling.html",
+    "title": "6  Inverse Modeling",
+    "section": "",
+    "text": "WarningUnder Construction\n\n\n\nThis chapter is currently being developed.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06-ai-surrogates.html",
+    "href": "chapters/06-ai-surrogates.html",
+    "title": "7  AI Surrogates",
+    "section": "",
+    "text": "7.0.1 DeepONet",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06-ai-surrogates.html#gaussian-processes",
+    "href": "chapters/06-ai-surrogates.html#gaussian-processes",
+    "title": "7  AI Surrogates",
+    "section": "7.1 Gaussian Processes",
+    "text": "7.1 Gaussian Processes\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nGP fundamentals\nKernel selection\nScalable GPs",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06-ai-surrogates.html#reduced-order-models",
+    "href": "chapters/06-ai-surrogates.html#reduced-order-models",
+    "title": "7  AI Surrogates",
+    "section": "7.2 Reduced-Order Models",
+    "text": "7.2 Reduced-Order Models\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nProper Orthogonal Decomposition (POD)\nDynamic Mode Decomposition (DMD)\nNeural network-enhanced ROM",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06-ai-surrogates.html#uncertainty-quantification",
+    "href": "chapters/06-ai-surrogates.html#uncertainty-quantification",
+    "title": "7  AI Surrogates",
+    "section": "7.3 Uncertainty Quantification",
+    "text": "7.3 Uncertainty Quantification\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nEpistemic vs aleatoric uncertainty\nEnsemble methods\nBayesian neural networks",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06-ai-surrogates.html#multi-fidelity-modeling",
+    "href": "chapters/06-ai-surrogates.html#multi-fidelity-modeling",
+    "title": "7  AI Surrogates",
+    "section": "7.4 Multi-Fidelity Modeling",
+    "text": "7.4 Multi-Fidelity Modeling\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nCombining cheap and expensive models\nTransfer learning\nActive learning for surrogates",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07-applications.html",
+    "href": "chapters/07-applications.html",
+    "title": "8  Applications",
+    "section": "",
+    "text": "Warning🚧 Under Construction\n\n\n\nThis chapter is currently being developed.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
+    ]
+  }
+]
