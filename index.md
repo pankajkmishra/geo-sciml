@@ -8,6 +8,11 @@ title-block-banner: false
 .title {
   display: none !important;
 }
+.quarto-title-meta,
+.quarto-title-authors,
+.quarto-title-author {
+  display: none !important;
+}
 </style>
 
 
