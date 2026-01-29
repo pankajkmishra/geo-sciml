@@ -21,12 +21,22 @@ Welcome to the book **Geoscientific Machine Learning**.
 This book will teach you basics of Julia programming, machine learning, 
 and how to mix geoscience domain knowledge with machine learning methods.
 
-This book is free for everyone! 
+ 
+::: {.callout-warning}
+## Free living book
+This is a living book and  free for everyone! Contents will be dynamically updated at regular inervals betweeen major released versions.
+:::
 
-## This book is under construction 
 
+
+::: {.callout-warning}
+## This book is under construction
 Contents are not ready for readers. If you want me to include something specific while I work on this book part-time 
 Please open an issue and I'll try to add it. 
+:::
+
+
+
 
 ## Acknowledgements {.unnumbered}
 

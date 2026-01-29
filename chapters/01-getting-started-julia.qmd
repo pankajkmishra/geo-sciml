@@ -32,7 +32,7 @@ Download Julia from [julialang.org](https://julialang.org/downloads/).
 
 ```bash
 # Using juliaup (recommended)
-curl -fsSL https://install.julialang.org | sh
+curl -fsSL https://install.julialang.org | sh 
 ```
 
 ## Basic numerics

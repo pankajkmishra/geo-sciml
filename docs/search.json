@@ -4,17 +4,7 @@
     "href": "index.html",
     "title": "Geoscientific Machine Learning",
     "section": "",
-    "text": "This book is under construction\nWelcome to the book Geoscientific Machine Learning. This book will teach you basics of Julia programming, machine learning, and how to mix geoscience domain knowledge with machine learning methods.\nThis book is free for everyone!\nContents are not ready for readers. If you want me to include something specific while I work on this book part-time Please open an issue and I’ll try to add it.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Geoscientific Machine Learning",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nThis is a living book, continuously updated with new content and examples.",
+    "text": "Acknowledgements\nWelcome to the book Geoscientific Machine Learning. This book will teach you basics of Julia programming, machine learning, and how to mix geoscience domain knowledge with machine learning methods.\nThis is a living book, continuously updated with new content and examples.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
     ]
@@ -92,41 +82,41 @@
   {
     "objectID": "chapters/02-files-data.html",
     "href": "chapters/02-files-data.html",
-    "title": "3  Files and Data Manipulation",
+    "title": "3  Files & Data Manipulation",
     "section": "",
     "text": "3.1 Reading and Writing Files",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
     "objectID": "chapters/02-files-data.html#reading-and-writing-files",
     "href": "chapters/02-files-data.html#reading-and-writing-files",
-    "title": "3  Files and Data Manipulation",
+    "title": "3  Files & Data Manipulation",
     "section": "",
     "text": "3.1.1 Text Files\n\n# Writing to a file\nopen(\"example.txt\", \"w\") do f\n    write(f, \"Hello, Julia!\")\nend\n\n# Reading from a file\ncontent = read(\"example.txt\", String)\nprintln(content)\n\nHello, Julia!\n\n\n\n\n3.1.2 CSV Files\n\nusing CSV, DataFrames\n\n# Read CSV\ndf = CSV.read(\"data.csv\", DataFrame)\n\n# Write CSV\nCSV.write(\"output.csv\", df)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
     "objectID": "chapters/02-files-data.html#dataframes",
     "href": "chapters/02-files-data.html#dataframes",
-    "title": "3  Files and Data Manipulation",
+    "title": "3  Files & Data Manipulation",
     "section": "3.2 DataFrames",
-    "text": "3.2 DataFrames\nDataFrames are tabular data structures similar to pandas in Python or data.frames in R.\n\n3.2.1 Creating DataFrames\n\nusing DataFrames\n\n# Create from columns\ndf = DataFrame(\n    name = [\"Alice\", \"Bob\", \"Charlie\"],\n    age = [25, 30, 35],\n    city = [\"Helsinki\", \"Espoo\", \"Tampere\"]\n)\n\n3×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\n\n\n2\nBob\n30\nEspoo\n\n\n3\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n\n3.2.2 Basic Operations\n\n# Select columns\ndf[:, :name]\n\n3-element Vector{String}:\n \"Alice\"\n \"Bob\"\n \"Charlie\"\n\n\n\n# Filter rows\nfilter(row -&gt; row.age &gt; 25, df)\n\n2×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nBob\n30\nEspoo\n\n\n2\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n# Add new column\ndf.country = [\"Finland\", \"Finland\", \"Finland\"]\ndf\n\n3×4 DataFrame\n\n\n\nRow\nname\nage\ncity\ncountry\n\n\n\nString\nInt64\nString\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\nFinland\n\n\n2\nBob\n30\nEspoo\nFinland\n\n\n3\nCharlie\n35\nTampere\nFinland\n\n\n\n\n\n\n\n\n3.2.3 Grouping and Aggregation\n\nusing Statistics\n\n# Group by and summarize\ngdf = groupby(df, :country)\ncombine(gdf, :age =&gt; mean =&gt; :avg_age)\n\n1×2 DataFrame\n\n\n\nRow\ncountry\navg_age\n\n\n\nString\nFloat64\n\n\n\n\n1\nFinland\n30.0",
+    "text": "3.2 DataFrames\nDataFrames are tabular data structures similar to pandas in Python or data.frames in R.\n\n3.2.1 Creating DataFrames\n\nusing DataFrames\n\n# Create from columns\ndf = DataFrame(\n    name = [\"Alice\", \"Bob\", \"Charlie\"],\n    age = [25, 30, 35],\n    city = [\"Helsinki\", \"Espoo\", \"Tampere\"]\n)\n\n\nPrecompiling packages...\n    756.7 ms  ✓ QuartoNotebookWorkerTablesExt (serial)\n  1 dependency successfully precompiled in 1 seconds\nPrecompiling packages...\n    727.5 ms  ✓ QuartoNotebookWorkerLaTeXStringsExt (serial)\n  1 dependency successfully precompiled in 1 seconds\n\n\n\n\n3×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\n\n\n2\nBob\n30\nEspoo\n\n\n3\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n\n3.2.2 Basic Operations\n\n# Select columns\ndf[:, :name]\n\n3-element Vector{String}:\n \"Alice\"\n \"Bob\"\n \"Charlie\"\n\n\n\n# Filter rows\nfilter(row -&gt; row.age &gt; 25, df)\n\n2×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nBob\n30\nEspoo\n\n\n2\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n# Add new column\ndf.country = [\"Finland\", \"Finland\", \"Finland\"]\ndf\n\n3×4 DataFrame\n\n\n\nRow\nname\nage\ncity\ncountry\n\n\n\nString\nInt64\nString\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\nFinland\n\n\n2\nBob\n30\nEspoo\nFinland\n\n\n3\nCharlie\n35\nTampere\nFinland\n\n\n\n\n\n\n\n\n3.2.3 Grouping and Aggregation\n\nusing Statistics\n\n# Group by and summarize\ngdf = groupby(df, :country)\ncombine(gdf, :age =&gt; mean =&gt; :avg_age)\n\n1×2 DataFrame\n\n\n\nRow\ncountry\navg_age\n\n\n\nString\nFloat64\n\n\n\n\n1\nFinland\n30.0",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
     "objectID": "chapters/02-files-data.html#working-with-geoscientific-data",
     "href": "chapters/02-files-data.html#working-with-geoscientific-data",
-    "title": "3  Files and Data Manipulation",
+    "title": "3  Files & Data Manipulation",
     "section": "3.3 Working with Geoscientific Data",
     "text": "3.3 Working with Geoscientific Data\n\n3.3.1 Loading Geophysical Data\n\nusing DelimitedFiles\n\n# Read space-delimited data\ndata = readdlm(\"gravity_data.txt\")\n\n# Extract columns\nx, y, gz = data[:, 1], data[:, 2], data[:, 3]\n\n\n\n3.3.2 NetCDF Files\n\nusing NCDatasets\n\n# Read NetCDF\nds = Dataset(\"climate_data.nc\")\ntemp = ds[\"temperature\"][:]\nclose(ds)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files and Data Manipulation</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
@@ -174,7 +164,7 @@
     "href": "chapters/03-plotting-maps.html#geographic-maps",
     "title": "4  Plotting & Maps",
     "section": "4.4 Geographic Maps",
-    "text": "4.4 Geographic Maps\n\n\n\n\n\n\nNoteUnder Construction\n\n\n\nGeographic mapping examples with GeoMakie.jl will be added soon.\n\n\n\n4.4.1 Coordinate Systems\n\n# Example with projected coordinates\nusing CoordinateTransformations\nusing Proj4\n\n# Transform from WGS84 to UTM\nwgs84 = Proj4.Projection(\"+proj=longlat +datum=WGS84\")\nutm35 = Proj4.Projection(\"+proj=utm +zone=35 +datum=WGS84\")\n\n\n\n4.4.2 Plotting Geophysical Data\n\n# Gravity anomaly map example\nusing CairoMakie\n\n# Create synthetic gravity data\nnx, ny = 50, 50\nx_grav = range(0, 10, length=nx)\ny_grav = range(0, 10, length=ny)\ngz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]\n\nfig = Figure()\nax = Axis(fig[1, 1], \n          xlabel=\"Easting (km)\", \n          ylabel=\"Northing (km)\",\n          title=\"Bouguer Gravity Anomaly\")\nhm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)\nColorbar(fig[1, 2], hm, label=\"mGal\")\nfig",
+    "text": "4.4 Geographic Maps\n\n\n\n\n\n\nUnder Construction\n\n\n\nGeographic mapping examples with GeoMakie.jl will be added soon.\n\n\n\n4.4.1 Coordinate Systems\n\n# Example with projected coordinates\nusing CoordinateTransformations\nusing Proj4\n\n# Transform from WGS84 to UTM\nwgs84 = Proj4.Projection(\"+proj=longlat +datum=WGS84\")\nutm35 = Proj4.Projection(\"+proj=utm +zone=35 +datum=WGS84\")\n\n\n\n4.4.2 Plotting Geophysical Data\n\n# Gravity anomaly map example\nusing CairoMakie\n\n# Create synthetic gravity data\nnx, ny = 50, 50\nx_grav = range(0, 10, length=nx)\ny_grav = range(0, 10, length=ny)\ngz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]\n\nfig = Figure()\nax = Axis(fig[1, 1], \n          xlabel=\"Easting (km)\", \n          ylabel=\"Northing (km)\",\n          title=\"Bouguer Gravity Anomaly\")\nhm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)\nColorbar(fig[1, 2], hm, label=\"mGal\")\nfig",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
     ]
@@ -194,7 +184,7 @@
     "href": "chapters/04-neural-networks.html#introduction-to-neural-networks",
     "title": "5  Neural Networks",
     "section": "",
-    "text": "NoteComing Soon\n\n\n\n\nPerceptrons and activation functions\nFeedforward networks\nBackpropagation",
+    "text": "Coming Soon\n\n\n\n\nPerceptrons and activation functions\nFeedforward networks\nBackpropagation",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
@@ -204,7 +194,7 @@
     "href": "chapters/04-neural-networks.html#flux.jl-basics",
     "title": "5  Neural Networks",
     "section": "5.2 Flux.jl Basics",
-    "text": "5.2 Flux.jl Basics\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nInstalling Flux.jl\nBuilding your first neural network\nTraining loops",
+    "text": "5.2 Flux.jl Basics\n\n\n\n\n\n\nComing Soon\n\n\n\n\nInstalling Flux.jl\nBuilding your first neural network\nTraining loops",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
@@ -214,7 +204,7 @@
     "href": "chapters/04-neural-networks.html#deep-learning-architectures",
     "title": "5  Neural Networks",
     "section": "5.3 Deep Learning Architectures",
-    "text": "5.3 Deep Learning Architectures\n\n5.3.1 Convolutional Neural Networks (CNNs)\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nConvolution operations\nPooling layers\nImage classification for geoscience\n\n\n\n\n\n5.3.2 Recurrent Neural Networks (RNNs)\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nLSTM and GRU cells\nTime series prediction\nSequence modeling for seismic data\n\n\n\n\n\n5.3.3 Autoencoders\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nEncoder-decoder architecture\nVariational autoencoders\nDimensionality reduction",
+    "text": "5.3 Deep Learning Architectures\n\n5.3.1 Convolutional Neural Networks (CNNs)\n\n\n\n\n\n\nComing Soon\n\n\n\n\nConvolution operations\nPooling layers\nImage classification for geoscience\n\n\n\n\n\n5.3.2 Recurrent Neural Networks (RNNs)\n\n\n\n\n\n\nComing Soon\n\n\n\n\nLSTM and GRU cells\nTime series prediction\nSequence modeling for seismic data\n\n\n\n\n\n5.3.3 Autoencoders\n\n\n\n\n\n\nComing Soon\n\n\n\n\nEncoder-decoder architecture\nVariational autoencoders\nDimensionality reduction",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
@@ -224,7 +214,7 @@
     "href": "chapters/04-neural-networks.html#training-best-practices",
     "title": "5  Neural Networks",
     "section": "5.4 Training Best Practices",
-    "text": "5.4 Training Best Practices\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nData preprocessing and normalization\nBatch training\nLearning rate scheduling\nRegularization techniques",
+    "text": "5.4 Training Best Practices\n\n\n\n\n\n\nComing Soon\n\n\n\n\nData preprocessing and normalization\nBatch training\nLearning rate scheduling\nRegularization techniques",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
@@ -234,7 +224,7 @@
     "href": "chapters/04-neural-networks.html#gpu-computing-with-cuda.jl",
     "title": "5  Neural Networks",
     "section": "5.5 GPU Computing with CUDA.jl",
-    "text": "5.5 GPU Computing with CUDA.jl\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nGPU setup\nMoving data to GPU\nPerformance optimization",
+    "text": "5.5 GPU Computing with CUDA.jl\n\n\n\n\n\n\nComing Soon\n\n\n\n\nGPU setup\nMoving data to GPU\nPerformance optimization",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
@@ -244,7 +234,7 @@
     "href": "chapters/05-inverse-modeling.html",
     "title": "6  Inverse Modeling",
     "section": "",
-    "text": "WarningUnder Construction\n\n\n\nThis chapter is currently being developed.",
+    "text": "Under Construction\n\n\n\nThis chapter is currently being developed.",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
     ]
@@ -264,7 +254,7 @@
     "href": "chapters/06-ai-surrogates.html#gaussian-processes",
     "title": "7  AI Surrogates",
     "section": "7.1 Gaussian Processes",
-    "text": "7.1 Gaussian Processes\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nGP fundamentals\nKernel selection\nScalable GPs",
+    "text": "7.1 Gaussian Processes\n\n\n\n\n\n\nComing Soon\n\n\n\n\nGP fundamentals\nKernel selection\nScalable GPs",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
     ]
@@ -274,7 +264,7 @@
     "href": "chapters/06-ai-surrogates.html#reduced-order-models",
     "title": "7  AI Surrogates",
     "section": "7.2 Reduced-Order Models",
-    "text": "7.2 Reduced-Order Models\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nProper Orthogonal Decomposition (POD)\nDynamic Mode Decomposition (DMD)\nNeural network-enhanced ROM",
+    "text": "7.2 Reduced-Order Models\n\n\n\n\n\n\nComing Soon\n\n\n\n\nProper Orthogonal Decomposition (POD)\nDynamic Mode Decomposition (DMD)\nNeural network-enhanced ROM",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
     ]
@@ -284,7 +274,7 @@
     "href": "chapters/06-ai-surrogates.html#uncertainty-quantification",
     "title": "7  AI Surrogates",
     "section": "7.3 Uncertainty Quantification",
-    "text": "7.3 Uncertainty Quantification\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nEpistemic vs aleatoric uncertainty\nEnsemble methods\nBayesian neural networks",
+    "text": "7.3 Uncertainty Quantification\n\n\n\n\n\n\nComing Soon\n\n\n\n\nEpistemic vs aleatoric uncertainty\nEnsemble methods\nBayesian neural networks",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
     ]
@@ -294,7 +284,7 @@
     "href": "chapters/06-ai-surrogates.html#multi-fidelity-modeling",
     "title": "7  AI Surrogates",
     "section": "7.4 Multi-Fidelity Modeling",
-    "text": "7.4 Multi-Fidelity Modeling\n\n\n\n\n\n\nNoteComing Soon\n\n\n\n\nCombining cheap and expensive models\nTransfer learning\nActive learning for surrogates",
+    "text": "7.4 Multi-Fidelity Modeling\n\n\n\n\n\n\nComing Soon\n\n\n\n\nCombining cheap and expensive models\nTransfer learning\nActive learning for surrogates",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
     ]
@@ -304,7 +294,7 @@
     "href": "chapters/07-applications.html",
     "title": "8  Applications",
     "section": "",
-    "text": "Warning🚧 Under Construction\n\n\n\nThis chapter is currently being developed.",
+    "text": "🚧 Under Construction\n\n\n\nThis chapter is currently being developed.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
     ]

@@ -1,11 +1,11 @@
 /* Extend side padding to footer */
 .footer, footer, .quarto-page-footer {
   background: #3e3e3e !important;
-  padding-left: 120px !important;
-  padding-right: 120px !important;
+  padding-left: 100px !important;
+  padding-right: 100px !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .footer, footer, .quarto-page-footer {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -13,7 +13,7 @@
 }
 /* Hide main scrollbar but allow scrolling */
 html {
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: thin; /* Firefox */
 }
 html::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
@@ -21,18 +21,31 @@ html::-webkit-scrollbar {
 /* Add black color padding on both sides of the website */
 body {
   background: #3e3e3e !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow-x: hidden;
 }
 
+/* Responsive content container */
+/* Main content area centered with white background and side margins */
+/* Main content area centered with white background and side margins */
 #quarto-content {
   background: #fff !important;
-  margin-left: 120px !important;
-  margin-right: 120px !important;
+  max-width: 1200px;
+  margin-left: 100px !important;
+  margin-right: 100px !important;
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   #quarto-content {
+    max-width: 100vw;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     border-radius: 0;
   }
 }
@@ -81,8 +94,8 @@ body {
 }
 
 /*-- Sidebar title styling with box --*/
-.sidebar-title,
-#quarto-sidebar .sidebar-title {
+/* Sidebar title styling with box */
+.sidebar-title, #quarto-sidebar .sidebar-title {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -99,9 +112,8 @@ body {
 @media (max-width: 600px) {
   .navbar-title,
   .navbar-brand .navbar-title,
-  .sidebar-title,
-  #quarto-sidebar .sidebar-title {
-  font-size: 1.1rem !important;
+  .sidebar-title, #quarto-sidebar .sidebar-title {
+    font-size: 1.1rem !important;
   }
 }
 .sidebar-title::after,
@@ -242,15 +254,8 @@ pre {
 }
 
 /*-- No side margins --*/
-body {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
 
-#quarto-content {
-  max-width: 100%;
-  margin: 0 auto;
-}
+/* Removed duplicate body and #quarto-content rules for clarity */
 
 /*-- Responsive figures and images --*/
 img,
