@@ -36,6 +36,7 @@ book:
 
 format:
   html:
+    title-block-banner: false
     theme:
       light: cosmo
     css: styles.css
