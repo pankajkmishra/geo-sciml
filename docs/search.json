@@ -308,15 +308,5 @@
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
     ]
-  },
-  {
-    "objectID": "index.html#this-book-is-under-construction",
-    "href": "index.html#this-book-is-under-construction",
-    "title": "Geoscientific Machine Learning",
-    "section": "This book is under construction",
-    "text": "This book is under construction\nContents are not ready for readers. If you want me to include something specific while I work on this book part-time Please open an issue and I’ll try to add it.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
-    ]
   }
 ]

@@ -10,7 +10,7 @@ execute:
 book:
   title: "Geoscientific Machine Learning"
   author: "Pankaj K Mishra"
-  site-url: "https://pankajkmishra.github.io/geo-sciml/"
+  site-url: "https://geo-sciml/"
   output-file: "geo-sciml"
   downloads: [pdf]
   search: true
@@ -21,7 +21,7 @@ book:
     collapse-level: 1
     tools:
       - icon: github
-        href: https://github.com/pankajkmishra/geo-sciml
+        href: https://geo-sciml
   page-navigation: true
   chapters:
     - text: "About this book"
@@ -67,6 +67,8 @@ format:
     sansfont: "Libertinus Sans"
     monofont: "JuliaMono"
     mathfont: "Libertinus Math"
-    include-in-header:
-      text: |
-        \setcounter{secnumdepth}{3}
+    header-includes: |
+      \usepackage{fancyhdr}
+      \pagestyle{fancy}
+      \fancyfoot[C]{\href{https://www.geo-sciml.com/}{https://www.geo-sciml.com/}}
+      \setcounter{secnumdepth}{3}
