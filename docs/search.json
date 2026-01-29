@@ -6,7 +6,7 @@
     "section": "",
     "text": "This book is under construction\nWelcome to the book Geoscientific Machine Learning. This book will teach you basics of Julia programming, machine learning, and how to mix geoscience domain knowledge with machine learning methods.\nThis book is free for everyone!\nContents are not ready for readers. If you want me to include something specific while I work on this book part-time Please open an issue and I’ll try to add it.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
     ]
   },
   {
@@ -16,7 +16,7 @@
     "section": "Acknowledgements",
     "text": "Acknowledgements\nThis is a living book, continuously updated with new content and examples.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
     ]
   },
   {
@@ -44,7 +44,7 @@
     "href": "chapters/01-getting-started-julia.html#installing-julia",
     "title": "2  Getting started with Julia",
     "section": "2.2 Installing Julia",
-    "text": "2.2 Installing Julia\nDownload Julia from julialang.org.\n\n2.2.1 Windows\n\nDownload the Windows installer (.exe)\nRun the installer and follow the prompts\nAdd Julia to your PATH (optional but recommended)\n\n\n\n2.2.2 macOS\n\nDownload the macOS .dmg file\nDrag Julia to Applications\nAdd to PATH: export PATH=\"$PATH:/Applications/Julia-1.x.app/Contents/Resources/julia/bin\"\n\n\n\n2.2.3 Linux\n# Using juliaup (recommended)\ncurl -fsSL https://install.julialang.org | sh",
+    "text": "2.2 Installing Julia\nDownload Julia from julialang.org.\n\n2.2.1 Windows\n\nDownload the Windows installer (.exe)\nRun the installer and follow the prompts\nAdd Julia to your PATH (optional but recommended)\n\n\n\n2.2.2 macOS\n\nDownload the macOS .dmg file\nDrag Julia to Applications\n\n\n\n2.2.3 Linux\n# Using juliaup (recommended)\ncurl -fsSL https://install.julialang.org | sh",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -307,6 +307,16 @@
     "text": "Warning🚧 Under Construction\n\n\n\nThis chapter is currently being developed.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#this-book-is-under-construction",
+    "href": "index.html#this-book-is-under-construction",
+    "title": "Geoscientific Machine Learning",
+    "section": "This book is under construction",
+    "text": "This book is under construction\nContents are not ready for readers. If you want me to include something specific while I work on this book part-time Please open an issue and I’ll try to add it.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
     ]
   }
 ]

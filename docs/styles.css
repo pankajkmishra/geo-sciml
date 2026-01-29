@@ -1,52 +1,63 @@
+/* Extend side padding to footer */
+.footer, footer, .quarto-page-footer {
+  background: #3e3e3e !important;
+  padding-left: 120px !important;
+  padding-right: 120px !important;
+}
+
+@media (max-width: 900px) {
+  .footer, footer, .quarto-page-footer {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+/* Hide main scrollbar but allow scrolling */
+html {
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+/* Add black color padding on both sides of the website */
+body {
+  background: #3e3e3e !important;
+}
+
+#quarto-content {
+  background: #fff !important;
+  margin-left: 120px !important;
+  margin-right: 120px !important;
+}
+
+@media (max-width: 900px) {
+  #quarto-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0;
+  }
+}
 /*-- Two color scheme: dark grey titles + blue links --*/
 :root {
-  --dark-grey: #404040;
-  --link-blue: #00008B;
+  --dark-grey: #2d2c2c;
+    --link-blue: #0000EE;
 }
 
-/*-- Sidebar scrollbar - thin line style --*/
-#quarto-sidebar {
-  overflow-y: auto !important;
-  max-height: 100vh !important;
-  scrollbar-width: thin;
-  scrollbar-color: #c0c0c0 transparent;
-}
 
-#quarto-sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-
-#quarto-sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#quarto-sidebar::-webkit-scrollbar-thumb {
-  background: #c0c0c0;
-  border-radius: 2px;
-}
-
-#quarto-sidebar::-webkit-scrollbar-thumb:hover {
-  background: #a0a0a0;
-}
 
 /*-- Book title styling with box --*/
 .navbar-brand-container .navbar-brand {
-  background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f5f0ff 100%) !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 10px !important;
-  padding: 12px 20px !important;
+  /* Removed fancy box styling */
   margin: 10px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
 }
 
 .navbar-brand-container .navbar-brand::after {
-  content: "Geoscience \2764 SciML \2764 Julia" !important;
+  content: "Geoscience | SciML | Julia" !important;
   display: block !important;
-  font-size: 0.85rem !important;
-  color: #00008B !important;
+  font-size: 0.95rem !important;
+  color: var(--link-blue) !important;
   font-weight: 400 !important;
   margin-top: 4px !important;
   letter-spacing: 0.05em !important;
@@ -64,7 +75,9 @@
 .navbar-brand .navbar-title {
   color: var(--dark-grey) !important;
   font-weight: 700 !important;
-  font-size: 1.2rem !important;
+    font-size: 1.25rem !important;
+  line-height: 1.1;
+  word-break: break-word;
 }
 
 /*-- Sidebar title styling with box --*/
@@ -75,24 +88,28 @@
   align-items: center !important;
   color: var(--dark-grey) !important;
   font-weight: 700 !important;
-  font-size: 1.2rem !important;
+  font-size: 1.25rem !important;
+  line-height: 1.15;
+  word-break: break-word;
   text-align: center !important;
-  background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 50%, #f5f0ff 100%) !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 10px !important;
-  padding: 12px 20px !important;
   margin: 10px 5px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
   white-space: nowrap !important;
   width: calc(100% - 10px) !important;
 }
-
+@media (max-width: 600px) {
+  .navbar-title,
+  .navbar-brand .navbar-title,
+  .sidebar-title,
+  #quarto-sidebar .sidebar-title {
+  font-size: 1.1rem !important;
+  }
+}
 .sidebar-title::after,
 #quarto-sidebar .sidebar-title::after {
-  content: "Geoscience \2764 SciML \2764 Julia" !important;
+  content: "Geoscience | SciML | Julia" !important;
   display: block !important;
-  font-size: 0.85rem !important;
-  color: #00008B !important;
+  font-size: 0.95rem !important;
+  color: var(--link-blue) !important;
   font-weight: 400 !important;
   margin-top: 6px !important;
   letter-spacing: 0.03em !important;
@@ -109,19 +126,19 @@
   display: flex !important;
   justify-content: center !important;
   width: 100% !important;
-  margin-top: 0.5rem !important;
-  gap: 1rem !important;
+  margin-top: 1.5rem !important;
+  gap: 0.4rem !important;
 }
 
 /*-- Make sidebar icons bigger and blue --*/
 .sidebar-tools-main a i,
 .sidebar-tools-main a svg,
 .sidebar-tools-main .bi {
-  font-size: 1.3rem !important;
+  font-size: 1.5rem !important;
   width: 1.3rem !important;
   height: 1.3rem !important;
-  color: var(--link-blue) !important;
-  fill: var(--link-blue) !important;
+  color: #00008B !important;
+  fill: #00008B !important;
 }
 
 /*-- Sidebar items not bold --*/
@@ -183,7 +200,7 @@ a:hover {
 pre {
   background-color: #f8f9fa !important;
   border: 1px solid #e9ecef;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 /*-- TOC title with list icon --*/

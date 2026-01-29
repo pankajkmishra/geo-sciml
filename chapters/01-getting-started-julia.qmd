@@ -27,7 +27,6 @@ Download Julia from [julialang.org](https://julialang.org/downloads/).
 
 1. Download the macOS .dmg file
 2. Drag Julia to Applications
-3. Add to PATH: `export PATH="$PATH:/Applications/Julia-1.x.app/Contents/Resources/julia/bin"`
 
 ### Linux
 

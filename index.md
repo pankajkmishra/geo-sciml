@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Geoscientific Machine Learning"
 number-sections: false
 title-block-banner: false
 ---
@@ -14,6 +14,7 @@ title-block-banner: false
   display: none !important;
 }
 </style>
+
 
 
 Welcome to the book **Geoscientific Machine Learning**. 
