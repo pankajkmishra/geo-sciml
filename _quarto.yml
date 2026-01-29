@@ -10,7 +10,7 @@ execute:
 book:
   title: "Geoscientific Machine Learning"
   author: "Pankaj K Mishra"
-  site-url: "https://geo-sciml/"
+  site-url: "https://geo-sciml.com/"
   output-file: "geo-sciml"
   downloads: [pdf]
   search: true
@@ -21,7 +21,7 @@ book:
     collapse-level: 1
     tools:
       - icon: github
-        href: https://geo-sciml
+        href: https://github.com/pankajkmishra/geo-sciml
   page-navigation: true
   chapters:
     - text: "About this book"
