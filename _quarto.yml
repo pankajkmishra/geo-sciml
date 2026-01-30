@@ -14,8 +14,6 @@ book:
   output-file: "geo-sciml"
   downloads: [pdf]
   search: true
-  page-footer:
-    center: '<span style="white-space:nowrap;">✍️ Pankaj K Mishra <a href="https://www.linkedin.com/in/pankajkmishra01/" target="_blank" style="margin-left:0.3em;text-decoration:none;"><i class="bi bi-linkedin" style="font-size:1.2em;vertical-align:middle;"></i></a></span>'
   sidebar:
     style: docked
     collapse-level: 1
@@ -27,7 +25,8 @@ book:
     - text: "About this book"
       file: index.md
     - chapters/01-getting-started-julia.qmd
-    - chapters/02-files-data.qmd
+    - text: "Files & Data Manipulation"
+      file: chapters/02-files-data.qmd
     - chapters/03-plotting-maps.qmd
     - chapters/04-neural-networks.qmd
     - chapters/05-inverse-modeling.qmd
@@ -50,8 +49,8 @@ format:
     code-overflow: wrap
     grid:
       sidebar-width: 450px
-      body-width: 900px
-      margin-width: 200px
+      body-width: 1200px
+      margin-width: 300px
       gutter-width: 1.5em
   pdf:
     number-sections: true
@@ -71,5 +70,4 @@ format:
     header-includes: |
       \usepackage{fancyhdr}
       \pagestyle{fancy}
-      \fancyfoot[C]{\href{https://www.geo-sciml.com/}{https://www.geo-sciml.com/}}
       \setcounter{secnumdepth}{3}
