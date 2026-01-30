@@ -12,7 +12,7 @@
 
 :root{
   --content-max: 1200px;
-  --gutter: 200px;
+  --gutter: 80px;
   --gutter-sm: 0.5rem;
 }
 

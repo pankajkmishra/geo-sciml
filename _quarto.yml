@@ -48,9 +48,9 @@ format:
     code-copy: true
     code-overflow: wrap
     grid:
-      sidebar-width: 450px
-      body-width: 1200px
-      margin-width: 300px
+      sidebar-width: 400px
+      body-width: 1000px
+      margin-width: 200px
       gutter-width: 1.5em
   pdf:
     number-sections: true
