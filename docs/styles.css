@@ -1,7 +1,3 @@
-/* Ensure code output and code font sizes match */
-.cell-output, .cell-output-display, pre, code {
-  font-size: 0.9em !important;
-}
 /* Ensure output and code font sizes match */
 .cell-output, .cell-output-display, pre {
   font-size: 0.9em !important;
@@ -12,7 +8,7 @@
 
 :root{
   --content-max: 1200px;
-  --gutter: 80px;
+  --gutter: 200px;
   --gutter-sm: 0.5rem;
 }
 
