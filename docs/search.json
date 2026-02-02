@@ -298,25 +298,5 @@
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
     ]
-  },
-  {
-    "objectID": "index.html#this-book-is-under-construction",
-    "href": "index.html#this-book-is-under-construction",
-    "title": "Geoscientific Machine Learning",
-    "section": "This book is under construction",
-    "text": "This book is under construction\nSome sections are incomplete. If there’s something you’d like to see included, open an issue and let me know what you’re working on.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#acknowledgements",
-    "href": "index.html#acknowledgements",
-    "title": "Geoscientific Machine Learning",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nThanks to the readers who send corrections, questions, and suggestions. This book improves because of that.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>About this book</span>"
-    ]
   }
 ]
