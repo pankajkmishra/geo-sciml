@@ -87,5 +87,5 @@ format:
       \definecolor{codebg}{RGB}{245,245,245}
       \definecolor{codeborder}{RGB}{0,51,153}
       \renewenvironment{Shaded}{
-      \begin{tcolorbox}[enhanced,breakable,colback=codebg,colframe=codeborder,boxrule=0pt,leftrule=1pt,rightrule=0pt,arc=1.5pt,outer arc=1.5pt,left=8pt,right=8pt,top=6pt,bottom=3pt]}{\end{tcolorbox}
+      \begin{NoHyper}\begin{tcolorbox}[enhanced,breakable,colback=codebg,colframe=codeborder,boxrule=0pt,leftrule=1pt,rightrule=0pt,arc=1.5pt,outer arc=1.5pt,left=8pt,right=8pt,top=6pt,bottom=3pt]}{\end{tcolorbox}\end{NoHyper}
       }
