@@ -14,27 +14,57 @@
     "href": "chapters/01-getting-started-julia.html",
     "title": "2  Getting started with Julia",
     "section": "",
-    "text": "2.1 Installing Julia\nIn this chapter, we’ll guide you through setting up Julia with Visual Studio Code (VS Code) on Windows, Linux, and macOS. By the end of this chapter, you’ll have a fully functional Julia development environment ready for scientific computing and machine learning.\nJulia can be installed on all major operating systems. We recommend using juliaup, the official Julia version manager, which makes it easy to install, update, and manage multiple Julia versions.",
+    "text": "2.1 Quick setup (Windows, macOS, Linux)\nWe recommend starting with VS Code and adding Julia via juliaup. Keep it lean: install VS Code, install Julia, point VS Code to Julia, set your depot location, and add a few key extensions.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#installing-julia",
-    "href": "chapters/01-getting-started-julia.html#installing-julia",
+    "objectID": "chapters/01-getting-started-julia.html#quick-setup-windows-macos-linux",
+    "href": "chapters/01-getting-started-julia.html#quick-setup-windows-macos-linux",
     "title": "2  Getting started with Julia",
     "section": "",
-    "text": "2.1.1 Windows\nOption 1: Using juliaup (Recommended)\n\nOpen PowerShell or Command Prompt\nRun the following command:\nwinget install julia -s msstore\nRestart your terminal and verify the installation:\njulia --version\n\nOption 2: Manual Installation\n\nDownload the Windows installer (.exe) from julialang.org\nRun the installer and follow the prompts\nCheck “Add Julia to PATH” during installation\nRestart your terminal and verify with julia --version\n\n\n\n2.1.2 macOS\nOption 1: Using juliaup (Recommended)\n\nOpen Terminal and run:\ncurl -fsSL https://install.julialang.org | sh\nFollow the prompts and restart your terminal\nVerify the installation:\njulia --version\n\nOption 2: Using Homebrew\nbrew install julia\nOption 3: Manual Installation\n\nDownload the macOS .dmg file from julialang.org\nOpen the .dmg and drag Julia to Applications\nAdd Julia to your PATH by adding this line to ~/.zshrc or ~/.bash_profile:\nexport PATH=\"/Applications/Julia-1.11.app/Contents/Resources/julia/bin:$PATH\"\n\n\n\n2.1.3 Linux\nUsing juliaup (Recommended)\ncurl -fsSL https://install.julialang.org | sh\nAfter installation, restart your terminal or run source ~/.bashrc to update your PATH.\nAlternative: Using your distribution’s package manager\n# Ubuntu/Debian (may not have the latest version)\nsudo apt install julia\n\n# Arch Linux\nsudo pacman -S julia",
+    "text": "Install VS Code from code.visualstudio.com.\nInstall Julia with juliaup (recommended everywhere):\n\nWindows (PowerShell)\nwinget install julia -s msstore\njuliaup add release\nmacOS (Terminal, zsh/bash)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\nLinux (Terminal, bash/zsh)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\n\nVerify Julia is on PATH:\njulia --version",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#setting-up-vs-code",
-    "href": "chapters/01-getting-started-julia.html#setting-up-vs-code",
+    "objectID": "chapters/01-getting-started-julia.html#set-julia-depot-location-where-.julia-lives",
+    "href": "chapters/01-getting-started-julia.html#set-julia-depot-location-where-.julia-lives",
     "title": "2  Getting started with Julia",
-    "section": "2.2 Setting up VS Code",
-    "text": "2.2 Setting up VS Code\nVisual Studio Code is an excellent editor for Julia development, offering syntax highlighting, code completion, integrated debugging, and a built-in plot pane.\n\n2.2.1 Installing VS Code\nDownload and install VS Code from code.visualstudio.com for your operating system:\n\nWindows: Download the .exe installer\nmacOS: Download the .dmg file or use brew install --cask visual-studio-code\nLinux: Download the .deb or .rpm package, or use Snap: sudo snap install code --classic\n\n\n\n2.2.2 Installing the Julia Extension\n\nOpen VS Code\nClick the Extensions icon in the sidebar (or press Ctrl+Shift+X / Cmd+Shift+X)\nSearch for “Julia”\nInstall the Julia extension by julialang\n\n\n\n2.2.3 Configuring the Julia Path\nIf VS Code doesn’t automatically detect your Julia installation:\n\nOpen VS Code Settings (Ctrl+, / Cmd+,)\nSearch for “Julia: Executable Path”\nSet the path to your Julia executable:\n\nWindows: C:\\Users\\&lt;username&gt;\\AppData\\Local\\Programs\\Julia-1.11.2\\bin\\julia.exe\nmacOS: /Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia\nLinux: /usr/bin/julia or ~/.juliaup/bin/julia\n\n\n\n\n2.2.4 Recommended Extensions\nFor the best experience with this book, we recommend installing these additional extensions:\n\nJulia Language Support - syntax highlighting, code completion, inline results\nQuarto - for rendering notebooks and documents\nRainbow CSV - for viewing CSV files with color-coded columns\nGitLens - for enhanced Git integration\n\n\n\n2.2.5 Testing Your Setup\n\nCreate a new file called test.jl\nAdd the following code:\nprintln(\"Hello, Julia!\")\nx = [1, 2, 3, 4, 5]\nprintln(\"Sum: \", sum(x))\nPress Ctrl+Enter / Cmd+Enter to execute the current line, or Shift+Enter to execute and move to the next line\nYou should see the output in the Julia REPL at the bottom of VS Code",
+    "section": "2.2 Set Julia depot location (where .julia lives)",
+    "text": "2.2 Set Julia depot location (where .julia lives)\nPick a location (e.g., D:\\JuliaDepot on Windows, /opt/julia-depot or ~/julia-depot on macOS/Linux) and set JULIA_DEPOT_PATH before launching Julia/VS Code.\n\nWindows (PowerShell, per-shell)\n$env:JULIA_DEPOT_PATH = \"D:\\JuliaDepot\"\njulia --version\nWindows (persist system/user env var)\nsetx JULIA_DEPOT_PATH \"D:\\JuliaDepot\"\nmacOS/Linux (zsh/bash)\nexport JULIA_DEPOT_PATH=\"$HOME/julia-depot\"\njulia --version\nTo keep multiple depots (rare), separate with ; on Windows or : on macOS/Linux.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#point-vs-code-to-julia",
+    "href": "chapters/01-getting-started-julia.html#point-vs-code-to-julia",
+    "title": "2  Getting started with Julia",
+    "section": "2.3 Point VS Code to Julia",
+    "text": "2.3 Point VS Code to Julia\nIf auto-detect fails, set Settings → Julia: Executable Path:\n\nWindows: %LOCALAPPDATA%\\Programs\\Julia-*\\bin\\julia.exe or %USERPROFILE%\\.juliaup\\bin\\julia.exe\nmacOS: /Applications/Julia-*.app/Contents/Resources/julia/bin/julia or $HOME/.juliaup/bin/julia\nLinux: /usr/bin/julia or $HOME/.juliaup/bin/julia",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#must-have-vs-code-extensions",
+    "href": "chapters/01-getting-started-julia.html#must-have-vs-code-extensions",
+    "title": "2  Getting started with Julia",
+    "section": "2.4 Must-have VS Code extensions",
+    "text": "2.4 Must-have VS Code extensions\n\nJulia (julialang)\nQuarto\nRainbow CSV (handy for data files)\nGitLens (git UX)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#quick-check",
+    "href": "chapters/01-getting-started-julia.html#quick-check",
+    "title": "2  Getting started with Julia",
+    "section": "2.5 Quick check",
+    "text": "2.5 Quick check\nCreate test.jl and run in VS Code (Ctrl/Cmd+Enter):\nprintln(\"Hello, Julia!\")\nx = [1, 2, 3, 4, 5]\nprintln(\"Sum: \", sum(x))",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -43,8 +73,8 @@
     "objectID": "chapters/01-getting-started-julia.html#basic-numerics",
     "href": "chapters/01-getting-started-julia.html#basic-numerics",
     "title": "2  Getting started with Julia",
-    "section": "2.3 Basic numerics",
-    "text": "2.3 Basic numerics\nNow that your environment is set up, let’s explore some basic Julia syntax.\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\n\n2.3.1 Arithmetic\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\n\n\n2.3.2 Arrays\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)",
+    "section": "2.6 Basic numerics",
+    "text": "2.6 Basic numerics\nNow that your environment is set up, let’s explore some basic Julia syntax.\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\n\n2.6.1 Arithmetic\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\n\n\n2.6.2 Arrays\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -53,8 +83,8 @@
     "objectID": "chapters/01-getting-started-julia.html#functions",
     "href": "chapters/01-getting-started-julia.html#functions",
     "title": "2  Getting started with Julia",
-    "section": "2.4 Functions",
-    "text": "2.4 Functions\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16",
+    "section": "2.7 Functions",
+    "text": "2.7 Functions\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -63,8 +93,8 @@
     "objectID": "chapters/01-getting-started-julia.html#control-flow",
     "href": "chapters/01-getting-started-julia.html#control-flow",
     "title": "2  Getting started with Julia",
-    "section": "2.5 Control Flow",
-    "text": "2.5 Control Flow\n\n2.5.1 Conditionals\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\n\n\n2.5.2 Loops\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25",
+    "section": "2.8 Control Flow",
+    "text": "2.8 Control Flow\n\n2.8.1 Conditionals\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\n\n\n2.8.2 Loops\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -73,8 +103,8 @@
     "objectID": "chapters/01-getting-started-julia.html#types-and-structs",
     "href": "chapters/01-getting-started-julia.html#types-and-structs",
     "title": "2  Getting started with Julia",
-    "section": "2.6 Types and Structs",
-    "text": "2.6 Types and Structs\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)",
+    "section": "2.9 Types and Structs",
+    "text": "2.9 Types and Structs\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]

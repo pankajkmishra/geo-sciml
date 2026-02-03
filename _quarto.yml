@@ -76,33 +76,16 @@ format:
       \usepackage{fancyhdr}
       \pagestyle{fancy}
       \setcounter{secnumdepth}{3}
-      % Customize running headers - no uppercase, italic
       \renewcommand{\chaptermark}[1]{\markboth{\textit{#1}}{}}
       \renewcommand{\sectionmark}[1]{\markright{\textit{#1}}}
       \fancyhead[LE,RO]{\textit{\nouppercase{\rightmark}}}
       \fancyhead[LO,RE]{\textit{\nouppercase{\leftmark}}}
-      % Make all code text darker (same color)
       \usepackage{etoolbox}
       \AtBeginEnvironment{Highlighting}{\color[RGB]{30,30,30}}
-      % Rounded corners for code blocks using tcolorbox
       \usepackage{tcolorbox}
       \tcbuselibrary{breakable,skins}
-      \definecolor{codebg}{RGB}{255,253,252}
-      \definecolor{codeborder}{RGB}{8,143,143}
-      \renewenvironment{Shaded}{%
-        \begin{tcolorbox}[
-          enhanced,
-          breakable,
-          colback=codebg,
-          colframe=codeborder,
-          boxrule=0pt,
-          leftrule=1pt,
-          rightrule=0pt,
-          arc=1.5pt,
-          outer arc=1.5pt,
-          left=8pt,
-          right=8pt,
-          top=6pt,
-          bottom=3pt
-        ]
-      }{\end{tcolorbox}}
+      \definecolor{codebg}{RGB}{245,245,245}
+      \definecolor{codeborder}{RGB}{0,51,153}
+      \renewenvironment{Shaded}{
+      \begin{tcolorbox}[enhanced,breakable,colback=codebg,colframe=codeborder,boxrule=0pt,leftrule=1pt,rightrule=0pt,arc=1.5pt,outer arc=1.5pt,left=8pt,right=8pt,top=6pt,bottom=3pt]}{\end{tcolorbox}
+      }
