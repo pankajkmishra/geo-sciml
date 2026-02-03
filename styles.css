@@ -2,6 +2,14 @@
 .cell-output, .cell-output-display, pre {
   font-size: 0.9em !important;
 }
+
+/* Remove background and border from cell output */
+.cell-output-stdout pre, .cell-output pre {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 #quarto-content {
   min-height: 580vh;
 }

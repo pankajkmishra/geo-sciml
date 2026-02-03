@@ -19,10 +19,6 @@ title-block-banner: false
 
 Welcome to **Geoscientific Machine Learning**.
 
-::: {.callout-note}
-## Free living book
-This book is free to read. Between stable releases, chapters and code may change as the book evolves.
-:::
 
 If you’re reading this, you probably already have some familiarity with geoscience. You’re used to thinking in terms of physical processes, models, scales, and uncertainty. When it comes to computation, though, you may have mostly worked through existing tools: running models, adjusting parameters, or modifying scripts written by someone else. That’s a common place to be, and it works, until you want to change the model itself or test an idea that doesn’t fit into the existing workflow.
 

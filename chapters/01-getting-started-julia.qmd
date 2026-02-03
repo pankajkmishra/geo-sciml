@@ -2,40 +2,136 @@
 title: "Getting started with Julia"
 ---
 
-## Setting up VS Code
-
-1. Download and install [Visual Studio Code](https://code.visualstudio.com/)
-2. Install the **Julia** extension from the VS Code marketplace
-3. Configure the Julia path in VS Code settings if needed
-
-### Recommended Extensions
-
-- **Julia Language Support** - syntax highlighting, code completion
-- **Quarto** - for rendering notebooks and documents
+In this chapter, we'll guide you through setting up Julia with Visual Studio Code (VS Code) on Windows, Linux, and macOS. By the end of this chapter, you'll have a fully functional Julia development environment ready for scientific computing and machine learning.
 
 ## Installing Julia
 
-Download Julia from [julialang.org](https://julialang.org/downloads/).
+Julia can be installed on all major operating systems. We recommend using **juliaup**, the official Julia version manager, which makes it easy to install, update, and manage multiple Julia versions.
 
 ### Windows
 
-1. Download the Windows installer (.exe)
+**Option 1: Using juliaup (Recommended)**
+
+1. Open PowerShell or Command Prompt
+2. Run the following command:
+   ```powershell
+   winget install julia -s msstore
+   ```
+3. Restart your terminal and verify the installation:
+   ```powershell
+   julia --version
+   ```
+
+**Option 2: Manual Installation**
+
+1. Download the Windows installer (.exe) from [julialang.org](https://julialang.org/downloads/)
 2. Run the installer and follow the prompts
-3. Add Julia to your PATH (optional but recommended)
+3. Check "Add Julia to PATH" during installation
+4. Restart your terminal and verify with `julia --version`
 
 ### macOS
 
-1. Download the macOS .dmg file
-2. Drag Julia to Applications
+**Option 1: Using juliaup (Recommended)**
+
+1. Open Terminal and run:
+   ```bash
+   curl -fsSL https://install.julialang.org | sh
+   ```
+2. Follow the prompts and restart your terminal
+3. Verify the installation:
+   ```bash
+   julia --version
+   ```
+
+**Option 2: Using Homebrew**
+
+```bash
+brew install julia
+```
+
+**Option 3: Manual Installation**
+
+1. Download the macOS .dmg file from [julialang.org](https://julialang.org/downloads/)
+2. Open the .dmg and drag Julia to Applications
+3. Add Julia to your PATH by adding this line to `~/.zshrc` or `~/.bash_profile`:
+   ```bash
+   export PATH="/Applications/Julia-1.11.app/Contents/Resources/julia/bin:$PATH"
+   ```
 
 ### Linux
 
+**Using juliaup (Recommended)**
+
 ```bash
-# Using juliaup (recommended)
-curl -fsSL https://install.julialang.org | sh 
+curl -fsSL https://install.julialang.org | sh
 ```
 
+After installation, restart your terminal or run `source ~/.bashrc` to update your PATH.
+
+**Alternative: Using your distribution's package manager**
+
+```bash
+# Ubuntu/Debian (may not have the latest version)
+sudo apt install julia
+
+# Arch Linux
+sudo pacman -S julia
+```
+
+## Setting up VS Code
+
+Visual Studio Code is an excellent editor for Julia development, offering syntax highlighting, code completion, integrated debugging, and a built-in plot pane.
+
+### Installing VS Code
+
+Download and install VS Code from [code.visualstudio.com](https://code.visualstudio.com/) for your operating system:
+
+- **Windows**: Download the `.exe` installer
+- **macOS**: Download the `.dmg` file or use `brew install --cask visual-studio-code`
+- **Linux**: Download the `.deb` or `.rpm` package, or use Snap: `sudo snap install code --classic`
+
+### Installing the Julia Extension
+
+1. Open VS Code
+2. Click the Extensions icon in the sidebar (or press `Ctrl+Shift+X` / `Cmd+Shift+X`)
+3. Search for "Julia"
+4. Install the **Julia** extension by julialang
+
+### Configuring the Julia Path
+
+If VS Code doesn't automatically detect your Julia installation:
+
+1. Open VS Code Settings (`Ctrl+,` / `Cmd+,`)
+2. Search for "Julia: Executable Path"
+3. Set the path to your Julia executable:
+   - **Windows**: `C:\Users\<username>\AppData\Local\Programs\Julia-1.11.2\bin\julia.exe`
+   - **macOS**: `/Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia`
+   - **Linux**: `/usr/bin/julia` or `~/.juliaup/bin/julia`
+
+### Recommended Extensions
+
+For the best experience with this book, we recommend installing these additional extensions:
+
+- **Julia Language Support** - syntax highlighting, code completion, inline results
+- **Quarto** - for rendering notebooks and documents
+- **Rainbow CSV** - for viewing CSV files with color-coded columns
+- **GitLens** - for enhanced Git integration
+
+### Testing Your Setup
+
+1. Create a new file called `test.jl`
+2. Add the following code:
+   ```julia
+   println("Hello, Julia!")
+   x = [1, 2, 3, 4, 5]
+   println("Sum: ", sum(x))
+   ```
+3. Press `Ctrl+Enter` / `Cmd+Enter` to execute the current line, or `Shift+Enter` to execute and move to the next line
+4. You should see the output in the Julia REPL at the bottom of VS Code
+
 ## Basic numerics
+
+Now that your environment is set up, let's explore some basic Julia syntax.
 
 ```{julia}
 1 + 2, sin(1.0)

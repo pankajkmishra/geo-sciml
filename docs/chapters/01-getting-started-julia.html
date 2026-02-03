@@ -73,10 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9e246f33ef9e7da542ab9cba4232a1c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c81342dc2efaf5f45093f74b8ff9159c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -205,15 +205,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#setting-up-vs-code" id="toc-setting-up-vs-code" class="nav-link active" data-scroll-target="#setting-up-vs-code"><span class="header-section-number">2.1</span> Setting up VS Code</a>
+  <li><a href="#installing-julia" id="toc-installing-julia" class="nav-link active" data-scroll-target="#installing-julia"><span class="header-section-number">2.1</span> Installing Julia</a>
   <ul class="collapse">
-  <li><a href="#recommended-extensions" id="toc-recommended-extensions" class="nav-link" data-scroll-target="#recommended-extensions"><span class="header-section-number">2.1.1</span> Recommended Extensions</a></li>
+  <li><a href="#windows" id="toc-windows" class="nav-link" data-scroll-target="#windows"><span class="header-section-number">2.1.1</span> Windows</a></li>
+  <li><a href="#macos" id="toc-macos" class="nav-link" data-scroll-target="#macos"><span class="header-section-number">2.1.2</span> macOS</a></li>
+  <li><a href="#linux" id="toc-linux" class="nav-link" data-scroll-target="#linux"><span class="header-section-number">2.1.3</span> Linux</a></li>
   </ul></li>
-  <li><a href="#installing-julia" id="toc-installing-julia" class="nav-link" data-scroll-target="#installing-julia"><span class="header-section-number">2.2</span> Installing Julia</a>
+  <li><a href="#setting-up-vs-code" id="toc-setting-up-vs-code" class="nav-link" data-scroll-target="#setting-up-vs-code"><span class="header-section-number">2.2</span> Setting up VS Code</a>
   <ul class="collapse">
-  <li><a href="#windows" id="toc-windows" class="nav-link" data-scroll-target="#windows"><span class="header-section-number">2.2.1</span> Windows</a></li>
-  <li><a href="#macos" id="toc-macos" class="nav-link" data-scroll-target="#macos"><span class="header-section-number">2.2.2</span> macOS</a></li>
-  <li><a href="#linux" id="toc-linux" class="nav-link" data-scroll-target="#linux"><span class="header-section-number">2.2.3</span> Linux</a></li>
+  <li><a href="#installing-vs-code" id="toc-installing-vs-code" class="nav-link" data-scroll-target="#installing-vs-code"><span class="header-section-number">2.2.1</span> Installing VS Code</a></li>
+  <li><a href="#installing-the-julia-extension" id="toc-installing-the-julia-extension" class="nav-link" data-scroll-target="#installing-the-julia-extension"><span class="header-section-number">2.2.2</span> Installing the Julia Extension</a></li>
+  <li><a href="#configuring-the-julia-path" id="toc-configuring-the-julia-path" class="nav-link" data-scroll-target="#configuring-the-julia-path"><span class="header-section-number">2.2.3</span> Configuring the Julia Path</a></li>
+  <li><a href="#recommended-extensions" id="toc-recommended-extensions" class="nav-link" data-scroll-target="#recommended-extensions"><span class="header-section-number">2.2.4</span> Recommended Extensions</a></li>
+  <li><a href="#testing-your-setup" id="toc-testing-your-setup" class="nav-link" data-scroll-target="#testing-your-setup"><span class="header-section-number">2.2.5</span> Testing Your Setup</a></li>
   </ul></li>
   <li><a href="#basic-numerics" id="toc-basic-numerics" class="nav-link" data-scroll-target="#basic-numerics"><span class="header-section-number">2.3</span> Basic numerics</a>
   <ul class="collapse">
@@ -252,49 +256,124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="setting-up-vs-code" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="setting-up-vs-code"><span class="header-section-number">2.1</span> Setting up VS Code</h2>
+<p>In this chapter, we’ll guide you through setting up Julia with Visual Studio Code (VS Code) on Windows, Linux, and macOS. By the end of this chapter, you’ll have a fully functional Julia development environment ready for scientific computing and machine learning.</p>
+<section id="installing-julia" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="installing-julia"><span class="header-section-number">2.1</span> Installing Julia</h2>
+<p>Julia can be installed on all major operating systems. We recommend using <strong>juliaup</strong>, the official Julia version manager, which makes it easy to install, update, and manage multiple Julia versions.</p>
+<section id="windows" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="windows"><span class="header-section-number">2.1.1</span> Windows</h3>
+<p><strong>Option 1: Using juliaup (Recommended)</strong></p>
 <ol type="1">
-<li>Download and install <a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-<li>Install the <strong>Julia</strong> extension from the VS Code marketplace</li>
-<li>Configure the Julia path in VS Code settings if needed</li>
+<li><p>Open PowerShell or Command Prompt</p></li>
+<li><p>Run the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>winget install julia <span class="op">-</span>s msstore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Restart your terminal and verify the installation:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>julia <span class="op">--</span>version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
-<section id="recommended-extensions" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="recommended-extensions"><span class="header-section-number">2.1.1</span> Recommended Extensions</h3>
+<p><strong>Option 2: Manual Installation</strong></p>
+<ol type="1">
+<li>Download the Windows installer (.exe) from <a href="https://julialang.org/downloads/">julialang.org</a></li>
+<li>Run the installer and follow the prompts</li>
+<li>Check “Add Julia to PATH” during installation</li>
+<li>Restart your terminal and verify with <code>julia --version</code></li>
+</ol>
+</section>
+<section id="macos" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="macos"><span class="header-section-number">2.1.2</span> macOS</h3>
+<p><strong>Option 1: Using juliaup (Recommended)</strong></p>
+<ol type="1">
+<li><p>Open Terminal and run:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Follow the prompts and restart your terminal</p></li>
+<li><p>Verify the installation:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">julia</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+<p><strong>Option 2: Using Homebrew</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install julia</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Option 3: Manual Installation</strong></p>
+<ol type="1">
+<li><p>Download the macOS .dmg file from <a href="https://julialang.org/downloads/">julialang.org</a></p></li>
+<li><p>Open the .dmg and drag Julia to Applications</p></li>
+<li><p>Add Julia to your PATH by adding this line to <code>~/.zshrc</code> or <code>~/.bash_profile</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"/Applications/Julia-1.11.app/Contents/Resources/julia/bin:</span><span class="va">$PATH</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+<section id="linux" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="linux"><span class="header-section-number">2.1.3</span> Linux</h3>
+<p><strong>Using juliaup (Recommended)</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After installation, restart your terminal or run <code>source ~/.bashrc</code> to update your PATH.</p>
+<p><strong>Alternative: Using your distribution’s package manager</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ubuntu/Debian (may not have the latest version)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install julia</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Arch Linux</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> julia</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="setting-up-vs-code" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="setting-up-vs-code"><span class="header-section-number">2.2</span> Setting up VS Code</h2>
+<p>Visual Studio Code is an excellent editor for Julia development, offering syntax highlighting, code completion, integrated debugging, and a built-in plot pane.</p>
+<section id="installing-vs-code" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="installing-vs-code"><span class="header-section-number">2.2.1</span> Installing VS Code</h3>
+<p>Download and install VS Code from <a href="https://code.visualstudio.com/">code.visualstudio.com</a> for your operating system:</p>
 <ul>
-<li><strong>Julia Language Support</strong> - syntax highlighting, code completion</li>
-<li><strong>Quarto</strong> - for rendering notebooks and documents</li>
+<li><strong>Windows</strong>: Download the <code>.exe</code> installer</li>
+<li><strong>macOS</strong>: Download the <code>.dmg</code> file or use <code>brew install --cask visual-studio-code</code></li>
+<li><strong>Linux</strong>: Download the <code>.deb</code> or <code>.rpm</code> package, or use Snap: <code>sudo snap install code --classic</code></li>
 </ul>
 </section>
-</section>
-<section id="installing-julia" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="installing-julia"><span class="header-section-number">2.2</span> Installing Julia</h2>
-<p>Download Julia from <a href="https://julialang.org/downloads/">julialang.org</a>.</p>
-<section id="windows" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="windows"><span class="header-section-number">2.2.1</span> Windows</h3>
+<section id="installing-the-julia-extension" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="installing-the-julia-extension"><span class="header-section-number">2.2.2</span> Installing the Julia Extension</h3>
 <ol type="1">
-<li>Download the Windows installer (.exe)</li>
-<li>Run the installer and follow the prompts</li>
-<li>Add Julia to your PATH (optional but recommended)</li>
+<li>Open VS Code</li>
+<li>Click the Extensions icon in the sidebar (or press <code>Ctrl+Shift+X</code> / <code>Cmd+Shift+X</code>)</li>
+<li>Search for “Julia”</li>
+<li>Install the <strong>Julia</strong> extension by julialang</li>
 </ol>
 </section>
-<section id="macos" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="macos"><span class="header-section-number">2.2.2</span> macOS</h3>
+<section id="configuring-the-julia-path" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="configuring-the-julia-path"><span class="header-section-number">2.2.3</span> Configuring the Julia Path</h3>
+<p>If VS Code doesn’t automatically detect your Julia installation:</p>
 <ol type="1">
-<li>Download the macOS .dmg file</li>
-<li>Drag Julia to Applications</li>
+<li>Open VS Code Settings (<code>Ctrl+,</code> / <code>Cmd+,</code>)</li>
+<li>Search for “Julia: Executable Path”</li>
+<li>Set the path to your Julia executable:
+<ul>
+<li><strong>Windows</strong>: <code>C:\Users\&lt;username&gt;\AppData\Local\Programs\Julia-1.11.2\bin\julia.exe</code></li>
+<li><strong>macOS</strong>: <code>/Applications/Julia-1.11.app/Contents/Resources/julia/bin/julia</code></li>
+<li><strong>Linux</strong>: <code>/usr/bin/julia</code> or <code>~/.juliaup/bin/julia</code></li>
+</ul></li>
 </ol>
 </section>
-<section id="linux" class="level3" data-number="2.2.3">
-<h3 data-number="2.2.3" class="anchored" data-anchor-id="linux"><span class="header-section-number">2.2.3</span> Linux</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using juliaup (recommended)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="recommended-extensions" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="recommended-extensions"><span class="header-section-number">2.2.4</span> Recommended Extensions</h3>
+<p>For the best experience with this book, we recommend installing these additional extensions:</p>
+<ul>
+<li><strong>Julia Language Support</strong> - syntax highlighting, code completion, inline results</li>
+<li><strong>Quarto</strong> - for rendering notebooks and documents</li>
+<li><strong>Rainbow CSV</strong> - for viewing CSV files with color-coded columns</li>
+<li><strong>GitLens</strong> - for enhanced Git integration</li>
+</ul>
+</section>
+<section id="testing-your-setup" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="testing-your-setup"><span class="header-section-number">2.2.5</span> Testing Your Setup</h3>
+<ol type="1">
+<li><p>Create a new file called <code>test.jl</code></p></li>
+<li><p>Add the following code:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Hello, Julia!"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Sum: "</span>, <span class="fu">sum</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Press <code>Ctrl+Enter</code> / <code>Cmd+Enter</code> to execute the current line, or <code>Shift+Enter</code> to execute and move to the next line</p></li>
+<li><p>You should see the output in the Julia REPL at the bottom of VS Code</p></li>
+</ol>
 </section>
 </section>
 <section id="basic-numerics" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="basic-numerics"><span class="header-section-number">2.3</span> Basic numerics</h2>
+<p>Now that your environment is set up, let’s explore some basic Julia syntax.</p>
 <div id="2" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span>, <span class="fu">sin</span>(<span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span>, <span class="fu">sin</span>(<span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(3, 0.8414709848078965)</code></pre>
 </div>
@@ -302,9 +381,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="arithmetic" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="arithmetic"><span class="header-section-number">2.3.1</span> Arithmetic</h3>
 <div id="4" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="fl">10</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">3</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">+</span> b, a <span class="op">-</span> b, a <span class="op">*</span> b, a <span class="op">/</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="fl">10</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">+</span> b, a <span class="op">-</span> b, a <span class="op">*</span> b, a <span class="op">/</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(13, 7, 30, 3.3333333333333335)</code></pre>
 </div>
@@ -313,8 +392,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="arrays" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="arrays"><span class="header-section-number">2.3.2</span> Arrays</h3>
 <div id="6" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x), <span class="fu">length</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x), <span class="fu">length</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(15, 5)</code></pre>
 </div>
@@ -324,8 +403,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="functions" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="functions"><span class="header-section-number">2.4</span> Functions</h2>
 <div id="8" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span>x <span class="op">+</span> <span class="fl">1</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="fl">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">2</span>x <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="fl">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>16</code></pre>
 </div>
@@ -336,14 +415,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="conditionals" class="level3" data-number="2.5.1">
 <h3 data-number="2.5.1" class="anchored" data-anchor-id="conditionals"><span class="header-section-number">2.5.1</span> Conditionals</h3>
 <div id="10" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">5</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> x <span class="op">&gt;</span> <span class="fl">0</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"positive"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">elseif</span> x <span class="op">&lt;</span> <span class="fl">0</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"negative"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"zero"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">5</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> x <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"positive"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">elseif</span> x <span class="op">&lt;</span> <span class="fl">0</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"negative"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"zero"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>positive</code></pre>
 </div>
@@ -352,9 +431,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="loops" class="level3" data-number="2.5.2">
 <h3 data-number="2.5.2" class="anchored" data-anchor-id="loops"><span class="header-section-number">2.5.2</span> Loops</h3>
 <div id="12" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(i<span class="op">^</span><span class="fl">2</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(i<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1
 4
@@ -368,13 +447,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="types-and-structs" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="types-and-structs"><span class="header-section-number">2.6</span> Types and Structs</h2>
 <div id="14" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">::</span><span class="dt">Float64</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>p.x, p.y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Point</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">::</span><span class="dt">Float64</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fu">Point</span>(<span class="fl">1.0</span>, <span class="fl">2.0</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>p.x, p.y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>(1.0, 2.0)</code></pre>
 </div>
