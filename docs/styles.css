@@ -11,7 +11,7 @@
 }
 
 #quarto-content {
-  min-height: 580vh;
+  min-height: 100vh;
 }
 
 :root{
@@ -229,10 +229,9 @@ code {
   font-weight: 500 !important;
   text-transform: none !important;
   margin-right: 0.5em;
-.navbar a svg,
 }
 
-  #quarto-content{
+.navbar a svg,
 .navbar-nav .nav-link:hover svg,
 .quarto-navbar-tools a:hover i,
 .quarto-navbar-tools a:hover svg {
