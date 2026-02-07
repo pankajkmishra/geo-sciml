@@ -1,0 +1,264 @@
+/*-- scss:defaults --*/
+
+// Color scheme
+$dark-grey: #2d2c2c;
+$link-blue: #0000EE;
+$link-hover: #000066;
+$icon-blue: #00008B;
+
+// Headings
+$headings-color: $dark-grey;
+$h1-font-size: 1.75rem;
+$h2-font-size: 1.4rem;
+$h3-font-size: 1.15rem;
+$h4-font-size: 1rem;
+
+// Links
+$link-color: $link-blue;
+$link-hover-color: $link-hover;
+
+// Code / mono font stack
+$font-family-monospace: 'Monaco', 'Consolas', 'JetBrains Mono', 'Fira Mono', 'Menlo', monospace;
+$code-font-size: 0.9em;
+
+// Layout
+$content-max: 1800px;
+$gutter: 40px;
+$gutter-sm: 0.5rem;
+
+/*-- scss:rules --*/
+
+// ── Cell output ──────────────────────────────────────────────
+.cell-output,
+.cell-output-display,
+pre {
+  font-size: $code-font-size !important;
+}
+
+.cell-output-stdout pre,
+.cell-output pre {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+// ── Page layout ──────────────────────────────────────────────
+#quarto-content {
+  min-height: 100vh;
+  box-sizing: border-box;
+  width: min($content-max, calc(100% - (2 * #{$gutter})));
+  margin-inline: auto;
+  background: #fff !important;
+  padding-bottom: 2.5rem;
+}
+
+body {
+  background: #444445 !important;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1200px) {
+  #quarto-content,
+  .quarto-page-footer .footer {
+    width: 100%;
+    padding-inline: $gutter-sm;
+  }
+}
+
+// ── Navbar brand / book title ────────────────────────────────
+.navbar-brand-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  .navbar-brand {
+    margin: 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+
+    &::after {
+      content: "Geoscience | SciML | Julia" !important;
+      display: block !important;
+      font-size: 0.95rem !important;
+      color: $link-blue !important;
+      font-weight: 400 !important;
+      margin-top: 4px !important;
+      letter-spacing: 0.05em !important;
+    }
+  }
+}
+
+.navbar-title,
+.navbar-brand .navbar-title {
+  color: $dark-grey !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+// ── Sidebar title ────────────────────────────────────────────
+.sidebar-title,
+#quarto-sidebar .sidebar-title {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  color: $dark-grey !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.15;
+  word-break: break-word;
+  text-align: center !important;
+  margin: 10px 5px !important;
+  white-space: nowrap !important;
+  width: calc(100% - 10px) !important;
+
+  &::after {
+    content: "Geoscience | SciML | Julia" !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+    color: $link-blue !important;
+    font-weight: 400 !important;
+    margin-top: 6px !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  a {
+    color: $dark-grey !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-title,
+  .navbar-brand .navbar-title,
+  .sidebar-title,
+  #quarto-sidebar .sidebar-title {
+    font-size: 1.1rem !important;
+  }
+}
+
+// ── Sidebar tools / icons ────────────────────────────────────
+.sidebar-tools-main {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+  gap: 0.4rem !important;
+
+  a i,
+  a svg,
+  .bi {
+    font-size: 1.5rem !important;
+    width: 1.3rem !important;
+    height: 1.3rem !important;
+    color: $icon-blue !important;
+    fill: $icon-blue !important;
+  }
+}
+
+// ── Sidebar items ────────────────────────────────────────────
+.sidebar-item {
+  .sidebar-item-text {
+    font-weight: 400 !important;
+  }
+
+  &.active .sidebar-item-text {
+    color: $link-blue !important;
+    font-weight: 400 !important;
+  }
+}
+
+.sidebar-item-section .sidebar-item-text {
+  color: $dark-grey !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+}
+
+// ── Page navigation ──────────────────────────────────────────
+.page-navigation {
+  a,
+  .nav-page-text,
+  .nav-page-next,
+  .nav-page-previous {
+    color: $link-blue !important;
+  }
+}
+
+// ── Code blocks ──────────────────────────────────────────────
+// code-block-bg and code-block-border-left are handled in _quarto.yml
+pre,
+.code {
+  border: 1px solid #c3c5c7;
+  border-radius: 5px;
+}
+
+code {
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0.3em;
+}
+
+// ── TOC title ────────────────────────────────────────────────
+.toc-title {
+  color: $dark-grey;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  margin-right: 0.5em;
+}
+
+// ── Navbar icons hover ───────────────────────────────────────
+.navbar a svg,
+.navbar-nav .nav-link:hover svg,
+.quarto-navbar-tools a:hover i,
+.quarto-navbar-tools a:hover svg {
+  color: $link-hover !important;
+  fill: $link-hover !important;
+}
+
+// ── Responsive figures / images ──────────────────────────────
+img,
+.quarto-figure img,
+.cell-output img,
+.cell-output-display img,
+figure img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+.quarto-figure,
+figure,
+.cell-output-display {
+  max-width: 100% !important;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  img,
+  .quarto-figure img,
+  .cell-output img,
+  figure img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .quarto-figure,
+  figure,
+  .cell-output-display {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}

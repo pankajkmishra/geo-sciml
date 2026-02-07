@@ -37,8 +37,7 @@ format:
   html:
     title-block-banner: false
     theme:
-      light: cosmo
-    css: styles.css
+      light: [cosmo, styles.scss]
     toc: true
     toc-title: "Contents"
     toc-depth: 3
@@ -47,8 +46,7 @@ format:
     code-link: true
     code-copy: true
     code-overflow: wrap
-    code-block-bg: "#f8f9fa"
-    code-block-border-left: "#088F8F"  # left border color
+    code-block-border-left: "#088F8F"
     highlight-style: github
     grid:
       sidebar-width: 400px
