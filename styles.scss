@@ -197,6 +197,15 @@ pre,
   border-radius: 5px;
 }
 
+// Shell / terminal blocks: no coloured left border
+pre.sourceCode.bash,
+pre.sourceCode.powershell,
+pre.sourceCode.sh,
+pre.sourceCode.zsh,
+pre.sourceCode.toml {
+  border-left: 1px solid #c3c5c7;
+}
+
 code {
   background: none !important;
   border: none !important;

@@ -14,97 +14,147 @@
     "href": "chapters/01-getting-started-julia.html",
     "title": "2  Getting started with Julia",
     "section": "",
-    "text": "2.1 Quick setup (Windows, macOS, Linux)\nWe recommend starting with VS Code and adding Julia via juliaup. Keep it lean: install VS Code, install Julia, point VS Code to Julia, set your depot location, and add a few key extensions.",
+    "text": "2.1 Install Julia and VS Code\nYou are starting from scratch, and that is perfectly fine. No prior programming experience is assumed.\nIn this chapter we will install Julia and VS Code, write our first lines of code, and build up to functions, loops, and custom types. By the end you will be comfortable running Julia interactively, saving scripts, and managing packages in reproducible environments. If you have used another language before (Python, R, MATLAB), you will notice how little setup Julia needs to get going.\nYou need two things: Julia (the language) and VS Code (the editor you will write code in). Install them in this order:",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#quick-setup-windows-macos-linux",
-    "href": "chapters/01-getting-started-julia.html#quick-setup-windows-macos-linux",
+    "objectID": "chapters/01-getting-started-julia.html#install-julia-and-vs-code",
+    "href": "chapters/01-getting-started-julia.html#install-julia-and-vs-code",
     "title": "2  Getting started with Julia",
     "section": "",
-    "text": "Install VS Code from code.visualstudio.com.\nInstall Julia with juliaup (recommended everywhere):\n\nWindows (PowerShell)\nwinget install julia -s msstore\njuliaup add release\nmacOS (Terminal, zsh/bash)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\nLinux (Terminal, bash/zsh)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\n\nVerify Julia is on PATH:\njulia --version",
+    "text": "Install VS Code from code.visualstudio.com.\nInstall Julia using juliaup, a small tool that manages Julia versions for you:\n\nWindows (PowerShell)\nwinget install julia -s msstore\njuliaup add release\nmacOS (Terminal)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\nLinux (Terminal)\ncurl -fsSL https://install.julialang.org | sh\njuliaup add release\n\nOpen a new terminal and check that Julia is available:\njulia --version\nIf it prints something like julia version 1.11.2, you are ready.\nOpen VS Code, go to the Extensions panel (the square icon on the left sidebar, or press Ctrl/Cmd+Shift+X), and search for Julia. Install the one published by julialang. This single extension gives you syntax highlighting, code execution, an integrated REPL, a debugger, and a plot viewer. That is everything you need to get started.\n\n\n\n\n\n\n\nReading code blocks in this book\n\n\n\nThroughout this book you will see two styles of code block. Julia code has a thick coloured bar on the left edge:\n\nprintln(\"I am Julia code\")\n\nShell commands, configuration files, and other non-Julia text have a plain border with no coloured bar:\necho \"I am a shell command\"\nIf a block has the coloured side bar, you can type it into the Julia REPL or a .jl file. If it does not, it is meant for your terminal, a config file, or is just illustrative output.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#set-julia-depot-location-where-.julia-lives",
-    "href": "chapters/01-getting-started-julia.html#set-julia-depot-location-where-.julia-lives",
+    "objectID": "chapters/01-getting-started-julia.html#three-ways-to-run-julia-code",
+    "href": "chapters/01-getting-started-julia.html#three-ways-to-run-julia-code",
     "title": "2  Getting started with Julia",
-    "section": "2.2 Set Julia depot location (where .julia lives)",
-    "text": "2.2 Set Julia depot location (where .julia lives)\nPick a location (e.g., D:\\JuliaDepot on Windows, /opt/julia-depot or ~/julia-depot on macOS/Linux) and set JULIA_DEPOT_PATH before launching Julia/VS Code.\n\nWindows (PowerShell, per-shell)\n$env:JULIA_DEPOT_PATH = \"D:\\JuliaDepot\"\njulia --version\nWindows (persist system/user env var)\nsetx JULIA_DEPOT_PATH \"D:\\JuliaDepot\"\nmacOS/Linux (zsh/bash)\nexport JULIA_DEPOT_PATH=\"$HOME/julia-depot\"\njulia --version\nTo keep multiple depots (rare), separate with ; on Windows or : on macOS/Linux.",
+    "section": "2.2 Three ways to run Julia code",
+    "text": "2.2 Three ways to run Julia code\nBefore we start writing code, it helps to know that there are three ways to run Julia. Each is useful in different situations:\n\n2.2.1 1. Inside VS Code (recommended for beginners)\nThis is the easiest way. Create a file ending in .jl (e.g., test.jl), type your code, and press Ctrl+Enter (Windows/Linux) or Cmd+Enter (macOS) to run one line or a selected block. The Julia extension opens a built-in REPL panel at the bottom of VS Code and sends your code there. You see the results immediately, and you can go back and edit your file at any time.\nThis is what we will use throughout this book. It combines the best of both worlds: your code is saved in a file you can come back to, but you can run pieces of it interactively.\n\n\n2.2.2 2. Interactively in the REPL (command line)\nOpen a terminal and type julia to start the REPL (Read-Eval-Print Loop). You get a julia&gt; prompt where you can type expressions and see results instantly:\n$ julia\n               _\n   _       _ _(_)_     |\n  (_)     | (_) (_)    |  Version 1.11.2\n   _ _   _| |_  __ _   |\n  | | | | | | |/ _` |  |\n  | | |_| | | | (_| |  |\n _/ |\\__'_|_|_|\\__'_|  |\n|__/                   |\n\njulia&gt; 2 + 3\n5\n\njulia&gt; sqrt(144)\n12.0\nThe REPL is great for quick experiments: testing a formula, checking how a function works, or exploring a dataset. But nothing is saved to a file, so it is not ideal for work you want to keep.\n\n\n2.2.3 3. Running a script from the terminal\nIf you have a file called myscript.jl, you can run the whole thing at once from the terminal:\njulia myscript.jl\nJulia reads the file from top to bottom, executes every line, prints any output, and exits. This is how you run production code, batch jobs on a cluster, or automated workflows. You don’t see intermediate results, only what the script explicitly prints.\n\n\n2.2.4 Which one should I use?\n\n\n\n\n\n\n\nSituation\nBest option\n\n\n\n\nLearning and exploring\nVS Code (Ctrl/Cmd+Enter) or REPL\n\n\nDeveloping code you want to keep\nVS Code (code is in a file, but you run it interactively)\n\n\nQuick one-off calculations\nREPL\n\n\nRunning a finished analysis on a cluster\njulia myscript.jl\n\n\nAutomated or scheduled jobs\njulia myscript.jl\n\n\n\nYou will naturally switch between these as you get more comfortable. For now, open VS Code and follow along.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#point-vs-code-to-julia",
-    "href": "chapters/01-getting-started-julia.html#point-vs-code-to-julia",
+    "objectID": "chapters/01-getting-started-julia.html#hello-julia",
+    "href": "chapters/01-getting-started-julia.html#hello-julia",
     "title": "2  Getting started with Julia",
-    "section": "2.3 Point VS Code to Julia",
-    "text": "2.3 Point VS Code to Julia\nIf auto-detect fails, set Settings → Julia: Executable Path:\n\nWindows: %LOCALAPPDATA%\\Programs\\Julia-*\\bin\\julia.exe or %USERPROFILE%\\.juliaup\\bin\\julia.exe\nmacOS: /Applications/Julia-*.app/Contents/Resources/julia/bin/julia or $HOME/.juliaup/bin/julia\nLinux: /usr/bin/julia or $HOME/.juliaup/bin/julia",
+    "section": "2.3 Hello, Julia!",
+    "text": "2.3 Hello, Julia!\nLet’s make sure everything works. In VS Code, create a new file called test.jl and type the following:\nprintln(\"Hello, Julia!\")\nx = [1, 2, 3, 4, 5]\nprintln(\"Sum: \", sum(x))\nPress Ctrl+Enter (Windows/Linux) or Cmd+Enter (macOS) to run each line. You should see:\nHello, Julia!\nSum: 15\nCongratulations, you just ran your first Julia program. Everything after this point builds on what you just did.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#must-have-vs-code-extensions",
-    "href": "chapters/01-getting-started-julia.html#must-have-vs-code-extensions",
+    "objectID": "chapters/01-getting-started-julia.html#your-first-calculations",
+    "href": "chapters/01-getting-started-julia.html#your-first-calculations",
     "title": "2  Getting started with Julia",
-    "section": "2.4 Must-have VS Code extensions",
-    "text": "2.4 Must-have VS Code extensions\n\nJulia (julialang)\nQuarto\nRainbow CSV (handy for data files)\nGitLens (git UX)",
+    "section": "2.4 Your first calculations",
+    "text": "2.4 Your first calculations\nJulia works like a calculator right out of the box. You don’t need to import anything or set anything up:\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\nThis computed 1 + 2 and the sine of 1.0 (in radians) and returned both results as a pair. The comma groups them into a tuple, just a way of showing multiple answers together.\n\n2.4.1 Storing values in variables\nIn programming, a variable is a name you give to a value so you can use it later. Think of it as a sticky note on a number:\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\nHere a is a label for 10 and b is a label for 3. The next line asks Julia to add, subtract, multiply, and divide them, all at once.\nYou can name variables almost anything: temperature, depth_km, n_samples. Use names that describe what the value means. Your future self will thank you.\n\n\n2.4.2 Collecting values in a list\nIn real work you almost never deal with just one number. You have a list of measurements, a column of data, a time series. In Julia, a list of values is called an Array (or Vector when it is one-dimensional). You create one with square brackets:\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)\n\n\nsum(x) adds up all the values. length(x) counts how many there are. No imports, no setup.\n\n\n2.4.3 What about text?\nNot everything is a number. Julia handles text (called strings) too. Strings are wrapped in double quotes:\nname = \"Julia\"\nprintln(\"Hello, $name!\")\nThe $ inside a string inserts the value of a variable. This is called string interpolation. You can also insert expressions: \"2 + 3 = $(2 + 3)\".",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#quick-check",
-    "href": "chapters/01-getting-started-julia.html#quick-check",
+    "objectID": "chapters/01-getting-started-julia.html#reusing-code-with-functions",
+    "href": "chapters/01-getting-started-julia.html#reusing-code-with-functions",
     "title": "2  Getting started with Julia",
-    "section": "2.5 Quick check",
-    "text": "2.5 Quick check\nCreate test.jl and run in VS Code (Ctrl/Cmd+Enter):\nprintln(\"Hello, Julia!\")\nx = [1, 2, 3, 4, 5]\nprintln(\"Sum: \", sum(x))",
+    "section": "2.5 Reusing code with functions",
+    "text": "2.5 Reusing code with functions\nIf you find yourself doing the same calculation over and over, wrap it in a function. A function is like a recipe: you give it inputs (ingredients) and it gives you back a result (the dish).\nThe simplest way to define a function is the one-liner:\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16\n\n\nThis says: “define f so that it takes x, squares it, adds twice x, adds 1, and returns the result.” Now f(3) gives 16, f(10) gives 121, and so on.\nFor anything longer than one line, use the multi-line form:\nfunction kinetic_energy(mass, velocity)\n    return 0.5 * mass * velocity^2\nend\n\nkinetic_energy(70.0, 3.0)   # a 70 kg person walking at 3 m/s\nFunctions can also return more than one value. Unpack them into separate variables:\nfunction minmax(x)\n    return minimum(x), maximum(x)\nend\n\nlo, hi = minmax([4, 1, 7, 2])\nprintln(\"min = $lo, max = $hi\")\n\n\n\n\n\n\nWhy functions matter\n\n\n\nJulia’s compiler makes code inside functions run very fast, often as fast as C or Fortran. Code typed at the top level (outside a function) cannot be optimised the same way. So the habit of wrapping your work in functions is not just about tidiness, it is about speed.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#basic-numerics",
-    "href": "chapters/01-getting-started-julia.html#basic-numerics",
+    "objectID": "chapters/01-getting-started-julia.html#making-decisions-and-repeating-things",
+    "href": "chapters/01-getting-started-julia.html#making-decisions-and-repeating-things",
     "title": "2  Getting started with Julia",
-    "section": "2.6 Basic numerics",
-    "text": "2.6 Basic numerics\nNow that your environment is set up, let’s explore some basic Julia syntax.\n\n1 + 2, sin(1.0)\n\n(3, 0.8414709848078965)\n\n\n\n2.6.1 Arithmetic\n\na = 10\nb = 3\na + b, a - b, a * b, a / b\n\n(13, 7, 30, 3.3333333333333335)\n\n\n\n\n2.6.2 Arrays\n\nx = [1, 2, 3, 4, 5]\nsum(x), length(x)\n\n(15, 5)",
+    "section": "2.6 Making decisions and repeating things",
+    "text": "2.6 Making decisions and repeating things\n\n2.6.1 If / else: choosing what to do\nPrograms often need to choose what to do based on a condition. In Julia, this reads almost like English:\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\nprintln means “print this line of text.” Julia checks the conditions from top to bottom and runs the first one that is true, then skips the rest.\n\n\n2.6.2 Loops: repeating work\nA loop lets you repeat something many times without copying and pasting. The most common loop says “for each value in this range, do something”:\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25\n\n\n1:5 means the numbers 1, 2, 3, 4, 5. For each one, Julia squares it and prints the result. In geoscience, you might use a loop to process every station in a survey, every layer in a model, or every time step in a simulation.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#functions",
-    "href": "chapters/01-getting-started-julia.html#functions",
+    "objectID": "chapters/01-getting-started-julia.html#organising-data-with-custom-types",
+    "href": "chapters/01-getting-started-julia.html#organising-data-with-custom-types",
     "title": "2  Getting started with Julia",
-    "section": "2.7 Functions",
-    "text": "2.7 Functions\n\nf(x) = x^2 + 2x + 1\nf(3)\n\n16",
+    "section": "2.7 Organising data with custom types",
+    "text": "2.7 Organising data with custom types\nA geoscience measurement is rarely just a single number. It has coordinates, a value, an uncertainty, maybe a timestamp. Julia lets you bundle related values together using a struct (short for structure):\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)\n\n\nThis creates a new type called Point with two fields. Float64 means “a decimal number with double precision.” Once defined, you create a point by writing Point(1.0, 2.0) and access its parts with p.x and p.y.\n\n\n\n\n\n\nWhy bother with structs?\n\n\n\nAs your projects grow, structs keep things organised. Instead of passing around loose variables like lat, lon, elevation, you pass a single Station object that holds all of them together. Julia’s compiler also uses the type information to make your code faster.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#control-flow",
-    "href": "chapters/01-getting-started-julia.html#control-flow",
+    "objectID": "chapters/01-getting-started-julia.html#getting-comfortable-with-the-repl",
+    "href": "chapters/01-getting-started-julia.html#getting-comfortable-with-the-repl",
     "title": "2  Getting started with Julia",
-    "section": "2.8 Control Flow",
-    "text": "2.8 Control Flow\n\n2.8.1 Conditionals\n\nx = 5\nif x &gt; 0\n    println(\"positive\")\nelseif x &lt; 0\n    println(\"negative\")\nelse\n    println(\"zero\")\nend\n\npositive\n\n\n\n\n2.8.2 Loops\n\nfor i in 1:5\n    println(i^2)\nend\n\n1\n4\n9\n16\n25",
+    "section": "2.8 Getting comfortable with the REPL",
+    "text": "2.8 Getting comfortable with the REPL\nThe REPL (Read-Eval-Print Loop) is the interactive prompt you see when you type julia in a terminal. It is a great place to try things out quickly.\n\n2.8.1 Built-in modes\nThe REPL has several modes. You switch by pressing a single key at the start of an empty line:\n\n\n\nKey\nMode\nWhat it does\n\n\n\n\n]\nPkg\nPackage manager: add, remove, update packages\n\n\n;\nShell\nRun shell commands without leaving Julia\n\n\n?\nHelp\nLook up documentation for any function or type\n\n\nBackspace\nJulia\nReturn to normal Julia mode\n\n\n\nTry it: press ? then type sum and hit Enter. Julia shows you the documentation for sum, with examples.\n\n\n2.8.2 Tab completion and Unicode\nPress Tab to autocomplete names. This works for functions, variables, file paths, and even Unicode:\n\nType pri then Tab → print\nType \\alpha then Tab → α\nType \\sqrt then Tab → √\n\nThis is how you type mathematical symbols in Julia code. Any LaTeX name works.\n\n\n2.8.3 Handy shortcuts\n\nSemicolons suppress output: x = rand(1000); assigns the array without printing all 1000 numbers.\nans holds the last result: after typing 2 + 3, typing ans * 10 gives 50.\nUnderscores in numbers: write 1_000_000 instead of 1000000 for readability. Julia ignores the underscores.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
   },
   {
-    "objectID": "chapters/01-getting-started-julia.html#types-and-structs",
-    "href": "chapters/01-getting-started-julia.html#types-and-structs",
+    "objectID": "chapters/01-getting-started-julia.html#everyday-patterns",
+    "href": "chapters/01-getting-started-julia.html#everyday-patterns",
     "title": "2  Getting started with Julia",
-    "section": "2.9 Types and Structs",
-    "text": "2.9 Types and Structs\n\nstruct Point\n    x::Float64\n    y::Float64\nend\n\np = Point(1.0, 2.0)\np.x, p.y\n\n(1.0, 2.0)",
+    "section": "2.9 Everyday patterns",
+    "text": "2.9 Everyday patterns\nThese are practical patterns you will use constantly.\n\n2.9.1 Broadcasting with the dot .\nApply any function or operator to every element of an array by adding a dot:\nx = [1, 2, 3, 4]\nsin.(x)              # sine of each element\nx .^ 2               # square each element\nx .+ 10              # add 10 to each element\nThis works with your own functions too:\nf(x) = x^2 + 1\nf.([1, 2, 3])        # returns [2, 5, 10]\n\n\n2.9.2 Finding documentation and methods\nUse methods() to see all versions of a function, and @which to find out which version gets called:\nmethods(+)                # all methods for +\n@which 1.0 + 2.0          # which method handles Float64 + Float64\n\n\n2.9.3 Timing your code\nUse @time for a quick measurement. Run it twice because the first call includes compilation time:\n@time sum(rand(1_000_000))     # first call: includes compilation\n@time sum(rand(1_000_000))     # second call: actual speed\nFor serious benchmarking, use the BenchmarkTools package:\nusing BenchmarkTools\n@btime sum(rand(1_000_000))",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#performance-habits",
+    "href": "chapters/01-getting-started-julia.html#performance-habits",
+    "title": "2  Getting started with Julia",
+    "section": "2.10 Performance habits",
+    "text": "2.10 Performance habits\nThese two habits will save you hours of debugging slow code.\n\n2.10.1 Put work inside functions\nCode at the top level (the global scope) runs slowly because Julia cannot predict the types of global variables. The same code inside a function runs orders of magnitude faster:\n# Slow — top level\nx = rand(1_000_000)\ntotal = 0.0\nfor val in x\n    total += val\nend\n\n# Fast — inside a function\nfunction mysum(x)\n    total = 0.0\n    for val in x\n        total += val\n    end\n    return total\nend\nmysum(rand(1_000_000))\n\n\n2.10.2 Loop in the right order\nJulia stores matrices column by column in memory (like Fortran), not row by row (like C or Python). When looping over a matrix, always loop over rows in the inner loop:\nA = rand(1000, 1000)\n\n# Fast — columns in the outer loop, rows in the inner loop\nfor j in 1:1000       # column\n    for i in 1:1000   # row\n        A[i, j] += 1\n    end\nend",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#customising-your-julia-setup",
+    "href": "chapters/01-getting-started-julia.html#customising-your-julia-setup",
+    "title": "2  Getting started with Julia",
+    "section": "2.11 Customising your Julia setup",
+    "text": "2.11 Customising your Julia setup\n\n2.11.1 Startup file\nIf you load the same packages every session, add them to your startup file. Julia runs this file automatically on launch.\nThe file lives at ~/.julia/config/startup.jl. Create the directory and file if they don’t exist:\nmkdir -p ~/.julia/config\necho 'try using Revise catch end' &gt; ~/.julia/config/startup.jl\nOn Windows (PowerShell):\nNew-Item -ItemType Directory -Force -Path \"$env:USERPROFILE\\.julia\\config\"\nSet-Content \"$env:USERPROFILE\\.julia\\config\\startup.jl\" 'try using Revise catch end'\n\n\n\n\n\n\nRevise.jl\n\n\n\nRevise watches your source files and automatically picks up changes without restarting Julia. Install it once with ] add Revise, then load it from your startup file as shown above. It is one of the most useful Julia packages.\n\n\n\n\n2.11.2 Point VS Code to Julia manually\nIn most cases VS Code finds Julia automatically. If it does not, go to Settings → Julia: Executable Path and enter the path:\n\nWindows\n%LOCALAPPDATA%\\Programs\\Julia-*\\bin\\julia.exe\nor\n%USERPROFILE%\\.juliaup\\bin\\julia.exe\nmacOS\n/Applications/Julia-*.app/Contents/Resources/julia/bin/julia\nor\n$HOME/.juliaup/bin/julia\nLinux\n/usr/bin/julia\nor\n$HOME/.juliaup/bin/julia",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#the-.julia-directory-where-packages-live",
+    "href": "chapters/01-getting-started-julia.html#the-.julia-directory-where-packages-live",
+    "title": "2  Getting started with Julia",
+    "section": "2.12 The .julia directory: where packages live",
+    "text": "2.12 The .julia directory: where packages live\nWhen you install Julia and start adding packages, Julia creates a hidden directory called .julia in your home folder:\n\n\n\nOS\nDefault location\n\n\n\n\nWindows\nC:\\Users\\YourName\\.julia\\\n\n\nmacOS\n/Users/YourName/.julia/\n\n\nLinux\n/home/YourName/.julia/\n\n\n\nThis directory is called the depot. It stores everything Julia needs:\n\n\n\n\n\n\n\nSubfolder\nWhat’s inside\n\n\n\n\npackages/\nSource code of every package you install\n\n\ncompiled/\nPrecompiled versions of those packages\n\n\nartifacts/\nBinary libraries and datasets that packages download\n\n\nregistries/\nThe General registry, Julia’s index of all public packages\n\n\nlogs/\nBuild and install logs\n\n\nenvironments/\nProject environments and their Manifest.toml files\n\n\nconfig/\nYour startup.jl file\n\n\n\n\n2.12.1 Why it grows large\nEvery package brings its own dependencies, compiled caches, and sometimes large binary artefacts. A plotting library like CairoMakie can pull in hundreds of megabytes. Over time, .julia can easily reach 5–20 GB.\nOn a personal laptop this is fine. But on university HPC clusters and shared Linux servers, your home directory often has a quota, sometimes as little as 5 or 10 GB. If .julia fills it up, you will see “disk quota exceeded” errors and Julia will stop installing packages.\n\n\n2.12.2 Moving .julia to a larger disk\nSet the JULIA_DEPOT_PATH environment variable to point somewhere with more space:\n\nWindows (PowerShell, persist permanently)\nsetx JULIA_DEPOT_PATH \"D:\\JuliaDepot\"\nmacOS / Linux — add to ~/.bashrc or ~/.zshrc:\nexport JULIA_DEPOT_PATH=\"$HOME/julia-depot\"\nOn a cluster (use scratch or project space):\nexport JULIA_DEPOT_PATH=\"/scratch/$USER/julia-depot\"\n\n\n\n\n\n\n\nAlready have a large .julia in your home?\n\n\n\nMove the existing directory first, then set the variable:\nmv ~/.julia /scratch/$USER/julia-depot\nexport JULIA_DEPOT_PATH=\"/scratch/$USER/julia-depot\"\nOn Windows (PowerShell):\nMove-Item \"$env:USERPROFILE\\.julia\" \"D:\\JuliaDepot\"\nsetx JULIA_DEPOT_PATH \"D:\\JuliaDepot\"",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#using-julia-behind-a-proxy",
+    "href": "chapters/01-getting-started-julia.html#using-julia-behind-a-proxy",
+    "title": "2  Getting started with Julia",
+    "section": "2.13 Using Julia behind a proxy",
+    "text": "2.13 Using Julia behind a proxy\nOn university and corporate networks, internet traffic often goes through a proxy. Julia needs to know about this to download packages. If you skip this step, Pkg.add(...) will hang or time out.\nAsk your IT department for the proxy address. Then set it as an environment variable:\nWindows (PowerShell, persist permanently)\nsetx HTTP_PROXY  \"http://proxy.example.com:8080\"\nsetx HTTPS_PROXY \"http://proxy.example.com:8080\"\nClose and reopen your terminal after running setx.\nmacOS / Linux — add to ~/.bashrc or ~/.zshrc:\nexport HTTP_PROXY=\"http://proxy.example.com:8080\"\nexport HTTPS_PROXY=\"http://proxy.example.com:8080\"\nThen reload:\nsource ~/.zshrc   # or ~/.bashrc\nIf authentication is required, include credentials in the URL:\nhttp://username:password@proxy.example.com:8080\n\n2.13.1 Verify it works\nOpen the Julia REPL and try:\nENV[\"HTTP_PROXY\"]       # should print your proxy address\nusing Pkg\nPkg.add(\"Example\")      # should download successfully\n\n\n\n\n\n\nNo-proxy for local addresses\n\n\n\nIf internal servers should bypass the proxy:\nexport NO_PROXY=\"localhost,127.0.0.1,.internal.example.com\"\nOn Windows (PowerShell):\n$env:NO_PROXY = \"localhost,127.0.0.1,.internal.example.com\"",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/01-getting-started-julia.html#reproducible-environments",
+    "href": "chapters/01-getting-started-julia.html#reproducible-environments",
+    "title": "2  Getting started with Julia",
+    "section": "2.14 Reproducible environments",
+    "text": "2.14 Reproducible environments\nImagine you wrote a script that reads geoscientific data, runs an inversion, and produces a beautiful map. It works perfectly today. Six months later your colleague tries to run it and gets errors everywhere. A package was updated, a function was renamed, a dependency now needs a newer Julia version. This is the “it works on my machine” problem, and it is one of the biggest obstacles to reproducible science.\nJulia’s built-in package manager solves this at the language level. Every Julia project can carry two small text files that record exactly which packages (and which versions) were used. Anyone, anywhere, can recreate the identical environment with a single command.\n\n2.14.1 What a Julia project looks like\nA typical Julia project is just a folder with a few files:\nMyProject/\n├── Project.toml      # what you depend on\n├── Manifest.toml     # exact snapshot of every version\n└── src/\n    └── MyProject.jl  # your code\nYou may also have a test/, docs/, or scripts/ folder, but the two .toml files are the heart of reproducibility.\n\n\n2.14.2 Project.toml: what your project needs\nThis file lists the direct dependencies, the packages you asked for. Here is the Project.toml for this very book:\n[deps]\nCSV = \"336ed68f-0bac-5ca0-87d4-7b16caf5d00b\"\nCairoMakie = \"13f3f980-e62b-5c42-98c6-ff1f3baf88f0\"\nDataFrames = \"a93c6f00-e57d-5684-b7b6-d8193f3e46c0\"\nDelimitedFiles = \"8bb1440f-4735-579b-a4ab-409b98df4dab\"\nStatistics = \"10745b16-79ce-11e8-11f9-7d13ad32a3b2\"\nEach entry has a name and a UUID (a unique identifier so Julia never confuses two packages with the same name). You rarely type UUIDs by hand; the package manager fills them in when you run Pkg.add(\"CSV\").\nYou can optionally add a [compat] section to pin version ranges:\n[compat]\nCSV = \"0.10\"\nDataFrames = \"1.6\"\njulia = \"1.10\"\nThis tells Julia: “My code is tested with CSV 0.10.x, DataFrames 1.6.x, and Julia 1.10 or newer.” It prevents someone from accidentally installing an incompatible future version.\n\n\n2.14.3 Manifest.toml: the exact snapshot\nWhen you install packages, Julia resolves every dependency (and every dependency’s dependency) and writes the result into Manifest.toml. This file records the exact version of every single package in the tree. It can be hundreds of lines long, and that is normal.\nThink of it this way:\n\n\n\n\n\n\n\n\nFile\nAnalogy\nYou edit it?\n\n\n\n\nProject.toml\nA recipe’s ingredient list (“flour, eggs, sugar”)\nYes\n\n\nManifest.toml\nThe supermarket receipt with exact brands and batch numbers\nNo (generated automatically)\n\n\n\n\n\n\n\n\n\nShould you commit Manifest.toml to Git?\n\n\n\nFor applications and papers: yes. It guarantees bit-for-bit reproducibility. Anyone who checks out your repo and runs Pkg.instantiate() gets exactly the same package versions.\nFor libraries (reusable packages): usually no. You want downstream users to resolve versions against their environment, not yours.\n\n\n\n\n2.14.4 Creating and using environments\nStart a new project in any empty folder:\nusing Pkg\nPkg.activate(\".\")      # use the current folder as the environment\nPkg.add(\"CSV\")         # adds CSV to Project.toml and resolves Manifest.toml\nPkg.add(\"DataFrames\")\nOr in the REPL’s Pkg mode (press ]):\n(@v1.11) pkg&gt; activate .\n(MyProject) pkg&gt; add CSV DataFrames\nJulia creates Project.toml and Manifest.toml for you.\nReproduce someone else’s environment:\nusing Pkg\nPkg.activate(\".\")       # point to the folder containing their Project.toml\nPkg.instantiate()       # download the exact versions from Manifest.toml\nThat is it. Two commands and you have an identical setup. No guessing, no version conflicts.\n\n\n2.14.5 The default (global) environment\nWhen you start Julia without activating a project, you are in the global environment (shown as @v1.11 in the REPL prompt). Packages you add here are available everywhere, which is convenient for everyday tools like Revise or BenchmarkTools. But for actual research work, always create a project-specific environment so your results are reproducible.\n\n\n\n\n\n\nHow other languages handle this\n\n\n\nIf you come from Python, Julia’s Project.toml is similar to requirements.txt or pyproject.toml, and Manifest.toml is like a pip freeze snapshot or a Poetry/PDM lock file. The difference is that Julia’s package manager is built into the language, with no separate tool to install.\nIf you come from C++, reproducible builds are traditionally much harder. You might use CMake with pinned versions, Conan, or vcpkg, but there is no single built-in standard. Julia’s approach is closer to Rust’s Cargo.toml / Cargo.lock system.\nIn all cases the idea is the same: separate what you want from what you got, so someone else can recreate the exact same setup later.\n\n\n\n\n2.14.6 Key Pkg commands explained\nHere is what the most common Pkg functions actually do:\n\nPkg.activate(\".\")\n\nSwitch into a project environment. This tells Julia: “use the Project.toml in this folder instead of the global one.” The REPL prompt changes from (@v1.11) to the project name. Nothing is installed yet; you are just pointing Julia at a folder.\n\nPkg.add(\"CSV\")\n\nAdd a package. Writes the package name and UUID into Project.toml, resolves a compatible set of versions, downloads everything needed, and records the result in Manifest.toml. If Project.toml does not exist yet, Julia creates it for you.\n\nPkg.instantiate()\n\nRecreate an environment from existing files. If a Manifest.toml is present, it downloads the exact versions listed there. If only a Project.toml exists (no manifest), it resolves fresh versions and creates the manifest. This is the command you run after cloning someone else’s repository.\n\nPkg.resolve()\n\nRe-resolve versions without adding or removing anything. Useful after you edit Project.toml by hand (for example, adding a [compat] entry). It updates Manifest.toml to match the current Project.toml without downloading new packages.\n\nPkg.update()\n\nUpdate all packages to the newest versions that are still compatible with your [compat] constraints. This rewrites Manifest.toml. Run this periodically to pick up bug fixes and performance improvements.\n\nPkg.status()\n\nList installed packages and their versions. In Pkg-mode just type st or status.\n\nPkg.pin(\"CSV\")\n\nLock a package at its current version so that Pkg.update() will not change it. Useful when you know a newer release breaks your workflow. Unpin with Pkg.free(\"CSV\").\n\nPkg.rm(\"CSV\")\n\nRemove a package from the project. Deletes it from Project.toml and re-resolves the manifest.\n\nPkg.gc()\n\nGarbage-collect. Removes cached packages that are no longer used by any environment on your machine. Helpful when your .julia folder grows large (see the earlier section on the .julia directory).\n\nPkg.build()\n\nRe-run build scripts for installed packages. Occasionally needed after system-level changes (new compiler, updated shared libraries).\n\n\n\n\n2.14.7 Quick reference\n\n\n\nTask\nREPL Pkg-mode (])\nScript\n\n\n\n\nActivate an environment\nactivate .\nPkg.activate(\".\")\n\n\nAdd a package\nadd CSV\nPkg.add(\"CSV\")\n\n\nRemove a package\nrm CSV\nPkg.rm(\"CSV\")\n\n\nRecreate from lock file\ninstantiate\nPkg.instantiate()\n\n\nRe-resolve after hand edits\nresolve\nPkg.resolve()\n\n\nSee what is installed\nstatus\nPkg.status()\n\n\nUpdate all packages\nupdate\nPkg.update()\n\n\nPin a version\npin CSV@0.10.14\nPkg.pin(\"CSV\", v\"0.10.14\")\n\n\nUnpin\nfree CSV\nPkg.free(\"CSV\")\n\n\nClean unused caches\ngc\nPkg.gc()\n\n\nRe-run build scripts\nbuild\nPkg.build()\n\n\n\n\n\n\n\n\n\nLearn more\n\n\n\nThe official Pkg documentation covers everything in detail, including custom registries, private packages, artifacts, and more:\nhttps://pkgdocs.julialang.org/\n\n\nWith these two files and a handful of commands, your work stays reproducible, whether you revisit it next year or share it with a colleague on the other side of the world.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with Julia</span>"
     ]
@@ -114,37 +164,77 @@
     "href": "chapters/02-files-data.html",
     "title": "3  Files & Data Manipulation",
     "section": "",
-    "text": "3.1 Reading and Writing Files",
+    "text": "3.1 Writing and reading text files\nAt this point you know how to install Julia, run code in VS Code or the REPL, write functions, and create reproducible environments with Project.toml.\nIn this chapter we will put those skills to work on something you will do constantly in geoscience: reading data from files, reshaping it, and writing results back out. We start with plain text files, move on to delimited numeric data, then to CSV tables with the DataFrames ecosystem, and finish with a tour of specialised geoscientific formats (NetCDF, HDF5, SEG-Y, Shapefiles). We create small example files right here in the code so you can run every block and see the results yourself.\nIf some of the syntax looks unfamiliar at first, especially the do ... end pattern or the =&gt; arrow, don’t worry. These are common Julia patterns that will become second nature with practice. The important thing is to understand what each block does, not to memorise the syntax right now.\nThe simplest kind of file is plain text. Let’s create one:\n# Create a small text file\nopen(\"stations.txt\", \"w\") do f\n    write(f, \"Station  Latitude  Longitude  Elevation_m\\n\")\n    write(f, \"AAL      64.35     25.75      120\\n\")\n    write(f, \"BBR      61.50     23.80      95\\n\")\n    write(f, \"CCK      60.17     24.94      15\\n\")\nend\n\n33\nWhat happened here? open(\"stations.txt\", \"w\") creates (or overwrites) a file named stations.txt. The \"w\" means “write mode.” The do f ... end block is Julia’s way of saying “while the file is open, call it f and do these things, then close it automatically.” Each write call puts a line of text into the file.\nNow let’s read it back:\ncontent = read(\"stations.txt\", String)\nprintln(content)\n\nStation  Latitude  Longitude  Elevation_m\nAAL      64.35     25.75      120\nBBR      61.50     23.80      95\nCCK      60.17     24.94      15\nread(\"stations.txt\", String) loads the entire file into a single string. For a small file like this, that is perfectly fine.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
-    "objectID": "chapters/02-files-data.html#reading-and-writing-files",
-    "href": "chapters/02-files-data.html#reading-and-writing-files",
+    "objectID": "chapters/02-files-data.html#writing-and-reading-text-files",
+    "href": "chapters/02-files-data.html#writing-and-reading-text-files",
     "title": "3  Files & Data Manipulation",
     "section": "",
-    "text": "3.1.1 Text Files\n\n# Writing to a file\nopen(\"example.txt\", \"w\") do f\n    write(f, \"Hello, Julia!\")\nend\n\n# Reading from a file\ncontent = read(\"example.txt\", String)\nprintln(content)\n\nHello, Julia!\n\n\n\n\n3.1.2 CSV Files\n\nusing CSV, DataFrames\n\n# Read CSV\ndf = CSV.read(\"data.csv\", DataFrame)\n\n# Write CSV\nCSV.write(\"output.csv\", df)",
+    "text": "3.1.1 Reading line by line\nSometimes you want to process a file one line at a time, for instance to skip a header or to parse each row:\n\nopen(\"stations.txt\", \"r\") do f\n    for line in eachline(f)\n        println(\"→ \", line)\n    end\nend\n\n→ Station  Latitude  Longitude  Elevation_m\n→ AAL      64.35     25.75      120\n→ BBR      61.50     23.80      95\n→ CCK      60.17     24.94      15\n\n\nThe \"r\" means “read mode.” eachline(f) gives you one line at a time, which is memory-efficient even for very large files.\n\n\n3.1.2 Splitting lines into columns\nIn geoscience data files, columns are usually separated by spaces, tabs, or commas. You can split a line into pieces with split():\n\nopen(\"stations.txt\", \"r\") do f\n    header = readline(f)              # read and skip the header\n    for line in eachline(f)\n        parts = split(line)           # splits on whitespace by default\n        name  = parts[1]\n        lat   = parse(Float64, parts[2])\n        lon   = parse(Float64, parts[3])\n        elev  = parse(Float64, parts[4])\n        println(\"$name is at ($lat, $lon), elevation $elev m\")\n    end\nend\n\nAAL is at (64.35, 25.75), elevation 120.0 m\nBBR is at (61.5, 23.8), elevation 95.0 m\nCCK is at (60.17, 24.94), elevation 15.0 m\n\n\nsplit(line) breaks the string into a list of substrings. parse(Float64, ...) converts a text string like \"64.35\" into an actual number. This pattern (read a line, split it, parse the pieces) is the bread and butter of working with geoscience text files.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
-    "objectID": "chapters/02-files-data.html#dataframes",
-    "href": "chapters/02-files-data.html#dataframes",
+    "objectID": "chapters/02-files-data.html#delimited-data-with-delimitedfiles",
+    "href": "chapters/02-files-data.html#delimited-data-with-delimitedfiles",
     "title": "3  Files & Data Manipulation",
-    "section": "3.2 DataFrames",
-    "text": "3.2 DataFrames\nDataFrames are tabular data structures similar to pandas in Python or data.frames in R.\n\n3.2.1 Creating DataFrames\n\nusing DataFrames\n\n# Create from columns\ndf = DataFrame(\n    name = [\"Alice\", \"Bob\", \"Charlie\"],\n    age = [25, 30, 35],\n    city = [\"Helsinki\", \"Espoo\", \"Tampere\"]\n)\n\n\nPrecompiling packages...\n    756.7 ms  ✓ QuartoNotebookWorkerTablesExt (serial)\n  1 dependency successfully precompiled in 1 seconds\nPrecompiling packages...\n    727.5 ms  ✓ QuartoNotebookWorkerLaTeXStringsExt (serial)\n  1 dependency successfully precompiled in 1 seconds\n\n\n\n\n3×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\n\n\n2\nBob\n30\nEspoo\n\n\n3\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n\n3.2.2 Basic Operations\n\n# Select columns\ndf[:, :name]\n\n3-element Vector{String}:\n \"Alice\"\n \"Bob\"\n \"Charlie\"\n\n\n\n# Filter rows\nfilter(row -&gt; row.age &gt; 25, df)\n\n2×3 DataFrame\n\n\n\nRow\nname\nage\ncity\n\n\n\nString\nInt64\nString\n\n\n\n\n1\nBob\n30\nEspoo\n\n\n2\nCharlie\n35\nTampere\n\n\n\n\n\n\n\n# Add new column\ndf.country = [\"Finland\", \"Finland\", \"Finland\"]\ndf\n\n3×4 DataFrame\n\n\n\nRow\nname\nage\ncity\ncountry\n\n\n\nString\nInt64\nString\nString\n\n\n\n\n1\nAlice\n25\nHelsinki\nFinland\n\n\n2\nBob\n30\nEspoo\nFinland\n\n\n3\nCharlie\n35\nTampere\nFinland\n\n\n\n\n\n\n\n\n3.2.3 Grouping and Aggregation\n\nusing Statistics\n\n# Group by and summarize\ngdf = groupby(df, :country)\ncombine(gdf, :age =&gt; mean =&gt; :avg_age)\n\n1×2 DataFrame\n\n\n\nRow\ncountry\navg_age\n\n\n\nString\nFloat64\n\n\n\n\n1\nFinland\n30.0",
+    "section": "3.2 Delimited data with DelimitedFiles",
+    "text": "3.2 Delimited data with DelimitedFiles\nFor files with a regular grid of numbers (like gravity measurements or temperature readings), Julia has a built-in module called DelimitedFiles that reads the whole file into a matrix in one step.\nLet’s create a small data file and read it:\n\n# Create a space-delimited data file (no header, just numbers)\nopen(\"gravity.txt\", \"w\") do f\n    write(f, \"64.35  25.75  -12.3\\n\")\n    write(f, \"64.40  25.80  -11.8\\n\")\n    write(f, \"64.45  25.85  -13.1\\n\")\n    write(f, \"64.50  25.90  -12.7\\n\")\n    write(f, \"64.55  25.95  -14.0\\n\")\nend\n\n20\n\n\n\nusing DelimitedFiles\n\ndata = readdlm(\"gravity.txt\")       # reads into a matrix\nprintln(\"Size: \", size(data))        # 5 rows, 3 columns\n\nSize: (5, 3)\n\n\nNow you can pull out individual columns:\n\nlat = data[:, 1]         # all rows, first column\nlon = data[:, 2]         # all rows, second column\ngz  = data[:, 3]         # all rows, third column\n\nprintln(\"Latitudes: \", lat)\nprintln(\"Gravity anomalies: \", gz)\n\nLatitudes: [64.35, 64.4, 64.45, 64.5, 64.55]\nGravity anomalies: [-12.3, -11.8, -13.1, -12.7, -14.0]\n\n\nThe [:, 1] notation means “all rows, column 1.” This is the same notation used in MATLAB and NumPy.\nYou can also write a matrix back out:\n\n# Add 1.0 to all gravity values and save\ngz_corrected = gz .+ 1.0\noutput = hcat(lat, lon, gz_corrected)    # glue columns side by side\nwritedlm(\"gravity_corrected.txt\", output, '\\t')   # tab-separated\n\n# Verify\nprintln(read(\"gravity_corrected.txt\", String))\n\n64.35   25.75   -11.3\n64.4    25.8    -10.8\n64.45   25.85   -12.1\n64.5    25.9    -11.7\n64.55   25.95   -13.0\n\n\n\nhcat stands for “horizontal concatenate”. It sticks columns together into a matrix. writedlm writes the matrix to a file, using the tab character '\\t' as the separator.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
   },
   {
-    "objectID": "chapters/02-files-data.html#working-with-geoscientific-data",
-    "href": "chapters/02-files-data.html#working-with-geoscientific-data",
+    "objectID": "chapters/02-files-data.html#csv-files-and-dataframes",
+    "href": "chapters/02-files-data.html#csv-files-and-dataframes",
     "title": "3  Files & Data Manipulation",
-    "section": "3.3 Working with Geoscientific Data",
-    "text": "3.3 Working with Geoscientific Data\n\n3.3.1 Loading Geophysical Data\n\nusing DelimitedFiles\n\n# Read space-delimited data\ndata = readdlm(\"gravity_data.txt\")\n\n# Extract columns\nx, y, gz = data[:, 1], data[:, 2], data[:, 3]\n\n\n\n3.3.2 NetCDF Files\n\nusing NCDatasets\n\n# Read NetCDF\nds = Dataset(\"climate_data.nc\")\ntemp = ds[\"temperature\"][:]\nclose(ds)",
+    "section": "3.3 CSV files and DataFrames",
+    "text": "3.3 CSV files and DataFrames\nCSV (Comma-Separated Values) is probably the most common data format in science. Julia has excellent CSV support through the CSV.jl and DataFrames.jl packages.\n\n\n\n\n\n\nInstalling packages\n\n\n\nIf you haven’t installed these packages yet, press ] in the REPL to enter Pkg mode and type:\nadd CSV DataFrames\nOr from normal Julia code: using Pkg; Pkg.add([\"CSV\", \"DataFrames\"]). You only need to do this once.\n\n\n\n3.3.1 Creating a DataFrame\nA DataFrame is a table: rows and columns, like a spreadsheet. Each column has a name and all values in a column have the same type. If you have used pandas in Python, R’s data.frame, or even Excel, the concept is the same.\n\nusing DataFrames\n\n# Create a table of borehole samples\nsamples = DataFrame(\n    borehole  = [\"BH-01\", \"BH-01\", \"BH-01\", \"BH-02\", \"BH-02\"],\n    depth_m   = [10.0, 20.0, 30.0, 15.0, 25.0],\n    rock_type = [\"granite\", \"granite\", \"gneiss\", \"granite\", \"schist\"],\n    density   = [2.65, 2.68, 2.75, 2.63, 2.71]\n)\n\n5×4 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\n\n\n\nString\nFloat64\nString\nFloat64\n\n\n\n\n1\nBH-01\n10.0\ngranite\n2.65\n\n\n2\nBH-01\n20.0\ngranite\n2.68\n\n\n3\nBH-01\n30.0\ngneiss\n2.75\n\n\n4\nBH-02\n15.0\ngranite\n2.63\n\n\n5\nBH-02\n25.0\nschist\n2.71\n\n\n\n\n\n\nJulia displays the table neatly. Each column is a named array, and you can work with them individually or together.\n\n\n3.3.2 Writing and reading CSV\nLet’s save this table to a CSV file and read it back:\n\nusing CSV\n\n# Write to CSV\nCSV.write(\"samples.csv\", samples)\n\n# Read it back\nsamples_loaded = CSV.read(\"samples.csv\", DataFrame)\n\n5×4 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\n\n\n\nString7\nFloat64\nString7\nFloat64\n\n\n\n\n1\nBH-01\n10.0\ngranite\n2.65\n\n\n2\nBH-01\n20.0\ngranite\n2.68\n\n\n3\nBH-01\n30.0\ngneiss\n2.75\n\n\n4\nBH-02\n15.0\ngranite\n2.63\n\n\n5\nBH-02\n25.0\nschist\n2.71\n\n\n\n\n\n\nThat’s it. One line to write, one line to read. CSV.jl automatically detects column types, handles headers, and deals with missing values.\n\n\n3.3.3 Selecting columns\nGrab one or more columns by name:\n\n# One column - returns a vector\nsamples.depth_m\n\n5-element Vector{Float64}:\n 10.0\n 20.0\n 30.0\n 15.0\n 25.0\n\n\n\n# Multiple columns - returns a new DataFrame\nselect(samples, :borehole, :density)\n\n5×2 DataFrame\n\n\n\nRow\nborehole\ndensity\n\n\n\nString\nFloat64\n\n\n\n\n1\nBH-01\n2.65\n\n\n2\nBH-01\n2.68\n\n\n3\nBH-01\n2.75\n\n\n4\nBH-02\n2.63\n\n\n5\nBH-02\n2.71\n\n\n\n\n\n\nThe : before a column name makes it a Symbol, Julia’s way of referring to names. You will see this pattern everywhere in DataFrames.\n\n\n3.3.4 Filtering rows\nKeep only rows that match a condition:\n\n# Samples deeper than 20 m\nfilter(row -&gt; row.depth_m &gt; 20, samples)\n\n2×4 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\n\n\n\nString\nFloat64\nString\nFloat64\n\n\n\n\n1\nBH-01\n30.0\ngneiss\n2.75\n\n\n2\nBH-02\n25.0\nschist\n2.71\n\n\n\n\n\n\nThe row -&gt; row.depth_m &gt; 20 part is an anonymous function, a small throwaway function that takes one argument (row) and returns true or false. Don’t worry about the syntax too much; think of it as saying “keep rows where depth is greater than 20.”\n\n# Only granite samples\nfilter(row -&gt; row.rock_type == \"granite\", samples)\n\n3×4 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\n\n\n\nString\nFloat64\nString\nFloat64\n\n\n\n\n1\nBH-01\n10.0\ngranite\n2.65\n\n\n2\nBH-01\n20.0\ngranite\n2.68\n\n\n3\nBH-02\n15.0\ngranite\n2.63\n\n\n\n\n\n\n\n\n3.3.5 Adding and transforming columns\n\n# Add a new column\nsamples.weight_kg = samples.density .* 1000.0   # density × 1000\nsamples\n\n5×5 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\nweight_kg\n\n\n\nString\nFloat64\nString\nFloat64\nFloat64\n\n\n\n\n1\nBH-01\n10.0\ngranite\n2.65\n2650.0\n\n\n2\nBH-01\n20.0\ngranite\n2.68\n2680.0\n\n\n3\nBH-01\n30.0\ngneiss\n2.75\n2750.0\n\n\n4\nBH-02\n15.0\ngranite\n2.63\n2630.0\n\n\n5\nBH-02\n25.0\nschist\n2.71\n2710.0\n\n\n\n\n\n\nThe .* (dot-star) applies the multiplication to every row. You saw this broadcasting pattern in Chapter 1.\n\n\n3.3.6 Grouping and summarising\nThis is where DataFrames really shine. Group your data by a category and compute summaries:\n\nusing Statistics\n\n# Average density per borehole\ngdf = groupby(samples, :borehole)\ncombine(gdf, :density =&gt; mean =&gt; :avg_density)\n\n2×2 DataFrame\n\n\n\nRow\nborehole\navg_density\n\n\n\nString\nFloat64\n\n\n\n\n1\nBH-01\n2.69333\n\n\n2\nBH-02\n2.67\n\n\n\n\n\n\nRead this as: “group the table by :borehole, then for the :density column compute the mean and call the result :avg_density.” The =&gt; arrows connect input → function → output name.\n\n# Multiple summaries at once\ncombine(\n    groupby(samples, :rock_type),\n    :density =&gt; mean =&gt; :avg_density,\n    :density =&gt; minimum =&gt; :min_density,\n    :depth_m =&gt; maximum =&gt; :deepest\n)\n\n3×4 DataFrame\n\n\n\nRow\nrock_type\navg_density\nmin_density\ndeepest\n\n\n\nString\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\ngranite\n2.65333\n2.63\n20.0\n\n\n2\ngneiss\n2.75\n2.75\n30.0\n\n\n3\nschist\n2.71\n2.71\n25.0\n\n\n\n\n\n\n\n\n3.3.7 Joining tables\nIn real projects your data is often spread across multiple files. Joining brings them together:\n\n# A second table with borehole coordinates\nlocations = DataFrame(\n    borehole  = [\"BH-01\", \"BH-02\", \"BH-03\"],\n    latitude  = [64.35, 64.40, 64.45],\n    longitude = [25.75, 25.80, 25.85]\n)\n\n# Inner join - only boreholes that appear in both tables\ninnerjoin(samples, locations, on = :borehole)\n\n5×7 DataFrame\n\n\n\nRow\nborehole\ndepth_m\nrock_type\ndensity\nweight_kg\nlatitude\nlongitude\n\n\n\nString\nFloat64\nString\nFloat64\nFloat64\nFloat64\nFloat64\n\n\n\n\n1\nBH-01\n10.0\ngranite\n2.65\n2650.0\n64.35\n25.75\n\n\n2\nBH-01\n20.0\ngranite\n2.68\n2680.0\n64.35\n25.75\n\n\n3\nBH-01\n30.0\ngneiss\n2.75\n2750.0\n64.35\n25.75\n\n\n4\nBH-02\n15.0\ngranite\n2.63\n2630.0\n64.4\n25.8\n\n\n5\nBH-02\n25.0\nschist\n2.71\n2710.0\n64.4\n25.8\n\n\n\n\n\n\ninnerjoin keeps only rows where the :borehole value exists in both tables. BH-03 has no samples, so it is dropped. If you want to keep all locations even when there are no matching samples, use leftjoin or outerjoin instead.\n\n\n3.3.8 Handling missing data\nReal data has gaps. Julia represents missing values with a special value called missing:\n\n# Create data with a gap\nobs = DataFrame(\n    station = [\"A\", \"B\", \"C\", \"D\"],\n    temp_C  = [12.3, missing, 14.1, 13.7]\n)\nobs\n\n4×2 DataFrame\n\n\n\nRow\nstation\ntemp_C\n\n\n\nString\nFloat64?\n\n\n\n\n1\nA\n12.3\n\n\n2\nB\nmissing\n\n\n3\nC\n14.1\n\n\n4\nD\n13.7\n\n\n\n\n\n\n\n# Drop rows with missing values\ndropmissing(obs, :temp_C)\n\n3×2 DataFrame\n\n\n\nRow\nstation\ntemp_C\n\n\n\nString\nFloat64\n\n\n\n\n1\nA\n12.3\n\n\n2\nC\n14.1\n\n\n3\nD\n13.7\n\n\n\n\n\n\n\n# Compute mean, skipping missing values\nusing Statistics\nmean(skipmissing(obs.temp_C))\n\n13.366666666666665\n\n\nskipmissing is a wrapper that tells functions to ignore the gaps. Without it, mean would return missing because any operation involving missing propagates the unknown.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#working-with-file-paths",
+    "href": "chapters/02-files-data.html#working-with-file-paths",
+    "title": "3  Files & Data Manipulation",
+    "section": "3.4 Working with file paths",
+    "text": "3.4 Working with file paths\nWhen your project has many data files, you need to build file paths correctly. Julia’s joinpath function handles this across operating systems (so you don’t have to worry about / vs \\):\n\n# Build a path\npath = joinpath(\"data\", \"field_campaign\", \"gravity.txt\")\nprintln(path)\n\ndata/field_campaign/gravity.txt\n\n\nOther useful path functions:\n\nprintln(\"Current directory: \", pwd())\nprintln(\"Files here: \", readdir(\".\"))\n\n\n# Check if a file exists before reading\nif isfile(\"samples.csv\")\n    println(\"samples.csv exists!\")\nelse\n    println(\"File not found\")\nend\n\nsamples.csv exists!\n\n\n\n\n\n\n\n\nOrganise your data early\n\n\n\nCreate a data/ folder in your project from the start. Put raw data in data/raw/, processed data in data/processed/. This habit will save you from chaos later, especially when you have 50 stations and 3 field campaigns.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#searching-copying-and-renaming-files",
+    "href": "chapters/02-files-data.html#searching-copying-and-renaming-files",
+    "title": "3  Files & Data Manipulation",
+    "section": "3.5 Searching, copying, and renaming files",
+    "text": "3.5 Searching, copying, and renaming files\nIn practice, geoscientific data rarely arrives in one tidy folder. You might receive a USB drive with hundreds of files scattered across nested directories, including raw measurements from field instruments, GPS logs, photos, metadata files, all mixed together. A common first task is: find all files of a certain type, rename them consistently, and copy them into a single clean folder.\nJulia has everything you need for this built into the standard library, no extra packages required.\n\n3.5.1 Listing files in a directory\n\n# readdir returns the names of everything in a folder\nfor name in readdir(\".\")\n    println(name)\nend\n\n01-getting-started-julia.qmd\n02-files-data.qmd\n03-plotting-maps.qmd\n03-plotting-maps_files\n04-neural-networks.qmd\ngravity.txt\ngravity_corrected.txt\nsamples.csv\nstations.txt\n\n\nBy default readdir gives you the names without the full path. Pass join = true to get complete paths:\n\nfor path in readdir(\"data/raw\", join = true)\n    println(path)\nend\n\n\n\n3.5.2 Searching recursively with walkdir\nwalkdir is the key function for searching through directories and all their subdirectories. It yields a tuple (root, dirs, files) at each level:\n\n# Find every .csv file anywhere inside data/\nfor (root, dirs, files) in walkdir(\"data\")\n    for f in files\n        if endswith(f, \".csv\")\n            full_path = joinpath(root, f)\n            println(full_path)\n        end\n    end\nend\n\nYou can wrap this into a reusable function:\n\n\"\"\"\n    find_files(dir, ext)\n\nRecursively find all files with extension `ext` in `dir` and its subdirectories.\nReturns a vector of full paths.\n\"\"\"\nfunction find_files(dir, ext)\n    results = String[]\n    for (root, dirs, files) in walkdir(dir)\n        for f in files\n            if endswith(f, ext)\n                push!(results, joinpath(root, f))\n            end\n        end\n    end\n    return results\nend\n\nMain.Notebook.find_files\n\n\n\n# Example: find all .dat files under a field campaign folder\ndat_files = find_files(\"data/raw\", \".dat\")\nprintln(\"Found $(length(dat_files)) .dat files\")\n\n\n\n3.5.3 Extracting parts of a file path\nJulia has several functions for splitting a path into its components:\n\nexample_path = joinpath(\"surveys\", \"2024\", \"gravity\", \"station_042.csv\")\n\nprintln(\"Directory:  \", dirname(example_path))\nprintln(\"Filename:   \", basename(example_path))\nprintln(\"Name only:  \", splitext(basename(example_path))[1])\nprintln(\"Extension:  \", splitext(basename(example_path))[2])\nprintln(\"Split path: \", splitpath(example_path))\n\nDirectory:  surveys/2024/gravity\nFilename:   station_042.csv\nName only:  station_042\nExtension:  .csv\nSplit path: [\"surveys\", \"2024\", \"gravity\", \"station_042.csv\"]\n\n\n\n\n3.5.4 Copying and renaming files\nSuppose you have collected EM data from multiple campaigns and the instrument saved files with unhelpful names like meas_001.dat. You want to copy them into a single processed/ folder, renaming each file to include the station name and date.\nHere is a complete worked example. We first create a fake directory tree so you can run everything:\n\n# --- Set up a fake directory tree ---\nfor station in [\"EM01\", \"EM02\", \"EM03\"]\n    dir = joinpath(\"fake_survey\", station)\n    mkpath(dir)    # like mkdir -p: creates all intermediate directories\n    for i in 1:3\n        filepath = joinpath(dir, \"meas_$(lpad(i, 3, '0')).dat\")\n        write(filepath, \"fake data for $station measurement $i\\n\")\n    end\nend\nprintln(\"Created fake survey tree:\")\nfor (root, dirs, files) in walkdir(\"fake_survey\")\n    for f in files\n        println(\"  \", joinpath(root, f))\n    end\nend\n\nCreated fake survey tree:\n  fake_survey/EM01/meas_001.dat\n  fake_survey/EM01/meas_002.dat\n  fake_survey/EM01/meas_003.dat\n  fake_survey/EM02/meas_001.dat\n  fake_survey/EM02/meas_002.dat\n  fake_survey/EM02/meas_003.dat\n  fake_survey/EM03/meas_001.dat\n  fake_survey/EM03/meas_002.dat\n  fake_survey/EM03/meas_003.dat\n\n\nNow let’s search for all .dat files, rename them to include the station name, and copy them into a clean output folder:\n\n# --- Find, rename, and copy ---\noutput_dir = \"collected_data\"\nmkpath(output_dir)\n\nfor (root, dirs, files) in walkdir(\"fake_survey\")\n    for f in files\n        if endswith(f, \".dat\")\n            # The station name is the immediate parent folder\n            station = basename(root)\n\n            # Build a new name: EM01_meas_001.dat\n            new_name = station * \"_\" * f\n\n            src = joinpath(root, f)\n            dst = joinpath(output_dir, new_name)\n\n            cp(src, dst, force = true)   # copy; force=true overwrites if exists\n        end\n    end\nend\n\n# Check the result\nprintln(\"Files in $(output_dir):\")\nfor f in sort(readdir(output_dir))\n    println(\"  \", f)\nend\n\nFiles in collected_data:\n  EM01_meas_001.dat\n  EM01_meas_002.dat\n  EM01_meas_003.dat\n  EM02_meas_001.dat\n  EM02_meas_002.dat\n  EM02_meas_003.dat\n  EM03_meas_001.dat\n  EM03_meas_002.dat\n  EM03_meas_003.dat\n\n\n\n\n3.5.5 Key functions at a glance\n\n\n\n\n\n\n\nFunction\nWhat it does\n\n\n\n\nreaddir(dir)\nList contents of a directory\n\n\nreaddir(dir, join=true)\nSame, but returns full paths\n\n\nwalkdir(dir)\nRecursively walk through all subdirectories\n\n\nmkpath(dir)\nCreate a directory (and parents), like mkdir -p\n\n\ncp(src, dst)\nCopy a file\n\n\nmv(src, dst)\nMove or rename a file\n\n\nrm(path)\nDelete a file\n\n\nrm(path, recursive=true)\nDelete a directory and everything inside it\n\n\nisfile(path)\nCheck if a path points to an existing file\n\n\nisdir(path)\nCheck if a path points to an existing directory\n\n\njoinpath(parts...)\nBuild a path from pieces (cross-platform)\n\n\nbasename(path)\nFilename from a path\n\n\ndirname(path)\nDirectory from a path\n\n\nsplitext(name)\nSplit into (name, \".ext\")\n\n\nsplitpath(path)\nSplit into a vector of path components",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#geoscientific-file-formats",
+    "href": "chapters/02-files-data.html#geoscientific-file-formats",
+    "title": "3  Files & Data Manipulation",
+    "section": "3.6 Geoscientific file formats",
+    "text": "3.6 Geoscientific file formats\nGeoscience uses several specialised binary formats to store large, multidimensional datasets efficiently. Julia has packages for all the common ones. Here is a brief overview. Detailed usage will be added in future updates of this chapter.\n\n3.6.1 NetCDF\nNetCDF (Network Common Data Form) is the standard format for climate, ocean, and atmospheric data. Use the NCDatasets.jl package:\nusing NCDatasets\n\n# Read a NetCDF file\nds = NCDataset(\"temperature.nc\")\ntemp = ds[\"temperature\"][:, :, :]    # read the full 3D array\nlat  = ds[\"latitude\"][:]\nlon  = ds[\"longitude\"][:]\nclose(ds)\n\n# Or use the do-block pattern (auto-closes)\nNCDataset(\"temperature.nc\") do ds\n    temp = ds[\"temperature\"][:, :, :]\n    println(\"Shape: \", size(temp))\nend\n# Write a NetCDF file\nNCDataset(\"output.nc\", \"c\") do ds\n    defDim(ds, \"x\", 10)\n    defDim(ds, \"y\", 20)\n    v = defVar(ds, \"elevation\", Float64, (\"x\", \"y\"))\n    v[:, :] = rand(10, 20)\nend\n\n\n3.6.2 HDF5\nHDF5 (Hierarchical Data Format) is widely used in geophysics, remote sensing, and seismology. Use HDF5.jl:\nusing HDF5\n\n# Write\nh5open(\"model.h5\", \"w\") do f\n    f[\"resistivity\"] = rand(100, 100, 50)\n    f[\"depth\"] = collect(0.0:0.5:24.5)\nend\n\n# Read\nh5open(\"model.h5\", \"r\") do f\n    rho   = read(f, \"resistivity\")\n    depth = read(f, \"depth\")\n    println(\"Model size: \", size(rho))\nend\n\n\n3.6.3 SEG-Y\nSEG-Y is the seismic industry standard. Use SegyIO.jl:\nusing SegyIO\n\n# Read a SEG-Y file\nblock = segy_read(\"seismic_line.segy\")\ntraces = block.data           # matrix of traces\nheaders = block.traceheaders   # trace header information\n\n\n3.6.4 Shapefiles and GeoJSON\nFor vector geospatial data (points, polygons, map boundaries), use Shapefile.jl or GeoJSON.jl:\nusing Shapefile\n\ntable = Shapefile.Table(\"geology_map.shp\")\n# Access as a DataFrame\nusing DataFrames\ndf = DataFrame(table)\n\n\n\n\n\n\nThese examples are not executed\n\n\n\nThe geoscientific format examples above use eval: false style. They show the code patterns but don’t run here because they require actual data files. When you have your own NetCDF, HDF5, or SEG-Y files, copy the pattern and replace the file name.\n\n\n\n\n\n\n\n\nWant more formats or deeper coverage?\n\n\n\nThis section will grow as the book develops. If there is a specific geoscience format or workflow you need (GRIB, GeoTIFF, ASDF, miniSEED, EDI, ModEM, or anything else) please open an issue on GitHub and describe your use case. Your request will help us prioritise what to add next.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02-files-data.html#clean-up",
+    "href": "chapters/02-files-data.html#clean-up",
+    "title": "3  Files & Data Manipulation",
+    "section": "3.7 Clean up",
+    "text": "3.7 Clean up\nLet’s remove the temporary files we created in this chapter:\n\nfor f in [\"stations.txt\", \"gravity.txt\", \"gravity_corrected.txt\", \"samples.csv\"]\n    isfile(f) && rm(f)\nend\nprintln(\"Cleaned up.\")\n\nCleaned up.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Files & Data Manipulation</span>"
     ]
@@ -152,51 +242,171 @@
   {
     "objectID": "chapters/03-plotting-maps.html",
     "href": "chapters/03-plotting-maps.html",
-    "title": "4  Plotting & Maps",
+    "title": "4  Plotting & Data Visualisation",
     "section": "",
-    "text": "4.1 Basic Plotting with CairoMakie\nCairoMakie is a powerful plotting package that produces high-quality vector graphics and supports direct PDF output.\nusing CairoMakie\nCairoMakie.activate!(type = \"png\")\nx = 0:0.1:2π\ny = sin.(x)\nfig = lines(x, y, axis=(xlabel=\"x\", ylabel=\"y\", title=\"Sine Wave\"), \n            label=\"sin(x)\", linewidth=2)\nfig",
+    "text": "4.1 The Makie ecosystem\nAt this point you know how to write Julia code, work with functions and data structures, and read data from files into arrays and DataFrames.\nIn this chapter we will learn how to visualise that data. We start from the very basics, a single line on a pair of axes, and build up to the kinds of plots geoscientists use every day: scatter plots with error bars, borehole logs, contour maps, heatmaps, multi-panel figures, and more. By the end you will be able to turn any dataset into a publication-ready figure and save it as PNG, PDF, or SVG.\nJulia has several plotting libraries. In this book we use Makie, a modern, high-performance plotting ecosystem designed for scientific visualisation. Makie is split into backends. You write the same plotting code, but choose a backend depending on where you want the output:\nFor this book we use CairoMakie because it produces crisp vector graphics and does not need a GPU. When you start exploring 3-D geological models or large point clouds interactively, switch to GLMakie. The plotting code stays the same, only the using line changes.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
     ]
   },
   {
-    "objectID": "chapters/03-plotting-maps.html#basic-plotting-with-cairomakie",
-    "href": "chapters/03-plotting-maps.html#basic-plotting-with-cairomakie",
-    "title": "4  Plotting & Maps",
+    "objectID": "chapters/03-plotting-maps.html#the-makie-ecosystem",
+    "href": "chapters/03-plotting-maps.html#the-makie-ecosystem",
+    "title": "4  Plotting & Data Visualisation",
     "section": "",
-    "text": "4.1.1 Multiple Series\n\nfig = Figure()\nax = Axis(fig[1, 1], xlabel=\"x\", ylabel=\"y\")\nlines!(ax, x, sin.(x), label=\"sin(x)\", linewidth=2)\nlines!(ax, x, cos.(x), label=\"cos(x)\", linewidth=2, linestyle=:dash)\naxislegend(ax)\nfig\n\n\n\n\n\n\n4.1.2 Scatter Plots\n\nxs = randn(50)\nys = randn(50)\nfig = scatter(xs, ys, \n              axis=(xlabel=\"X\", ylabel=\"Y\", title=\"Random Points\"),\n              markersize=12, alpha=0.7)\nfig\n\n\n\n\n\n\n4.1.3 Heatmaps\n\nz = [sin(xi) * cos(yi) for xi in 0:0.1:2π, yi in 0:0.1:2π]\nfig = heatmap(z, axis=(xlabel=\"X\", ylabel=\"Y\", title=\"2D Function\"),\n              colormap=:viridis)\nfig",
+    "text": "Backend\nPackage\nBest for\n\n\n\n\nCairoMakie\nCairoMakie.jl\nStatic figures (PNG, PDF, SVG) for papers, reports, this book\n\n\nGLMakie\nGLMakie.jl\nInteractive, GPU-accelerated windows for rotating 3-D models, exploring large datasets on your screen\n\n\nWGLMakie\nWGLMakie.jl\nInteractive plots in a web browser or Jupyter/Pluto notebook\n\n\n\n\n\n\n\n\n\nCairoMakie vs GLMakie: which one do I use?\n\n\n\nThink of Makie as one plotting language with different “printers”:\n\nCairoMakie renders to a file (PNG, PDF, SVG). There is no window. You call save(\"fig.pdf\", fig) and get a crisp vector graphic ready for a journal. It works everywhere, including headless servers and HPC clusters with no display. This is what we use throughout this book.\nGLMakie opens an interactive window on your screen, powered by your GPU. You can pan, zoom, and rotate 3-D scenes with the mouse, perfect for exploring a velocity model, a point cloud, or a seismicity catalogue before you decide which view to export. You need a display and a working OpenGL driver.\nWGLMakie does the same interactive thing, but inside a web browser. It is the best choice for Jupyter or Pluto notebooks.\n\nThe key point: your plotting code does not change. You just swap using CairoMakie for using GLMakie (or using WGLMakie). So learn the API once, and pick the backend that fits the task.\n\n\n\n\n\n\n\n\n\nWhat about Plots.jl and Plotly?\n\n\n\nPlots.jl is another popular Julia plotting package with a different API. It supports multiple backends (GR, Plotly, PGFPlotsX, etc.) through a single interface. If you prefer Plotly-style interactive HTML plots, you can use Plots.jl with the plotlyjs() backend, or use PlotlyJS.jl directly.\nWe chose Makie for this book because its composability (building complex figures from simple pieces) and performance with large datasets make it a natural fit for geoscientific work. But there is no wrong choice — explore both and use what feels right for your workflow.\n\n\n\n\n\n\n\n\nGMT.jl: the Generic Mapping Tools for Julia\n\n\n\nIf you work with geographic or bathymetric data, you should know about GMT.jl, a Julia wrapper around the legendary Generic Mapping Tools (GMT). GMT has been the gold standard for map-making in the earth sciences for over 30 years. The Julia wrapper gives you the full power of GMT (coastlines, topographic relief, geodetic projections, gravity grids, focal mechanisms) from within Julia.\nGMT.jl is not covered in this chapter because it has its own extensive documentation and a different API from Makie. But if your work involves publication-quality maps with coastlines, plate boundaries, or bathymetry, it is absolutely worth exploring:\nhttps://www.generic-mapping-tools.org/GMT.jl/stable/",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
     ]
   },
   {
-    "objectID": "chapters/03-plotting-maps.html#subplots",
-    "href": "chapters/03-plotting-maps.html#subplots",
-    "title": "4  Plotting & Maps",
-    "section": "4.2 Subplots",
-    "text": "4.2 Subplots\n\nfig = Figure(size=(700, 500))\n\nax1 = Axis(fig[1, 1], title=\"Sine\")\nlines!(ax1, x, sin.(x))\n\nax2 = Axis(fig[1, 2], title=\"Cosine\")\nlines!(ax2, x, cos.(x))\n\nax3 = Axis(fig[2, 1], title=\"Tangent\", limits=(nothing, (-5, 5)))\nlines!(ax3, x, tan.(x))\n\nax4 = Axis(fig[2, 2], title=\"Random\")\nscatter!(ax4, randn(20), randn(20))\n\nfig",
+    "objectID": "chapters/03-plotting-maps.html#installing-cairomakie",
+    "href": "chapters/03-plotting-maps.html#installing-cairomakie",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.2 Installing CairoMakie",
+    "text": "4.2 Installing CairoMakie\nBefore we can plot anything, we need to add CairoMakie to our project environment. Press ] in the REPL to enter Pkg mode:\npkg&gt; add CairoMakie\nOr from normal Julia code:\nusing Pkg; Pkg.add(\"CairoMakie\")\nYou only need to do this once per environment. CairoMakie is already in this book’s Project.toml, so if you cloned the book repository and ran Pkg.instantiate(), you are all set.\n\n\n\n\n\n\nFirst load is slow, that is normal\n\n\n\nThe very first time you run using CairoMakie in a fresh Julia session, it takes a while (sometimes 20 to 40 seconds) because Julia compiles the package. Subsequent calls in the same session are instant. This is Julia’s “time to first plot” (TTFP). It has improved enormously over recent versions and continues to get faster.\n\n\n\nusing CairoMakie\nCairoMakie.activate!(type = \"png\")",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
     ]
   },
   {
-    "objectID": "chapters/03-plotting-maps.html#contour-plots",
-    "href": "chapters/03-plotting-maps.html#contour-plots",
-    "title": "4  Plotting & Maps",
-    "section": "4.3 Contour Plots",
-    "text": "4.3 Contour Plots\n\nx_cont = -2:0.1:2\ny_cont = -2:0.1:2\nz_cont = [exp(-(xi^2 + yi^2)) for xi in x_cont, yi in y_cont]\n\nfig = Figure()\nax = Axis(fig[1, 1], xlabel=\"X\", ylabel=\"Y\", title=\"Gaussian\")\nco = contourf!(ax, x_cont, y_cont, z_cont, levels=10)\nColorbar(fig[1, 2], co)\nfig",
+    "objectID": "chapters/03-plotting-maps.html#your-first-plot",
+    "href": "chapters/03-plotting-maps.html#your-first-plot",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.3 Your first plot",
+    "text": "4.3 Your first plot\nLet’s start with the simplest possible plot, a line:\n\nx = 0:0.1:10\ny = sin.(x)\n\nlines(x, y)\n\n\n\n\nThat is it. lines(x, y) creates a figure, adds an axis, and draws a line through the points. Makie returns a FigureAxisPlot object that renders automatically.\n\n4.3.1 Adding labels and a title\nA plot without labels is just a pretty picture. Always label your axes:\n\nfig, ax, plt = lines(x, sin.(x),\n    axis = (\n        xlabel = \"Distance (km)\",\n        ylabel = \"Amplitude\",\n        title  = \"Synthetic waveform\"\n    ),\n    linewidth = 2,\n    color = :steelblue\n)\nfig\n\n\n\n\nThe fig, ax, plt = ... pattern gives you handles to the figure, the axis, and the plot object. You will use these handles a lot when building more complex figures.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
     ]
   },
   {
-    "objectID": "chapters/03-plotting-maps.html#geographic-maps",
-    "href": "chapters/03-plotting-maps.html#geographic-maps",
-    "title": "4  Plotting & Maps",
-    "section": "4.4 Geographic Maps",
-    "text": "4.4 Geographic Maps\n\n\n\n\n\n\nUnder Construction\n\n\n\nGeographic mapping examples with GeoMakie.jl will be added soon.\n\n\n\n4.4.1 Coordinate Systems\n\n# Example with projected coordinates\nusing CoordinateTransformations\nusing Proj4\n\n# Transform from WGS84 to UTM\nwgs84 = Proj4.Projection(\"+proj=longlat +datum=WGS84\")\nutm35 = Proj4.Projection(\"+proj=utm +zone=35 +datum=WGS84\")\n\n\n\n4.4.2 Plotting Geophysical Data\n\n# Gravity anomaly map example\nusing CairoMakie\n\n# Create synthetic gravity data\nnx, ny = 50, 50\nx_grav = range(0, 10, length=nx)\ny_grav = range(0, 10, length=ny)\ngz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]\n\nfig = Figure()\nax = Axis(fig[1, 1], \n          xlabel=\"Easting (km)\", \n          ylabel=\"Northing (km)\",\n          title=\"Bouguer Gravity Anomaly\")\nhm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)\nColorbar(fig[1, 2], hm, label=\"mGal\")\nfig",
+    "objectID": "chapters/03-plotting-maps.html#scatter-plots",
+    "href": "chapters/03-plotting-maps.html#scatter-plots",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.4 Scatter plots",
+    "text": "4.4 Scatter plots\nScatter plots are the workhorse of geoscience: plotting measurement locations, geochemical concentrations, geophysical anomalies, or any point data.\n\n# Synthetic borehole collar locations\nn = 30\neasting  = 500 .+ 200 .* rand(n)\nnorthing = 7000 .+ 150 .* rand(n)\ndepth    = 50 .+ 100 .* rand(n)\n\nfig, ax, plt = scatter(easting, northing,\n    color = depth,\n    colormap = :viridis,\n    markersize = 12,\n    axis = (\n        xlabel = \"Easting (m)\",\n        ylabel = \"Northing (m)\",\n        title  = \"Borehole collar locations\",\n        aspect = DataAspect()\n    )\n)\nColorbar(fig[1, 2], plt, label = \"Depth (m)\")\nfig\n\n\n\n\nA few things to notice:\n\ncolor = depth maps a data vector to colour, just like you would colour-code sample values on a field map.\ncolormap = :viridis picks a perceptually uniform colourmap. Other good choices for geoscience: :turbo, :RdBu (diverging, great for anomalies), :terrain, :deep.\nColorbar(...) adds a colour legend. The position fig[1, 2] means “row 1, column 2 of the figure layout.”\naspect = DataAspect() keeps the x and y scales equal — essential when plotting spatial coordinates.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Maps</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#line-plots-with-multiple-series",
+    "href": "chapters/03-plotting-maps.html#line-plots-with-multiple-series",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.5 Line plots with multiple series",
+    "text": "4.5 Line plots with multiple series\nGeoscientists often compare several datasets on the same axes: different field campaigns, model predictions versus observations, or time series from multiple stations.\n\ntime = 0:0.5:50            # time in seconds\nsignal_1 = sin.(0.5 .* time) .+ 0.1 .* randn(length(time))\nsignal_2 = sin.(0.5 .* time .+ π/3) .+ 0.1 .* randn(length(time))\n\nfig = Figure(size = (700, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Time (s)\",\n    ylabel = \"Voltage (mV)\",\n    title  = \"EM receiver channels\"\n)\nlines!(ax, time, signal_1, label = \"Rx-1\", linewidth = 2)\nlines!(ax, time, signal_2, label = \"Rx-2\", linewidth = 2, linestyle = :dash)\naxislegend(ax, position = :rt)\nfig\n\n\n\n\nNotice the ! in lines! and axislegend!-style calls. The exclamation mark means “add to an existing axis” rather than creating a new one. This is a consistent Makie convention.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#error-bars",
+    "href": "chapters/03-plotting-maps.html#error-bars",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.6 Error bars",
+    "text": "4.6 Error bars\nField measurements always have uncertainty. Use errorbars! to show it:\n\nstations = 1:8\ngravity  = [12.3, 14.1, 13.5, 15.8, 16.2, 14.9, 13.7, 12.8]\nuncert   = [0.5,  0.8,  0.4,  0.6,  0.9,  0.3,  0.7,  0.5]\n\nfig = Figure(size = (600, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Station\",\n    ylabel = \"Gravity anomaly (mGal)\",\n    title  = \"Profile A – Bouguer anomaly\",\n    xticks = 1:8\n)\nerrorbars!(ax, stations, gravity, uncert, whiskerwidth = 8)\nscatter!(ax, stations, gravity, markersize = 10, color = :black)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#bar-charts-and-histograms",
+    "href": "chapters/03-plotting-maps.html#bar-charts-and-histograms",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.7 Bar charts and histograms",
+    "text": "4.7 Bar charts and histograms\n\n4.7.1 Histogram of sample data\n\n# Simulated grain sizes (log-normal distribution)\ngrain_sizes = exp.(randn(500) .* 0.6 .+ 1.0)\n\nfig = Figure(size = (600, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Grain size (mm)\",\n    ylabel = \"Count\",\n    title  = \"Grain-size distribution\"\n)\nhist!(ax, grain_sizes, bins = 30, color = (:steelblue, 0.7))\nfig\n\n\n\n\n\n\n4.7.2 Bar chart\n\nminerals  = [\"Quartz\", \"Feldspar\", \"Mica\", \"Olivine\", \"Pyroxene\"]\nabundance = [35, 25, 15, 15, 10]\n\nfig = Figure(size = (600, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Mineral\",\n    ylabel = \"Abundance (%)\",\n    title  = \"Modal composition\",\n    xticks = (1:5, minerals)\n)\nbarplot!(ax, 1:5, abundance, color = :teal)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#heatmaps-and-contour-plots",
+    "href": "chapters/03-plotting-maps.html#heatmaps-and-contour-plots",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.8 Heatmaps and contour plots",
+    "text": "4.8 Heatmaps and contour plots\nGridded data is everywhere in geoscience: gravity grids, magnetic surveys, temperature fields, elevation models. Makie handles these with heatmap and contour/contourf.\n\n4.8.1 Heatmap\n\n# Synthetic gravity anomaly on a 2-D grid\nx_grid = range(0, 10, length = 60)\ny_grid = range(0, 8,  length = 50)\ngz = [10 * exp(-((xi - 4)^2 + (yi - 3)^2) / 3) -\n       5 * exp(-((xi - 7)^2 + (yi - 6)^2) / 2)\n      for xi in x_grid, yi in y_grid]\n\nfig = Figure(size = (700, 500))\nax = Axis(fig[1, 1],\n    xlabel = \"Easting (km)\",\n    ylabel = \"Northing (km)\",\n    title  = \"Bouguer gravity anomaly\",\n    aspect = DataAspect()\n)\nhm = heatmap!(ax, x_grid, y_grid, gz, colormap = :RdBu)\nColorbar(fig[1, 2], hm, label = \"ΔgB (mGal)\")\nfig\n\n\n\n\n\n\n4.8.2 Filled contour plot\n\nfig = Figure(size = (700, 500))\nax = Axis(fig[1, 1],\n    xlabel = \"Easting (km)\",\n    ylabel = \"Northing (km)\",\n    title  = \"Gravity anomaly (contour)\",\n    aspect = DataAspect()\n)\nco = contourf!(ax, x_grid, y_grid, gz, levels = 15, colormap = :RdBu)\ncontour!(ax, x_grid, y_grid, gz, levels = 15, color = :black, linewidth = 0.5)\nColorbar(fig[1, 2], co, label = \"ΔgB (mGal)\")\nfig\n\n\n\n\nOverlaying contour! lines on a contourf! fill is a classic geophysics style. The thin black lines make it easier to read precise values.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#multi-panel-figures-subplots",
+    "href": "chapters/03-plotting-maps.html#multi-panel-figures-subplots",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.9 Multi-panel figures (subplots)",
+    "text": "4.9 Multi-panel figures (subplots)\nScientific papers often require several panels in one figure. Makie uses a grid layout system: fig[row, col] places content anywhere on the grid.\n\nfig = Figure(size = (700, 500))\n\n# Panel a — line plot\nax1 = Axis(fig[1, 1], title = \"(a) Signal\", xlabel = \"Time (s)\", ylabel = \"mV\")\nlines!(ax1, time, signal_1)\n\n# Panel b — scatter\nax2 = Axis(fig[1, 2], title = \"(b) Collars\",\n    xlabel = \"Easting\", ylabel = \"Northing\", aspect = DataAspect())\nscatter!(ax2, easting, northing, color = depth, colormap = :viridis, markersize = 8)\n\n# Panel c — histogram\nax3 = Axis(fig[2, 1], title = \"(c) Grain sizes\", xlabel = \"mm\", ylabel = \"Count\")\nhist!(ax3, grain_sizes, bins = 25, color = (:teal, 0.7))\n\n# Panel d — contour\nax4 = Axis(fig[2, 2], title = \"(d) Gravity\", xlabel = \"Easting (km)\",\n    ylabel = \"Northing (km)\", aspect = DataAspect())\ncontourf!(ax4, x_grid, y_grid, gz, levels = 12, colormap = :RdBu)\n\nfig\n\n\n\n\nYou can span rows or columns for insets and wide panels — see the Makie layout tutorial for advanced arrangements.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#customising-appearance",
+    "href": "chapters/03-plotting-maps.html#customising-appearance",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.10 Customising appearance",
+    "text": "4.10 Customising appearance\n\n4.10.1 Fonts and themes\nMakie ships with several built-in themes. You can also override individual settings:\n\nwith_theme(theme_minimal()) do\n    fig = Figure(size = (600, 400))\n    ax = Axis(fig[1, 1],\n        xlabel = \"Frequency (Hz)\",\n        ylabel = \"Power spectral density\",\n        title  = \"Minimal theme example\",\n        xscale = log10,\n        yscale = log10\n    )\n    freqs = 10 .^ range(-1, 3, length = 200)\n    psd   = 1 ./ freqs .+ 0.01 .* abs.(randn(200))\n    lines!(ax, freqs, psd, linewidth = 2)\n    fig\nend\n\n\n\n\nOther themes to try: theme_dark(), theme_light(), theme_black(), theme_ggplot2().\n\n\n4.10.2 Colourmaps\nChoosing the right colourmap matters, especially in geoscience where a bad colourmap can hide features or mislead the reader. Some guidelines:\n\n\n\n\n\n\n\n\nData type\nGood choices\nAvoid\n\n\n\n\nSequential (elevation, depth, concentration)\n:viridis, :cividis, :deep, :thermal\n:jet (perceptual jumps)\n\n\nDiverging (anomalies centred on zero)\n:RdBu, :BrBG, :PiYG\nAny sequential map\n\n\nCategorical (lithology, fault type)\n:tab10, :Set1\nContinuous maps\n\n\nTerrain / bathymetry\n:terrain, :topo\n:hot, :gray\n\n\n\n\nfig = Figure(size = (650, 280))\n\nax1 = Axis(fig[1, 1], title = \":viridis (sequential)\", aspect = DataAspect())\nheatmap!(ax1, gz, colormap = :viridis)\n\nax2 = Axis(fig[1, 2], title = \":RdBu (diverging)\", aspect = DataAspect())\nheatmap!(ax2, gz, colormap = :RdBu)\n\nax3 = Axis(fig[1, 3], title = \":terrain\", aspect = DataAspect())\nheatmap!(ax3, gz, colormap = :terrain)\n\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#log-scale-axes",
+    "href": "chapters/03-plotting-maps.html#log-scale-axes",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.11 Log-scale axes",
+    "text": "4.11 Log-scale axes\nGeophysical data often spans many orders of magnitude: resistivity, frequency, spectral power. Use xscale = log10 or yscale = log10:\n\nfreq = 10 .^ range(-2, 5, length = 50)\napparent_res = 100 .* (1 .+ 0.3 .* sin.(log10.(freq) .* 2))\n\nfig = Figure(size = (600, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Frequency (Hz)\",\n    ylabel = \"Apparent resistivity (Ω·m)\",\n    title  = \"MT sounding curve\",\n    xscale = log10,\n    yscale = log10\n)\nlines!(ax, freq, apparent_res, linewidth = 2, color = :navy)\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#annotations-and-markers",
+    "href": "chapters/03-plotting-maps.html#annotations-and-markers",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.12 Annotations and markers",
+    "text": "4.12 Annotations and markers\nLabelling key features on a plot (a fault, an anomaly peak, a sample location) is something you will do often:\n\nfig = Figure(size = (600, 400))\nax = Axis(fig[1, 1],\n    xlabel = \"Easting (km)\", ylabel = \"Gravity (mGal)\",\n    title  = \"Annotated profile\"\n)\nprofile_x = range(0, 10, length = 100)\nprofile_g = 8 .* exp.(-((profile_x .- 4) ./ 1.5).^2) .- 2\nlines!(ax, profile_x, profile_g, linewidth = 2)\n\n# Mark the peak\nscatter!(ax, [4.0], [6.0], markersize = 14, color = :red)\ntext!(ax, 4.3, 6.2, text = \"Anomaly peak\", fontsize = 14, color = :red)\n\n# Mark a fault\nvlines!(ax, [7.0], color = :grey40, linestyle = :dash, linewidth = 1.5)\ntext!(ax, 7.2, -1.5, text = \"Fault F1\", fontsize = 12, color = :grey40)\n\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#saving-figures",
+    "href": "chapters/03-plotting-maps.html#saving-figures",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.13 Saving figures",
+    "text": "4.13 Saving figures\nUse save to export your figure. The file extension determines the format:\n\nsave(\"gravity_profile.png\", fig)              # raster (300 dpi by default)\nsave(\"gravity_profile.pdf\", fig)              # vector, best for papers\nsave(\"gravity_profile.svg\", fig)              # vector, good for web\nsave(\"gravity_profile.png\", fig, px_per_unit = 3)  # high-res raster (900 dpi)\n\n\n\n\n\n\n\nPDF for papers, PNG for presentations\n\n\n\nFor journal submissions, PDF or SVG gives you lossless vector graphics that look sharp at any zoom. For slides and posters, PNG at high resolution (px_per_unit = 3 or higher) is more portable.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#putting-it-together-a-geoscience-figure",
+    "href": "chapters/03-plotting-maps.html#putting-it-together-a-geoscience-figure",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.14 Putting it together: a geoscience figure",
+    "text": "4.14 Putting it together: a geoscience figure\nLet’s combine several techniques into a single multi-panel figure typical of a geophysical report:\n\nusing Statistics\n\nfig = Figure(size = (700, 550))\n\n# --- Panel a: profile with error bars ---\nax1 = Axis(fig[1, 1:2], title = \"(a) Gravity profile\",\n    xlabel = \"Distance (km)\", ylabel = \"Bouguer anomaly (mGal)\")\ndist   = range(0, 12, length = 25)\nobs    = 8 .* exp.(-((dist .- 5) ./ 2).^2) .+ 0.3 .* randn(25)\nuncert = 0.2 .+ 0.1 .* rand(25)\nerrorbars!(ax1, collect(dist), obs, uncert, whiskerwidth = 6)\nscatter!(ax1, collect(dist), obs, markersize = 8, color = :black, label = \"Observed\")\nmodel_g = 8 .* exp.(-((dist .- 5) ./ 2).^2)\nlines!(ax1, collect(dist), model_g, linewidth = 2, color = :red, label = \"Model\")\naxislegend(ax1, position = :rt)\n\n# --- Panel b: contour map ---\nax2 = Axis(fig[2, 1], title = \"(b) Anomaly map\",\n    xlabel = \"Easting (km)\", ylabel = \"Northing (km)\",\n    aspect = DataAspect())\nco = contourf!(ax2, x_grid, y_grid, gz, levels = 12, colormap = :RdBu)\ncontour!(ax2, x_grid, y_grid, gz, levels = 12, color = :black, linewidth = 0.4)\nColorbar(fig[2, 0], co, label = \"mGal\", flipaxis = false)\n\n# --- Panel c: histogram of residuals ---\nresiduals = obs .- model_g\nax3 = Axis(fig[2, 2], title = \"(c) Residuals\",\n    xlabel = \"Residual (mGal)\", ylabel = \"Count\")\nhist!(ax3, residuals, bins = 10, color = (:steelblue, 0.7))\nvlines!(ax3, [0.0], color = :red, linestyle = :dash)\nvlines!(ax3, [mean(residuals)], color = :black, linewidth = 2, label = \"mean\")\naxislegend(ax3, position = :lt)\n\nfig",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#geographic-maps-with-geomakie",
+    "href": "chapters/03-plotting-maps.html#geographic-maps-with-geomakie",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.15 Geographic maps with GeoMakie",
+    "text": "4.15 Geographic maps with GeoMakie\nSo far every plot has used plain numeric axes — “Easting (km)” and “Northing (km).” But geoscientists often need to plot data on a map with coastlines, country borders, and a proper geographic projection. That is what GeoMakie.jl gives you.\nGeoMakie provides a GeoAxis, a drop-in replacement for Makie’s Axis that understands coordinate reference systems (CRS) and projections. You feed it longitude/latitude data and tell it which projection you want; it handles the transformation and draws graticules automatically.\n\n4.15.1 Installing GeoMakie\npkg&gt; add GeoMakie\nOr: using Pkg; Pkg.add(\"GeoMakie\"). GeoMakie pulls in Proj.jl (for map projections) and NaturalEarth (for coastlines and country boundaries).\n\nusing GeoMakie\n\n\n\n4.15.2 A world map in three lines\n\nfig = Figure()\nga = GeoAxis(fig[1, 1], dest = \"+proj=natearth\", title = \"Natural Earth projection\")\nlines!(ga, GeoMakie.coastlines(), color = :black, linewidth = 0.5)\nfig\n\n\n\n\nGeoAxis accepts any PROJ-string through the dest keyword. The default source CRS is WGS84 (longitude/latitude). Try replacing \"+proj=natearth\" with \"+proj=ortho\" for an orthographic globe view, or \"+proj=moll\" for a Mollweide equal-area projection.\n\n\n4.15.3 Overlaying polygons and raster data\nGeoMakie integrates with GeoInterface.jl, so you can plot any GeoInterface-compatible geometry: shapefiles, GeoJSON, geological unit polygons, fault traces, concession boundaries:\nusing GeoMakie, GeoJSON\n\n# Load a GeoJSON of geological units (hypothetical file)\ngeol = GeoJSON.read(\"geology_units.geojson\")\n\nfig = Figure()\nga = GeoAxis(fig[1, 1], dest = \"+proj=utm +zone=18 +south\")\npoly!(ga, geol, color = :lightgrey, strokecolor = :black, strokewidth = 0.5)\nfig\n\n\n\n\n\n\nCommon projections for geoscience\n\n\n\n\n\n\n\n\n\n\n\nRegion / Use case\nPROJ string\nNotes\n\n\n\n\nGlobal equal-area\n+proj=moll\nMollweide, good for thematic world maps\n\n\nGlobal for visuals\n+proj=natearth\nNatural Earth, pleasant for presentations\n\n\nGlobe view\n+proj=ortho +lon_0=0 +lat_0=30\nOrthographic, looks like a photo from space\n\n\nLocal field survey\n+proj=utm +zone=35 +datum=WGS84\nMetric grid, precise local coordinates\n\n\nContinental\n+proj=lcc +lat_1=30 +lat_2=60 +lon_0=10\nLambert Conformal Conic, preserves shape\n\n\nPolar\n+proj=stere +lat_0=90 +lon_0=0\nStereographic, Arctic/Antarctic maps\n\n\n\nYou can browse all available projections at https://proj.org/operations/projections/.\n\n\n\n\n4.15.4 Learn more about GeoMakie\n\nDocumentation & gallery: https://geo.makie.org/\nSource code: https://github.com/MakieOrg/GeoMakie.jl",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03-plotting-maps.html#where-to-learn-more",
+    "href": "chapters/03-plotting-maps.html#where-to-learn-more",
+    "title": "4  Plotting & Data Visualisation",
+    "section": "4.16 Where to learn more",
+    "text": "4.16 Where to learn more\n\nMakie documentation: https://docs.makie.org/ with tutorials, gallery, and the full API reference.\nBeautiful Makie: https://beautiful.makie.org/, a gallery of polished example figures you can copy and adapt.\nMakie colour maps: the ColorSchemes.jl package gives you access to hundreds of colour maps. Browse them at https://juliagraphics.github.io/ColorSchemes.jl/stable/.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Plotting & Data Visualisation</span>"
     ]
   },
   {
@@ -204,129 +414,29 @@
     "href": "chapters/04-neural-networks.html",
     "title": "5  Neural Networks",
     "section": "",
-    "text": "5.1 Introduction to Neural Networks",
+    "text": "5.1 Your first neural network: Sauna Satisfaction Predictor\nAt this point you know how to handle data files, manipulate tables, and create plots.\nIn this chapter we will build neural networks that learn patterns directly from data. We start with a hands-on example (generate data, train, evaluate) before unpacking the theory. The framework is Lux.jl, a modern Julia library that keeps model parameters and state explicit.\nLet’s skip the theory for now and train a neural network end to end. Data goes in, a model learns, predictions come out. Everything fits on your laptop in under a minute.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
   },
   {
-    "objectID": "chapters/04-neural-networks.html#introduction-to-neural-networks",
-    "href": "chapters/04-neural-networks.html#introduction-to-neural-networks",
+    "objectID": "chapters/04-neural-networks.html#your-first-neural-network-sauna-satisfaction-predictor",
+    "href": "chapters/04-neural-networks.html#your-first-neural-network-sauna-satisfaction-predictor",
     "title": "5  Neural Networks",
     "section": "",
-    "text": "Coming Soon\n\n\n\n\nPerceptrons and activation functions\nFeedforward networks\nBackpropagation",
+    "text": "5.1.1 The problem\nIn an alternate universe, the Geological Survey of Finland has an office sauna in every building, and geologists are allowed to use it after a single qualifying event: surviving a long meeting with geophysicists.\nSince this is a government office sauna, a visitor log is maintained with the seriousness usually reserved for core samples. For each sauna visit the log records three things:\n\nSauna temperature (°C)\nOutside temperature (°C)\nMinutes since last coffee\n\nAfter the session the visitor assigns a Satisfaction Score between 0 and 1, where 0 means “this was a management idea” and 1 means “I love my job.”\nWe will train a small neural network to predict the Satisfaction Score from these three inputs. This is a regression problem (the output is a continuous number) rather than classification, so we will use mean squared error (MSE) as the loss function.\n\n\n5.1.2 The training data\nThe logbook has 200 visits. The hidden satisfaction rule works like this: satisfaction peaks around 80 °C, gets a boost when it is freezing outside, drops when the last coffee was too long ago, and includes random noise because people are unpredictable. The relationships are non-linear, so a straight line cannot capture them, but a small neural network can.\n\n\n5.1.3 Setting up packages\n\nusing Lux, Random, Optimisers, Zygote, Statistics, Printf\n\n\n\n\n\n\n\nInstalling Lux\n\n\n\nIf you have not installed Lux yet, open the Julia REPL and run:\nusing Pkg\nPkg.add([\"Lux\", \"Optimisers\"])\n\n\n\n\n5.1.4 Generate the visitor log\nThe logbook has been transcribed into a tidy text file called sauna_log.txt. Each row is one visit, with columns separated by commas. Here are the first few lines:\n\n# Peek at the file\nfor (i, line) in enumerate(eachline(\"sauna_log.txt\"))\n    i &gt; 6 && break\n    println(line)\nend\n\nsauna_temp,outside_temp,coffee_min,score\n78.2,-6.8,76.7,1.0000\n66.9,8.8,8.2,0.1861\n86.4,-21.4,49.2,0.9703\n72.9,-29.5,119.1,0.5900\n86.8,-23.7,90.2,0.5756\n\n\n\n\n5.1.5 Read the data and normalise\nWe read the file, parse the numbers, and normalise each feature to zero mean and unit variance so the network treats all inputs equally:\n\nlines = readlines(\"sauna_log.txt\")\nheader = split(lines[1], \",\")\ndata = reduce(hcat, [parse.(Float32, split(l, \",\")) for l in lines[2:end]])\n\n# rows: sauna_temp, outside_temp, coffee_min, score\nX_raw = data[1:3, :]\nY     = data[4:4, :]\n\n# Normalise inputs\nmu  = mean(X_raw, dims = 2)\nsig = std(X_raw, dims = 2)\nX   = (X_raw .- mu) ./ sig\n\n@printf \"Visits: %d   Features: %s   Output: %s\\n\" size(X, 2) string(size(X)) string(size(Y))\n\nVisits: 200   Features: (3, 200)   Output: (1, 200)\n\n\n\n\n5.1.6 Split into train and test\n\nrng = Xoshiro(123)\nn_train = Int(round(0.8 * size(X, 2)))\nidx = randperm(rng, size(X, 2))\n\nX_train = X[:, idx[1:n_train]]\nY_train = Y[:, idx[1:n_train]]\nX_test  = X[:, idx[n_train+1:end]]\nY_test  = Y[:, idx[n_train+1:end]]\n\nprintln(\"Train: \", size(X_train, 2), \"  Test: \", size(X_test, 2))\n\nTrain: 160  Test: 40\n\n\n\n\n5.1.7 Build the model\nOne hidden layer, 8 neurons, tanh activation, and a single linear output. No sigmoid at the end because this is regression, not classification.\n\nmodel = Chain(\n    Dense(3 =&gt; 8, tanh),\n    Dense(8 =&gt; 1)\n)\n\n\nChain(\n    layer_1 = Dense(3 =&gt; 8, tanh),                # 32 parameters\n    layer_2 = Dense(8 =&gt; 1),                      # 9 parameters\n)         # Total: 41 parameters,\n          #        plus 0 states.\n\n\n\nIn Lux the model is just a blueprint. Parameters and state are initialised separately:\n\nps, st = Lux.setup(rng, model)\n\n((layer_1 = (weight = Float32[-0.71197426 0.5440084 -0.9027876; -0.62075335 -0.5090574 1.4643831; … ; 0.7166022 -0.17811993 0.5175801; -1.5047655 -0.24505515 1.5166628], bias = Float32[0.23182774, -0.18704338, 0.17974052, 0.15094592, -0.023374384, 0.47140634, -0.18232994, 0.08013492]), layer_2 = (weight = Float32[-0.48614922 0.6079607 … -0.5020537 -0.45970005], bias = Float32[0.24544002])), (layer_1 = NamedTuple(), layer_2 = NamedTuple()))\n\n\nThis separation means you can save parameters, swap them between models, or pass them to a differential equation solver without any fuss.\n\n\n5.1.8 Define the loss function\nMean squared error (MSE): predictions far from the truth get penalised quadratically.\n\nfunction mse_loss(model, ps, st, data)\n    x, y_true = data\n    y_pred, st_new = model(x, ps, st)\n    loss = mean((y_pred .- y_true) .^ 2)\n    return loss, st_new, ()\nend\n\nmse_loss (generic function with 1 method)\n\n\n\n\n5.1.9 Train the network\nAdam optimiser, 500 epochs:\n\nopt = Adam(0.01f0)\ntstate = Training.TrainState(model, ps, st, opt)\n\nfor epoch in 1:500\n    _, loss, _, tstate = Training.single_train_step!(\n        AutoZygote(), mse_loss, (X_train, Y_train), tstate\n    )\n    if epoch == 1 || epoch % 100 == 0\n        @printf \"Epoch %4d  MSE = %.6f\\n\" epoch loss\n    end\nend\n\nEpoch    1  MSE = 0.298768\nEpoch  100  MSE = 0.021929\nEpoch  200  MSE = 0.008098\nEpoch  300  MSE = 0.006308\nEpoch  400  MSE = 0.005393\nEpoch  500  MSE = 0.005107\n\n\n\n\n5.1.10 Evaluate on test data\n\nY_pred_test, _ = model(X_test, tstate.parameters, tstate.states)\ntest_mse = mean((Y_pred_test .- Y_test) .^ 2)\ntest_mae = mean(abs.(Y_pred_test .- Y_test))\n\n@printf \"Test MSE:  %.6f\\n\" test_mse\n@printf \"Test MAE:  %.4f  (average error in satisfaction score)\\n\" test_mae\n\nTest MSE:  0.006323\nTest MAE:  0.0615  (average error in satisfaction score)\n\n\n\n\n5.1.11 Predict new scenarios\nNow for the important part. HR wants to know: what sauna settings should they recommend after the next geophysicist meeting?\n\nscenarios = [\n    (sauna=80, outside=-20, coffee=10,\n     label=\"Perfect: 80°C, -20°C, fresh coffee\"),\n    (sauna=65, outside=5,   coffee=100,\n     label=\"Sad: lukewarm, mild day, stale coffee\"),\n    (sauna=95, outside=-25, coffee=30,\n     label=\"Extreme: 95°C, deep winter, recent coffee\"),\n    (sauna=75, outside=0,   coffee=60,\n     label=\"Average: 75°C, 0°C, 1 h since coffee\"),\n]\n\nfunction predict_score(s, model, ps, st, mu, sig)\n    x = Float32.([(s.sauna  - mu[1]) / sig[1],\n                  (s.outside - mu[2]) / sig[2],\n                  (s.coffee  - mu[3]) / sig[3]])\n    pred, _ = model(reshape(x, 3, 1), ps, st)\n    return pred[1]\nend\n\nprintln(\"Sauna Satisfaction Predictions\")\nprintln(\"─\"^40)\nfor s in scenarios\n    sc = predict_score(s, model,\n        tstate.parameters, tstate.states, mu, sig)\n    @printf \"  %-38s  %.2f\\n\" s.label sc\nend\nprintln(\"─\"^40)\n\nSauna Satisfaction Predictions\n────────────────────────────────────────\n  Perfect: 80°C, -20°C, fresh coffee      1.04\n  Sad: lukewarm, mild day, stale coffee   0.07\n  Extreme: 95°C, deep winter, recent coffee  0.41\n  Average: 75°C, 0°C, 1 h since coffee    0.77\n────────────────────────────────────────\n\n\nThe predictions match intuition: 80 °C with freezing weather and fresh coffee scores high; a lukewarm room on a mild day with stale coffee scores low. HR can now issue sauna recommendations with full scientific confidence.\n\n\n\n\n\n\nTry it yourself\n\n\n\n\nAdd a fourth input, “meeting duration (minutes).” Does the network improve?\nMake it deeper: 3 =&gt; 16 =&gt; 8 =&gt; 1. Does it overfit on 200 samples?\nSwap tanh for relu. How does the test error change?",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
     ]
   },
   {
-    "objectID": "chapters/04-neural-networks.html#flux.jl-basics",
-    "href": "chapters/04-neural-networks.html#flux.jl-basics",
+    "objectID": "chapters/04-neural-networks.html#what-is-a-neural-network",
+    "href": "chapters/04-neural-networks.html#what-is-a-neural-network",
     "title": "5  Neural Networks",
-    "section": "5.2 Flux.jl Basics",
-    "text": "5.2 Flux.jl Basics\n\n\n\n\n\n\nComing Soon\n\n\n\n\nInstalling Flux.jl\nBuilding your first neural network\nTraining loops",
+    "section": "5.2 What is a neural network?",
+    "text": "5.2 What is a neural network?\nA neuron multiplies inputs by weights, adds a bias, and passes the result through a non-linear activation:\n\\[\nz = \\sigma\\!\\bigl(\\mathbf{w}^\\top \\mathbf{x} + b\\bigr)\n\\]\nStack neurons side by side to get a layer; chain layers to get a network. Our Chain(Dense(3 =&gt; 8, tanh), Dense(8 =&gt; 1)) is two layers.\n\n5.2.1 How does it learn?\nFour steps, repeated many times:\n\nForward pass: run data through the network.\nLoss: measure how wrong the predictions are.\nBackward pass: compute gradients of the loss with respect to every weight using automatic differentiation.\nUpdate: nudge each parameter to reduce the loss (Adam, SGD, etc.).\n\nThat is the entire recipe.\n\n\n\n\n\n\nWork in progress\n\n\n\nSome sections are still being written. The example below is complete and ready to run. Now that you have all the things in place, we will start with detailed discussios about machine learning especially scientific machine learning and learn how to use best of both: domain knowlege and data and machine learning to solve geoscientific problems.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/04-neural-networks.html#deep-learning-architectures",
-    "href": "chapters/04-neural-networks.html#deep-learning-architectures",
-    "title": "5  Neural Networks",
-    "section": "5.3 Deep Learning Architectures",
-    "text": "5.3 Deep Learning Architectures\n\n5.3.1 Convolutional Neural Networks (CNNs)\n\n\n\n\n\n\nComing Soon\n\n\n\n\nConvolution operations\nPooling layers\nImage classification for geoscience\n\n\n\n\n\n5.3.2 Recurrent Neural Networks (RNNs)\n\n\n\n\n\n\nComing Soon\n\n\n\n\nLSTM and GRU cells\nTime series prediction\nSequence modeling for seismic data\n\n\n\n\n\n5.3.3 Autoencoders\n\n\n\n\n\n\nComing Soon\n\n\n\n\nEncoder-decoder architecture\nVariational autoencoders\nDimensionality reduction",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/04-neural-networks.html#training-best-practices",
-    "href": "chapters/04-neural-networks.html#training-best-practices",
-    "title": "5  Neural Networks",
-    "section": "5.4 Training Best Practices",
-    "text": "5.4 Training Best Practices\n\n\n\n\n\n\nComing Soon\n\n\n\n\nData preprocessing and normalization\nBatch training\nLearning rate scheduling\nRegularization techniques",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/04-neural-networks.html#gpu-computing-with-cuda.jl",
-    "href": "chapters/04-neural-networks.html#gpu-computing-with-cuda.jl",
-    "title": "5  Neural Networks",
-    "section": "5.5 GPU Computing with CUDA.jl",
-    "text": "5.5 GPU Computing with CUDA.jl\n\n\n\n\n\n\nComing Soon\n\n\n\n\nGPU setup\nMoving data to GPU\nPerformance optimization",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Neural Networks</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/05-inverse-modeling.html",
-    "href": "chapters/05-inverse-modeling.html",
-    "title": "6  Inverse Modeling",
-    "section": "",
-    "text": "Under Construction\n\n\n\nThis chapter is currently being developed.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inverse Modeling</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/06-ai-surrogates.html",
-    "href": "chapters/06-ai-surrogates.html",
-    "title": "7  AI Surrogates",
-    "section": "",
-    "text": "7.0.1 DeepONet",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/06-ai-surrogates.html#gaussian-processes",
-    "href": "chapters/06-ai-surrogates.html#gaussian-processes",
-    "title": "7  AI Surrogates",
-    "section": "7.1 Gaussian Processes",
-    "text": "7.1 Gaussian Processes\n\n\n\n\n\n\nComing Soon\n\n\n\n\nGP fundamentals\nKernel selection\nScalable GPs",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/06-ai-surrogates.html#reduced-order-models",
-    "href": "chapters/06-ai-surrogates.html#reduced-order-models",
-    "title": "7  AI Surrogates",
-    "section": "7.2 Reduced-Order Models",
-    "text": "7.2 Reduced-Order Models\n\n\n\n\n\n\nComing Soon\n\n\n\n\nProper Orthogonal Decomposition (POD)\nDynamic Mode Decomposition (DMD)\nNeural network-enhanced ROM",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/06-ai-surrogates.html#uncertainty-quantification",
-    "href": "chapters/06-ai-surrogates.html#uncertainty-quantification",
-    "title": "7  AI Surrogates",
-    "section": "7.3 Uncertainty Quantification",
-    "text": "7.3 Uncertainty Quantification\n\n\n\n\n\n\nComing Soon\n\n\n\n\nEpistemic vs aleatoric uncertainty\nEnsemble methods\nBayesian neural networks",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/06-ai-surrogates.html#multi-fidelity-modeling",
-    "href": "chapters/06-ai-surrogates.html#multi-fidelity-modeling",
-    "title": "7  AI Surrogates",
-    "section": "7.4 Multi-Fidelity Modeling",
-    "text": "7.4 Multi-Fidelity Modeling\n\n\n\n\n\n\nComing Soon\n\n\n\n\nCombining cheap and expensive models\nTransfer learning\nActive learning for surrogates",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>AI Surrogates</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/07-applications.html",
-    "href": "chapters/07-applications.html",
-    "title": "8  Applications",
-    "section": "",
-    "text": "🚧 Under Construction\n\n\n\nThis chapter is currently being developed.",
-    "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Applications</span>"
     ]
   }
 ]

@@ -10,7 +10,6 @@ _book/
 # docs/
 
 # Julia
-Manifest.toml
 *.jl.cov
 *.jl.mem
 

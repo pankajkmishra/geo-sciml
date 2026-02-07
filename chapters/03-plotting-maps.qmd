@@ -1,10 +1,75 @@
 ---
-title: "Plotting & Maps"
+title: "Plotting & Data Visualisation"
 ---
 
-## Basic Plotting with CairoMakie
+At this point you know how to write Julia code, work with functions and data structures, and read data from files into arrays and DataFrames.
 
-CairoMakie is a powerful plotting package that produces high-quality vector graphics and supports direct PDF output.
+In this chapter we will learn how to **visualise** that data. We start from the very basics, a single line on a pair of axes, and build up to the kinds of plots geoscientists use every day: scatter plots with error bars, borehole logs, contour maps, heatmaps, multi-panel figures, and more. By the end you will be able to turn any dataset into a publication-ready figure and save it as PNG, PDF, or SVG.
+
+## The Makie ecosystem
+
+Julia has several plotting libraries. In this book we use **Makie**, a modern, high-performance plotting ecosystem designed for scientific visualisation. Makie is split into **backends**. You write the same plotting code, but choose a backend depending on where you want the output:
+
+| Backend | Package | Best for |
+|---------|---------|----------|
+| **CairoMakie** | `CairoMakie.jl` | Static figures (PNG, PDF, SVG) for papers, reports, this book |
+| **GLMakie** | `GLMakie.jl` | Interactive, GPU-accelerated windows for rotating 3-D models, exploring large datasets on your screen |
+| **WGLMakie** | `WGLMakie.jl` | Interactive plots in a web browser or Jupyter/Pluto notebook |
+
+:::{.callout-important}
+## CairoMakie vs GLMakie: which one do I use?
+
+Think of Makie as one plotting language with different "printers":
+
+- **CairoMakie** renders to a file (PNG, PDF, SVG). There is no window. You call `save("fig.pdf", fig)` and get a crisp vector graphic ready for a journal. It works everywhere, including headless servers and HPC clusters with no display. This is what we use throughout this book.
+
+- **GLMakie** opens an **interactive window** on your screen, powered by your GPU. You can pan, zoom, and rotate 3-D scenes with the mouse, perfect for exploring a velocity model, a point cloud, or a seismicity catalogue before you decide which view to export. You need a display and a working OpenGL driver.
+
+- **WGLMakie** does the same interactive thing, but inside a **web browser**. It is the best choice for Jupyter or Pluto notebooks.
+
+The key point: **your plotting code does not change**. You just swap `using CairoMakie` for `using GLMakie` (or `using WGLMakie`). So learn the API once, and pick the backend that fits the task.
+:::
+
+For this book we use **CairoMakie** because it produces crisp vector graphics and does not need a GPU. When you start exploring 3-D geological models or large point clouds interactively, switch to **GLMakie**. The plotting code stays the same, only the `using` line changes.
+
+:::{.callout-tip}
+## What about Plots.jl and Plotly?
+
+**Plots.jl** is another popular Julia plotting package with a different API. It supports multiple backends (GR, Plotly, PGFPlotsX, etc.) through a single interface. If you prefer Plotly-style interactive HTML plots, you can use `Plots.jl` with the `plotlyjs()` backend, or use **PlotlyJS.jl** directly.
+
+We chose Makie for this book because its composability (building complex figures from simple pieces) and performance with large datasets make it a natural fit for geoscientific work. But there is no wrong choice — explore both and use what feels right for your workflow.
+:::
+
+:::{.callout-note}
+## GMT.jl: the Generic Mapping Tools for Julia
+
+If you work with geographic or bathymetric data, you should know about **GMT.jl**, a Julia wrapper around the legendary [Generic Mapping Tools (GMT)](https://www.generic-mapping-tools.org/). GMT has been the gold standard for map-making in the earth sciences for over 30 years. The Julia wrapper gives you the full power of GMT (coastlines, topographic relief, geodetic projections, gravity grids, focal mechanisms) from within Julia.
+
+GMT.jl is not covered in this chapter because it has its own extensive documentation and a different API from Makie. But if your work involves publication-quality maps with coastlines, plate boundaries, or bathymetry, it is absolutely worth exploring:
+
+<https://www.generic-mapping-tools.org/GMT.jl/stable/>
+:::
+
+## Installing CairoMakie
+
+Before we can plot anything, we need to add CairoMakie to our project environment. Press `]` in the REPL to enter Pkg mode:
+
+```
+pkg> add CairoMakie
+```
+
+Or from normal Julia code:
+
+```julia
+using Pkg; Pkg.add("CairoMakie")
+```
+
+You only need to do this once per environment. CairoMakie is already in this book's `Project.toml`, so if you cloned the book repository and ran `Pkg.instantiate()`, you are all set.
+
+:::{.callout-note}
+## First load is slow, that is normal
+The very first time you run `using CairoMakie` in a fresh Julia session, it takes a while (sometimes 20 to 40 seconds) because Julia compiles the package. Subsequent calls in the same session are instant. This is Julia's "time to first plot" (TTFP). It has improved enormously over recent versions and continues to get faster.
+:::
 
 ```{julia}
 #| output: false
@@ -12,118 +77,447 @@ using CairoMakie
 CairoMakie.activate!(type = "png")
 ```
 
+## Your first plot
+
+Let's start with the simplest possible plot, a line:
+
 ```{julia}
-x = 0:0.1:2π
+x = 0:0.1:10
 y = sin.(x)
-fig = lines(x, y, axis=(xlabel="x", ylabel="y", title="Sine Wave"), 
-            label="sin(x)", linewidth=2)
-fig
+
+lines(x, y)
 ```
 
-### Multiple Series
+That is it. `lines(x, y)` creates a figure, adds an axis, and draws a line through the points. Makie returns a `FigureAxisPlot` object that renders automatically.
+
+### Adding labels and a title
+
+A plot without labels is just a pretty picture. Always label your axes:
 
 ```{julia}
-fig = Figure()
-ax = Axis(fig[1, 1], xlabel="x", ylabel="y")
-lines!(ax, x, sin.(x), label="sin(x)", linewidth=2)
-lines!(ax, x, cos.(x), label="cos(x)", linewidth=2, linestyle=:dash)
-axislegend(ax)
+fig, ax, plt = lines(x, sin.(x),
+    axis = (
+        xlabel = "Distance (km)",
+        ylabel = "Amplitude",
+        title  = "Synthetic waveform"
+    ),
+    linewidth = 2,
+    color = :steelblue
+)
 fig
 ```
 
-### Scatter Plots
+The `fig, ax, plt = ...` pattern gives you handles to the **figure**, the **axis**, and the **plot object**. You will use these handles a lot when building more complex figures.
+
+## Scatter plots
+
+Scatter plots are the workhorse of geoscience: plotting measurement locations, geochemical concentrations, geophysical anomalies, or any point data.
 
 ```{julia}
-xs = randn(50)
-ys = randn(50)
-fig = scatter(xs, ys, 
-              axis=(xlabel="X", ylabel="Y", title="Random Points"),
-              markersize=12, alpha=0.7)
+# Synthetic borehole collar locations
+n = 30
+easting  = 500 .+ 200 .* rand(n)
+northing = 7000 .+ 150 .* rand(n)
+depth    = 50 .+ 100 .* rand(n)
+
+fig, ax, plt = scatter(easting, northing,
+    color = depth,
+    colormap = :viridis,
+    markersize = 12,
+    axis = (
+        xlabel = "Easting (m)",
+        ylabel = "Northing (m)",
+        title  = "Borehole collar locations",
+        aspect = DataAspect()
+    )
+)
+Colorbar(fig[1, 2], plt, label = "Depth (m)")
 fig
 ```
 
-### Heatmaps
+A few things to notice:
+
+- **`color = depth`** maps a data vector to colour, just like you would colour-code sample values on a field map.
+- **`colormap = :viridis`** picks a perceptually uniform colourmap. Other good choices for geoscience: `:turbo`, `:RdBu` (diverging, great for anomalies), `:terrain`, `:deep`.
+- **`Colorbar(...)`** adds a colour legend. The position `fig[1, 2]` means "row 1, column 2 of the figure layout."
+- **`aspect = DataAspect()`** keeps the x and y scales equal — essential when plotting spatial coordinates.
+
+## Line plots with multiple series
+
+Geoscientists often compare several datasets on the same axes: different field campaigns, model predictions versus observations, or time series from multiple stations.
 
 ```{julia}
-z = [sin(xi) * cos(yi) for xi in 0:0.1:2π, yi in 0:0.1:2π]
-fig = heatmap(z, axis=(xlabel="X", ylabel="Y", title="2D Function"),
-              colormap=:viridis)
+time = 0:0.5:50            # time in seconds
+signal_1 = sin.(0.5 .* time) .+ 0.1 .* randn(length(time))
+signal_2 = sin.(0.5 .* time .+ π/3) .+ 0.1 .* randn(length(time))
+
+fig = Figure(size = (700, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Time (s)",
+    ylabel = "Voltage (mV)",
+    title  = "EM receiver channels"
+)
+lines!(ax, time, signal_1, label = "Rx-1", linewidth = 2)
+lines!(ax, time, signal_2, label = "Rx-2", linewidth = 2, linestyle = :dash)
+axislegend(ax, position = :rt)
 fig
 ```
 
-## Subplots
+Notice the `!` in `lines!` and `axislegend!`-style calls. The exclamation mark means "add to an existing axis" rather than creating a new one. This is a consistent Makie convention.
+
+## Error bars
+
+Field measurements always have uncertainty. Use `errorbars!` to show it:
 
 ```{julia}
-fig = Figure(size=(700, 500))
+stations = 1:8
+gravity  = [12.3, 14.1, 13.5, 15.8, 16.2, 14.9, 13.7, 12.8]
+uncert   = [0.5,  0.8,  0.4,  0.6,  0.9,  0.3,  0.7,  0.5]
 
-ax1 = Axis(fig[1, 1], title="Sine")
-lines!(ax1, x, sin.(x))
-
-ax2 = Axis(fig[1, 2], title="Cosine")
-lines!(ax2, x, cos.(x))
-
-ax3 = Axis(fig[2, 1], title="Tangent", limits=(nothing, (-5, 5)))
-lines!(ax3, x, tan.(x))
-
-ax4 = Axis(fig[2, 2], title="Random")
-scatter!(ax4, randn(20), randn(20))
-
+fig = Figure(size = (600, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Station",
+    ylabel = "Gravity anomaly (mGal)",
+    title  = "Profile A – Bouguer anomaly",
+    xticks = 1:8
+)
+errorbars!(ax, stations, gravity, uncert, whiskerwidth = 8)
+scatter!(ax, stations, gravity, markersize = 10, color = :black)
 fig
 ```
 
-## Contour Plots
+## Bar charts and histograms
+
+### Histogram of sample data
 
 ```{julia}
-x_cont = -2:0.1:2
-y_cont = -2:0.1:2
-z_cont = [exp(-(xi^2 + yi^2)) for xi in x_cont, yi in y_cont]
+# Simulated grain sizes (log-normal distribution)
+grain_sizes = exp.(randn(500) .* 0.6 .+ 1.0)
 
-fig = Figure()
-ax = Axis(fig[1, 1], xlabel="X", ylabel="Y", title="Gaussian")
-co = contourf!(ax, x_cont, y_cont, z_cont, levels=10)
-Colorbar(fig[1, 2], co)
+fig = Figure(size = (600, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Grain size (mm)",
+    ylabel = "Count",
+    title  = "Grain-size distribution"
+)
+hist!(ax, grain_sizes, bins = 30, color = (:steelblue, 0.7))
 fig
 ```
 
-## Geographic Maps
+### Bar chart
 
-::: {.callout-note}
-## Under Construction
-Geographic mapping examples with GeoMakie.jl will be added soon.
+```{julia}
+minerals  = ["Quartz", "Feldspar", "Mica", "Olivine", "Pyroxene"]
+abundance = [35, 25, 15, 15, 10]
+
+fig = Figure(size = (600, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Mineral",
+    ylabel = "Abundance (%)",
+    title  = "Modal composition",
+    xticks = (1:5, minerals)
+)
+barplot!(ax, 1:5, abundance, color = :teal)
+fig
+```
+
+## Heatmaps and contour plots
+
+Gridded data is everywhere in geoscience: gravity grids, magnetic surveys, temperature fields, elevation models. Makie handles these with `heatmap` and `contour`/`contourf`.
+
+### Heatmap
+
+```{julia}
+# Synthetic gravity anomaly on a 2-D grid
+x_grid = range(0, 10, length = 60)
+y_grid = range(0, 8,  length = 50)
+gz = [10 * exp(-((xi - 4)^2 + (yi - 3)^2) / 3) -
+       5 * exp(-((xi - 7)^2 + (yi - 6)^2) / 2)
+      for xi in x_grid, yi in y_grid]
+
+fig = Figure(size = (700, 500))
+ax = Axis(fig[1, 1],
+    xlabel = "Easting (km)",
+    ylabel = "Northing (km)",
+    title  = "Bouguer gravity anomaly",
+    aspect = DataAspect()
+)
+hm = heatmap!(ax, x_grid, y_grid, gz, colormap = :RdBu)
+Colorbar(fig[1, 2], hm, label = "ΔgB (mGal)")
+fig
+```
+
+### Filled contour plot
+
+```{julia}
+fig = Figure(size = (700, 500))
+ax = Axis(fig[1, 1],
+    xlabel = "Easting (km)",
+    ylabel = "Northing (km)",
+    title  = "Gravity anomaly (contour)",
+    aspect = DataAspect()
+)
+co = contourf!(ax, x_grid, y_grid, gz, levels = 15, colormap = :RdBu)
+contour!(ax, x_grid, y_grid, gz, levels = 15, color = :black, linewidth = 0.5)
+Colorbar(fig[1, 2], co, label = "ΔgB (mGal)")
+fig
+```
+
+Overlaying `contour!` lines on a `contourf!` fill is a classic geophysics style. The thin black lines make it easier to read precise values.
+
+## Multi-panel figures (subplots)
+
+Scientific papers often require several panels in one figure. Makie uses a **grid layout** system: `fig[row, col]` places content anywhere on the grid.
+
+```{julia}
+fig = Figure(size = (700, 500))
+
+# Panel a — line plot
+ax1 = Axis(fig[1, 1], title = "(a) Signal", xlabel = "Time (s)", ylabel = "mV")
+lines!(ax1, time, signal_1)
+
+# Panel b — scatter
+ax2 = Axis(fig[1, 2], title = "(b) Collars",
+    xlabel = "Easting", ylabel = "Northing", aspect = DataAspect())
+scatter!(ax2, easting, northing, color = depth, colormap = :viridis, markersize = 8)
+
+# Panel c — histogram
+ax3 = Axis(fig[2, 1], title = "(c) Grain sizes", xlabel = "mm", ylabel = "Count")
+hist!(ax3, grain_sizes, bins = 25, color = (:teal, 0.7))
+
+# Panel d — contour
+ax4 = Axis(fig[2, 2], title = "(d) Gravity", xlabel = "Easting (km)",
+    ylabel = "Northing (km)", aspect = DataAspect())
+contourf!(ax4, x_grid, y_grid, gz, levels = 12, colormap = :RdBu)
+
+fig
+```
+
+You can span rows or columns for insets and wide panels — see the [Makie layout tutorial](https://docs.makie.org/stable/tutorials/layout-tutorial) for advanced arrangements.
+
+## Customising appearance
+
+### Fonts and themes
+
+Makie ships with several built-in themes. You can also override individual settings:
+
+```{julia}
+with_theme(theme_minimal()) do
+    fig = Figure(size = (600, 400))
+    ax = Axis(fig[1, 1],
+        xlabel = "Frequency (Hz)",
+        ylabel = "Power spectral density",
+        title  = "Minimal theme example",
+        xscale = log10,
+        yscale = log10
+    )
+    freqs = 10 .^ range(-1, 3, length = 200)
+    psd   = 1 ./ freqs .+ 0.01 .* abs.(randn(200))
+    lines!(ax, freqs, psd, linewidth = 2)
+    fig
+end
+```
+
+Other themes to try: `theme_dark()`, `theme_light()`, `theme_black()`, `theme_ggplot2()`.
+
+### Colourmaps
+
+Choosing the right colourmap matters, especially in geoscience where a bad colourmap can hide features or mislead the reader. Some guidelines:
+
+| Data type | Good choices | Avoid |
+|-----------|-------------|-------|
+| Sequential (elevation, depth, concentration) | `:viridis`, `:cividis`, `:deep`, `:thermal` | `:jet` (perceptual jumps) |
+| Diverging (anomalies centred on zero) | `:RdBu`, `:BrBG`, `:PiYG` | Any sequential map |
+| Categorical (lithology, fault type) | `:tab10`, `:Set1` | Continuous maps |
+| Terrain / bathymetry | `:terrain`, `:topo` | `:hot`, `:gray` |
+
+```{julia}
+fig = Figure(size = (650, 280))
+
+ax1 = Axis(fig[1, 1], title = ":viridis (sequential)", aspect = DataAspect())
+heatmap!(ax1, gz, colormap = :viridis)
+
+ax2 = Axis(fig[1, 2], title = ":RdBu (diverging)", aspect = DataAspect())
+heatmap!(ax2, gz, colormap = :RdBu)
+
+ax3 = Axis(fig[1, 3], title = ":terrain", aspect = DataAspect())
+heatmap!(ax3, gz, colormap = :terrain)
+
+fig
+```
+
+## Log-scale axes
+
+Geophysical data often spans many orders of magnitude: resistivity, frequency, spectral power. Use `xscale = log10` or `yscale = log10`:
+
+```{julia}
+freq = 10 .^ range(-2, 5, length = 50)
+apparent_res = 100 .* (1 .+ 0.3 .* sin.(log10.(freq) .* 2))
+
+fig = Figure(size = (600, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Frequency (Hz)",
+    ylabel = "Apparent resistivity (Ω·m)",
+    title  = "MT sounding curve",
+    xscale = log10,
+    yscale = log10
+)
+lines!(ax, freq, apparent_res, linewidth = 2, color = :navy)
+fig
+```
+
+## Annotations and markers
+
+Labelling key features on a plot (a fault, an anomaly peak, a sample location) is something you will do often:
+
+```{julia}
+fig = Figure(size = (600, 400))
+ax = Axis(fig[1, 1],
+    xlabel = "Easting (km)", ylabel = "Gravity (mGal)",
+    title  = "Annotated profile"
+)
+profile_x = range(0, 10, length = 100)
+profile_g = 8 .* exp.(-((profile_x .- 4) ./ 1.5).^2) .- 2
+lines!(ax, profile_x, profile_g, linewidth = 2)
+
+# Mark the peak
+scatter!(ax, [4.0], [6.0], markersize = 14, color = :red)
+text!(ax, 4.3, 6.2, text = "Anomaly peak", fontsize = 14, color = :red)
+
+# Mark a fault
+vlines!(ax, [7.0], color = :grey40, linestyle = :dash, linewidth = 1.5)
+text!(ax, 7.2, -1.5, text = "Fault F1", fontsize = 12, color = :grey40)
+
+fig
+```
+
+## Saving figures
+
+Use `save` to export your figure. The file extension determines the format:
+
+```{julia}
+#| eval: false
+save("gravity_profile.png", fig)              # raster (300 dpi by default)
+save("gravity_profile.pdf", fig)              # vector, best for papers
+save("gravity_profile.svg", fig)              # vector, good for web
+save("gravity_profile.png", fig, px_per_unit = 3)  # high-res raster (900 dpi)
+```
+
+:::{.callout-tip}
+## PDF for papers, PNG for presentations
+
+For journal submissions, **PDF** or **SVG** gives you lossless vector graphics that look sharp at any zoom. For slides and posters, **PNG at high resolution** (`px_per_unit = 3` or higher) is more portable.
 :::
 
-### Coordinate Systems
+## Putting it together: a geoscience figure
+
+Let's combine several techniques into a single multi-panel figure typical of a geophysical report:
 
 ```{julia}
-#| eval: false
-# Example with projected coordinates
-using CoordinateTransformations
-using Proj4
+using Statistics
 
-# Transform from WGS84 to UTM
-wgs84 = Proj4.Projection("+proj=longlat +datum=WGS84")
-utm35 = Proj4.Projection("+proj=utm +zone=35 +datum=WGS84")
-```
+fig = Figure(size = (700, 550))
 
-### Plotting Geophysical Data
+# --- Panel a: profile with error bars ---
+ax1 = Axis(fig[1, 1:2], title = "(a) Gravity profile",
+    xlabel = "Distance (km)", ylabel = "Bouguer anomaly (mGal)")
+dist   = range(0, 12, length = 25)
+obs    = 8 .* exp.(-((dist .- 5) ./ 2).^2) .+ 0.3 .* randn(25)
+uncert = 0.2 .+ 0.1 .* rand(25)
+errorbars!(ax1, collect(dist), obs, uncert, whiskerwidth = 6)
+scatter!(ax1, collect(dist), obs, markersize = 8, color = :black, label = "Observed")
+model_g = 8 .* exp.(-((dist .- 5) ./ 2).^2)
+lines!(ax1, collect(dist), model_g, linewidth = 2, color = :red, label = "Model")
+axislegend(ax1, position = :rt)
 
-```{julia}
-#| eval: false
-# Gravity anomaly map example
-using CairoMakie
+# --- Panel b: contour map ---
+ax2 = Axis(fig[2, 1], title = "(b) Anomaly map",
+    xlabel = "Easting (km)", ylabel = "Northing (km)",
+    aspect = DataAspect())
+co = contourf!(ax2, x_grid, y_grid, gz, levels = 12, colormap = :RdBu)
+contour!(ax2, x_grid, y_grid, gz, levels = 12, color = :black, linewidth = 0.4)
+Colorbar(fig[2, 0], co, label = "mGal", flipaxis = false)
 
-# Create synthetic gravity data
-nx, ny = 50, 50
-x_grav = range(0, 10, length=nx)
-y_grav = range(0, 10, length=ny)
-gz = [10 * exp(-((xi-5)^2 + (yi-5)^2)/2) for xi in x_grav, yi in y_grav]
+# --- Panel c: histogram of residuals ---
+residuals = obs .- model_g
+ax3 = Axis(fig[2, 2], title = "(c) Residuals",
+    xlabel = "Residual (mGal)", ylabel = "Count")
+hist!(ax3, residuals, bins = 10, color = (:steelblue, 0.7))
+vlines!(ax3, [0.0], color = :red, linestyle = :dash)
+vlines!(ax3, [mean(residuals)], color = :black, linewidth = 2, label = "mean")
+axislegend(ax3, position = :lt)
 
-fig = Figure()
-ax = Axis(fig[1, 1], 
-          xlabel="Easting (km)", 
-          ylabel="Northing (km)",
-          title="Bouguer Gravity Anomaly")
-hm = heatmap!(ax, x_grav, y_grav, gz, colormap=:RdBu)
-Colorbar(fig[1, 2], hm, label="mGal")
 fig
 ```
+
+## Geographic maps with GeoMakie
+
+So far every plot has used plain numeric axes — "Easting (km)" and "Northing (km)." But geoscientists often need to plot data on a **map** with coastlines, country borders, and a proper geographic projection. That is what **GeoMakie.jl** gives you.
+
+GeoMakie provides a `GeoAxis`, a drop-in replacement for Makie's `Axis` that understands coordinate reference systems (CRS) and projections. You feed it longitude/latitude data and tell it which projection you want; it handles the transformation and draws graticules automatically.
+
+### Installing GeoMakie
+
+```
+pkg> add GeoMakie
+```
+
+Or: `using Pkg; Pkg.add("GeoMakie")`. GeoMakie pulls in Proj.jl (for map projections) and NaturalEarth (for coastlines and country boundaries).
+
+```{julia}
+#| output: false
+using GeoMakie
+```
+
+### A world map in three lines
+
+```{julia}
+fig = Figure()
+ga = GeoAxis(fig[1, 1], dest = "+proj=natearth", title = "Natural Earth projection")
+lines!(ga, GeoMakie.coastlines(), color = :black, linewidth = 0.5)
+fig
+```
+
+`GeoAxis` accepts any [PROJ-string](https://proj.org/operations/projections/) through the `dest` keyword. The default source CRS is WGS84 (longitude/latitude). Try replacing `"+proj=natearth"` with `"+proj=ortho"` for an orthographic globe view, or `"+proj=moll"` for a Mollweide equal-area projection.
+
+### Overlaying polygons and raster data
+
+GeoMakie integrates with **GeoInterface.jl**, so you can plot any GeoInterface-compatible geometry: shapefiles, GeoJSON, geological unit polygons, fault traces, concession boundaries:
+
+```julia
+using GeoMakie, GeoJSON
+
+# Load a GeoJSON of geological units (hypothetical file)
+geol = GeoJSON.read("geology_units.geojson")
+
+fig = Figure()
+ga = GeoAxis(fig[1, 1], dest = "+proj=utm +zone=18 +south")
+poly!(ga, geol, color = :lightgrey, strokecolor = :black, strokewidth = 0.5)
+fig
+```
+
+:::{.callout-tip}
+## Common projections for geoscience
+
+| Region / Use case | PROJ string | Notes |
+|-------------------|-------------|-------|
+| Global equal-area | `+proj=moll` | Mollweide, good for thematic world maps |
+| Global for visuals | `+proj=natearth` | Natural Earth, pleasant for presentations |
+| Globe view | `+proj=ortho +lon_0=0 +lat_0=30` | Orthographic, looks like a photo from space |
+| Local field survey | `+proj=utm +zone=35 +datum=WGS84` | Metric grid, precise local coordinates |
+| Continental | `+proj=lcc +lat_1=30 +lat_2=60 +lon_0=10` | Lambert Conformal Conic, preserves shape |
+| Polar | `+proj=stere +lat_0=90 +lon_0=0` | Stereographic, Arctic/Antarctic maps |
+
+You can browse all available projections at <https://proj.org/operations/projections/>.
+:::
+
+### Learn more about GeoMakie
+
+- **Documentation & gallery**: <https://geo.makie.org/>
+- **Source code**: <https://github.com/MakieOrg/GeoMakie.jl>
+
+## Where to learn more
+
+- **Makie documentation**: <https://docs.makie.org/> with tutorials, gallery, and the full API reference.
+- **Beautiful Makie**: <https://beautiful.makie.org/>, a gallery of polished example figures you can copy and adapt.
+- **Makie colour maps**: the `ColorSchemes.jl` package gives you access to hundreds of colour maps. Browse them at <https://juliagraphics.github.io/ColorSchemes.jl/stable/>.

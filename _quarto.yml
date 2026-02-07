@@ -16,7 +16,7 @@ book:
   search: true
   sidebar:
     style: docked
-    collapse-level: 1
+    collapse-level: 2
     tools:
       - icon: github
         href: https://github.com/pankajkmishra/geo-sciml
@@ -29,9 +29,6 @@ book:
       file: chapters/02-files-data.qmd
     - chapters/03-plotting-maps.qmd
     - chapters/04-neural-networks.qmd
-    - chapters/05-inverse-modeling.qmd
-    - chapters/06-ai-surrogates.qmd
-    - chapters/07-applications.qmd
 
 format:
   html:
@@ -51,14 +48,16 @@ format:
     grid:
       sidebar-width: 400px
       body-width: 1000px
-      margin-width: 200px
       gutter-width: 1.5em
   pdf:
     number-sections: true
-    number-depth: 3
+    number-depth: 2
     toc: true
-    toc-depth: 3
+    toc-depth: 2
     toc-title: "Table of Contents"
+    fig-width: 6
+    fig-height: 4
+    out-width: "100%"
     colorlinks: true
     linkcolor: blue
     toccolor: blue
@@ -79,6 +78,7 @@ format:
       \fancyhead[LE,RO]{\textit{\nouppercase{\rightmark}}}
       \fancyhead[LO,RE]{\textit{\nouppercase{\leftmark}}}
       \usepackage{etoolbox}
+      \AtBeginEnvironment{figure}{\centering}
       \AtBeginEnvironment{Highlighting}{\color[RGB]{30,30,30}}
       \usepackage{tcolorbox}
       \tcbuselibrary{breakable,skins}

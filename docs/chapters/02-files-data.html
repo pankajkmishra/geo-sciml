@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-372530e246b3615d47d8e4c87af5ccc6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2ac785514e0db027eb4fd00e2dd5fee8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c17ae8301deaf22bc4af9fbc4f87a88f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -170,31 +170,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/03-plotting-maps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Maps</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Data Visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/04-neural-networks.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Neural Networks</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/05-inverse-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inverse Modeling</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/06-ai-surrogates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">AI Surrogates</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/07-applications.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Applications</span></span></a>
   </div>
 </li>
     </ul>
@@ -207,22 +189,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#reading-and-writing-files" id="toc-reading-and-writing-files" class="nav-link active" data-scroll-target="#reading-and-writing-files"><span class="header-section-number">3.1</span> Reading and Writing Files</a>
+  <li><a href="#writing-and-reading-text-files" id="toc-writing-and-reading-text-files" class="nav-link active" data-scroll-target="#writing-and-reading-text-files"><span class="header-section-number">3.1</span> Writing and reading text files</a>
   <ul class="collapse">
-  <li><a href="#text-files" id="toc-text-files" class="nav-link" data-scroll-target="#text-files"><span class="header-section-number">3.1.1</span> Text Files</a></li>
-  <li><a href="#csv-files" id="toc-csv-files" class="nav-link" data-scroll-target="#csv-files"><span class="header-section-number">3.1.2</span> CSV Files</a></li>
+  <li><a href="#reading-line-by-line" id="toc-reading-line-by-line" class="nav-link" data-scroll-target="#reading-line-by-line"><span class="header-section-number">3.1.1</span> Reading line by line</a></li>
+  <li><a href="#splitting-lines-into-columns" id="toc-splitting-lines-into-columns" class="nav-link" data-scroll-target="#splitting-lines-into-columns"><span class="header-section-number">3.1.2</span> Splitting lines into columns</a></li>
   </ul></li>
-  <li><a href="#dataframes" id="toc-dataframes" class="nav-link" data-scroll-target="#dataframes"><span class="header-section-number">3.2</span> DataFrames</a>
+  <li><a href="#delimited-data-with-delimitedfiles" id="toc-delimited-data-with-delimitedfiles" class="nav-link" data-scroll-target="#delimited-data-with-delimitedfiles"><span class="header-section-number">3.2</span> Delimited data with <code>DelimitedFiles</code></a></li>
+  <li><a href="#csv-files-and-dataframes" id="toc-csv-files-and-dataframes" class="nav-link" data-scroll-target="#csv-files-and-dataframes"><span class="header-section-number">3.3</span> CSV files and DataFrames</a>
   <ul class="collapse">
-  <li><a href="#creating-dataframes" id="toc-creating-dataframes" class="nav-link" data-scroll-target="#creating-dataframes"><span class="header-section-number">3.2.1</span> Creating DataFrames</a></li>
-  <li><a href="#basic-operations" id="toc-basic-operations" class="nav-link" data-scroll-target="#basic-operations"><span class="header-section-number">3.2.2</span> Basic Operations</a></li>
-  <li><a href="#grouping-and-aggregation" id="toc-grouping-and-aggregation" class="nav-link" data-scroll-target="#grouping-and-aggregation"><span class="header-section-number">3.2.3</span> Grouping and Aggregation</a></li>
+  <li><a href="#creating-a-dataframe" id="toc-creating-a-dataframe" class="nav-link" data-scroll-target="#creating-a-dataframe"><span class="header-section-number">3.3.1</span> Creating a DataFrame</a></li>
+  <li><a href="#writing-and-reading-csv" id="toc-writing-and-reading-csv" class="nav-link" data-scroll-target="#writing-and-reading-csv"><span class="header-section-number">3.3.2</span> Writing and reading CSV</a></li>
+  <li><a href="#selecting-columns" id="toc-selecting-columns" class="nav-link" data-scroll-target="#selecting-columns"><span class="header-section-number">3.3.3</span> Selecting columns</a></li>
+  <li><a href="#filtering-rows" id="toc-filtering-rows" class="nav-link" data-scroll-target="#filtering-rows"><span class="header-section-number">3.3.4</span> Filtering rows</a></li>
+  <li><a href="#adding-and-transforming-columns" id="toc-adding-and-transforming-columns" class="nav-link" data-scroll-target="#adding-and-transforming-columns"><span class="header-section-number">3.3.5</span> Adding and transforming columns</a></li>
+  <li><a href="#grouping-and-summarising" id="toc-grouping-and-summarising" class="nav-link" data-scroll-target="#grouping-and-summarising"><span class="header-section-number">3.3.6</span> Grouping and summarising</a></li>
+  <li><a href="#joining-tables" id="toc-joining-tables" class="nav-link" data-scroll-target="#joining-tables"><span class="header-section-number">3.3.7</span> Joining tables</a></li>
+  <li><a href="#handling-missing-data" id="toc-handling-missing-data" class="nav-link" data-scroll-target="#handling-missing-data"><span class="header-section-number">3.3.8</span> Handling missing data</a></li>
   </ul></li>
-  <li><a href="#working-with-geoscientific-data" id="toc-working-with-geoscientific-data" class="nav-link" data-scroll-target="#working-with-geoscientific-data"><span class="header-section-number">3.3</span> Working with Geoscientific Data</a>
+  <li><a href="#working-with-file-paths" id="toc-working-with-file-paths" class="nav-link" data-scroll-target="#working-with-file-paths"><span class="header-section-number">3.4</span> Working with file paths</a></li>
+  <li><a href="#searching-copying-and-renaming-files" id="toc-searching-copying-and-renaming-files" class="nav-link" data-scroll-target="#searching-copying-and-renaming-files"><span class="header-section-number">3.5</span> Searching, copying, and renaming files</a>
   <ul class="collapse">
-  <li><a href="#loading-geophysical-data" id="toc-loading-geophysical-data" class="nav-link" data-scroll-target="#loading-geophysical-data"><span class="header-section-number">3.3.1</span> Loading Geophysical Data</a></li>
-  <li><a href="#netcdf-files" id="toc-netcdf-files" class="nav-link" data-scroll-target="#netcdf-files"><span class="header-section-number">3.3.2</span> NetCDF Files</a></li>
+  <li><a href="#listing-files-in-a-directory" id="toc-listing-files-in-a-directory" class="nav-link" data-scroll-target="#listing-files-in-a-directory"><span class="header-section-number">3.5.1</span> Listing files in a directory</a></li>
+  <li><a href="#searching-recursively-with-walkdir" id="toc-searching-recursively-with-walkdir" class="nav-link" data-scroll-target="#searching-recursively-with-walkdir"><span class="header-section-number">3.5.2</span> Searching recursively with <code>walkdir</code></a></li>
+  <li><a href="#extracting-parts-of-a-file-path" id="toc-extracting-parts-of-a-file-path" class="nav-link" data-scroll-target="#extracting-parts-of-a-file-path"><span class="header-section-number">3.5.3</span> Extracting parts of a file path</a></li>
+  <li><a href="#copying-and-renaming-files" id="toc-copying-and-renaming-files" class="nav-link" data-scroll-target="#copying-and-renaming-files"><span class="header-section-number">3.5.4</span> Copying and renaming files</a></li>
+  <li><a href="#key-functions-at-a-glance" id="toc-key-functions-at-a-glance" class="nav-link" data-scroll-target="#key-functions-at-a-glance"><span class="header-section-number">3.5.5</span> Key functions at a glance</a></li>
   </ul></li>
+  <li><a href="#geoscientific-file-formats" id="toc-geoscientific-file-formats" class="nav-link" data-scroll-target="#geoscientific-file-formats"><span class="header-section-number">3.6</span> Geoscientific file formats</a>
+  <ul class="collapse">
+  <li><a href="#netcdf" id="toc-netcdf" class="nav-link" data-scroll-target="#netcdf"><span class="header-section-number">3.6.1</span> NetCDF</a></li>
+  <li><a href="#hdf5" id="toc-hdf5" class="nav-link" data-scroll-target="#hdf5"><span class="header-section-number">3.6.2</span> HDF5</a></li>
+  <li><a href="#seg-y" id="toc-seg-y" class="nav-link" data-scroll-target="#seg-y"><span class="header-section-number">3.6.3</span> SEG-Y</a></li>
+  <li><a href="#shapefiles-and-geojson" id="toc-shapefiles-and-geojson" class="nav-link" data-scroll-target="#shapefiles-and-geojson"><span class="header-section-number">3.6.4</span> Shapefiles and GeoJSON</a></li>
+  </ul></li>
+  <li><a href="#clean-up" id="toc-clean-up" class="nav-link" data-scroll-target="#clean-up"><span class="header-section-number">3.7</span> Clean up</a></li>
   </ul>
 </nav>
     </div>
@@ -248,221 +248,332 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="reading-and-writing-files" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="reading-and-writing-files"><span class="header-section-number">3.1</span> Reading and Writing Files</h2>
-<section id="text-files" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="text-files"><span class="header-section-number">3.1.1</span> Text Files</h3>
+<p>At this point you know how to install Julia, run code in VS Code or the REPL, write functions, and create reproducible environments with <code>Project.toml</code>.</p>
+<p>In this chapter we will put those skills to work on something you will do constantly in geoscience: <strong>reading data from files, reshaping it, and writing results back out</strong>. We start with plain text files, move on to delimited numeric data, then to CSV tables with the <code>DataFrames</code> ecosystem, and finish with a tour of specialised geoscientific formats (NetCDF, HDF5, SEG-Y, Shapefiles). We create small example files right here in the code so you can run every block and see the results yourself.</p>
+<p>If some of the syntax looks unfamiliar at first, especially the <code>do ... end</code> pattern or the <code>=&gt;</code> arrow, don’t worry. These are common Julia patterns that will become second nature with practice. The important thing is to understand <em>what</em> each block does, not to memorise the syntax right now.</p>
+<section id="writing-and-reading-text-files" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="writing-and-reading-text-files"><span class="header-section-number">3.1</span> Writing and reading text files</h2>
+<p>The simplest kind of file is plain text. Let’s create one:</p>
 <div id="2" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Writing to a file</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"example.txt"</span>, <span class="st">"w"</span>) <span class="cf">do</span> f</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"Hello, Julia!"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading from a file</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>content <span class="op">=</span> <span class="fu">read</span>(<span class="st">"example.txt"</span>, <span class="dt">String</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a small text file</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"stations.txt"</span>, <span class="st">"w"</span>) <span class="cf">do</span> f</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"Station  Latitude  Longitude  Elevation_m</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"AAL      64.35     25.75      120</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"BBR      61.50     23.80      95</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"CCK      60.17     24.94      15</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>33</code></pre>
+</div>
+</div>
+<p>What happened here? <code>open("stations.txt", "w")</code> creates (or overwrites) a file named <code>stations.txt</code>. The <code>"w"</code> means “write mode.” The <code>do f ... end</code> block is Julia’s way of saying “while the file is open, call it <code>f</code> and do these things, then close it automatically.” Each <code>write</code> call puts a line of text into the file.</p>
+<p>Now let’s read it back:</p>
+<div id="4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>content <span class="op">=</span> <span class="fu">read</span>(<span class="st">"stations.txt"</span>, <span class="dt">String</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Hello, Julia!</code></pre>
+<pre><code>Station  Latitude  Longitude  Elevation_m
+AAL      64.35     25.75      120
+BBR      61.50     23.80      95
+CCK      60.17     24.94      15
+</code></pre>
 </div>
 </div>
-</section>
-<section id="csv-files" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="csv-files"><span class="header-section-number">3.1.2</span> CSV Files</h3>
-<div id="4" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read CSV</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"data.csv"</span>, DataFrame)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Write CSV</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>CSV.<span class="fu">write</span>(<span class="st">"output.csv"</span>, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-</section>
-<section id="dataframes" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="dataframes"><span class="header-section-number">3.2</span> DataFrames</h2>
-<p>DataFrames are tabular data structures similar to pandas in Python or data.frames in R.</p>
-<section id="creating-dataframes" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="creating-dataframes"><span class="header-section-number">3.2.1</span> Creating DataFrames</h3>
+<p><code>read("stations.txt", String)</code> loads the entire file into a single string. For a small file like this, that is perfectly fine.</p>
+<section id="reading-line-by-line" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="reading-line-by-line"><span class="header-section-number">3.1.1</span> Reading line by line</h3>
+<p>Sometimes you want to process a file one line at a time, for instance to skip a header or to parse each row:</p>
 <div id="6" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create from columns</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> [<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>],</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    age <span class="op">=</span> [<span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">35</span>],</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    city <span class="op">=</span> [<span class="st">"Helsinki"</span>, <span class="st">"Espoo"</span>, <span class="st">"Tampere"</span>]</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"stations.txt"</span>, <span class="st">"r"</span>) <span class="cf">do</span> f</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> <span class="fu">eachline</span>(f)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"→ "</span>, line)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    756.7 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerTablesExt<span class="ansi-bright-black-fg"> (serial)</span>
-  1 dependency successfully precompiled in 1 seconds
-<span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    727.5 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerLaTeXStringsExt<span class="ansi-bright-black-fg"> (serial)</span>
-  1 dependency successfully precompiled in 1 seconds
-</pre>
+<pre><code>→ Station  Latitude  Longitude  Elevation_m
+→ AAL      64.35     25.75      120
+→ BBR      61.50     23.80      95
+→ CCK      60.17     24.94      15</code></pre>
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<div><div style="float: left;"><span>3×3 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
-<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="columnLabelRow header">
-<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">name</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">age</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">city</th>
-</tr>
-<tr class="columnLabelRow even">
-<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-</tr>
-</thead>
-<tbody>
-<tr class="dataRow odd">
-<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: left;">Helsinki</td>
-</tr>
-<tr class="dataRow even">
-<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: left;">Espoo</td>
-</tr>
-<tr class="dataRow odd">
-<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">35</td>
-<td style="text-align: left;">Tampere</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+<p>The <code>"r"</code> means “read mode.” <code>eachline(f)</code> gives you one line at a time, which is memory-efficient even for very large files.</p>
 </section>
-<section id="basic-operations" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="basic-operations"><span class="header-section-number">3.2.2</span> Basic Operations</h3>
+<section id="splitting-lines-into-columns" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="splitting-lines-into-columns"><span class="header-section-number">3.1.2</span> Splitting lines into columns</h3>
+<p>In geoscience data files, columns are usually separated by spaces, tabs, or commas. You can split a line into pieces with <code>split()</code>:</p>
 <div id="8" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select columns</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df[<span class="op">:</span>, <span class="op">:</span>name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>3-element Vector{String}:
- "Alice"
- "Bob"
- "Charlie"</code></pre>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"stations.txt"</span>, <span class="st">"r"</span>) <span class="cf">do</span> f</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    header <span class="op">=</span> <span class="fu">readline</span>(f)              <span class="co"># read and skip the header</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> <span class="fu">eachline</span>(f)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        parts <span class="op">=</span> <span class="fu">split</span>(line)           <span class="co"># splits on whitespace by default</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        name  <span class="op">=</span> parts[<span class="fl">1</span>]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        lat   <span class="op">=</span> <span class="fu">parse</span>(<span class="dt">Float64</span>, parts[<span class="fl">2</span>])</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        lon   <span class="op">=</span> <span class="fu">parse</span>(<span class="dt">Float64</span>, parts[<span class="fl">3</span>])</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        elev  <span class="op">=</span> <span class="fu">parse</span>(<span class="dt">Float64</span>, parts[<span class="fl">4</span>])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>name<span class="st"> is at (</span><span class="sc">$</span>lat<span class="st">, </span><span class="sc">$</span>lon<span class="st">), elevation </span><span class="sc">$</span>elev<span class="st"> m"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AAL is at (64.35, 25.75), elevation 120.0 m
+BBR is at (61.5, 23.8), elevation 95.0 m
+CCK is at (60.17, 24.94), elevation 15.0 m</code></pre>
 </div>
 </div>
+<p><code>split(line)</code> breaks the string into a list of substrings. <code>parse(Float64, ...)</code> converts a text string like <code>"64.35"</code> into an actual number. This pattern (read a line, split it, parse the pieces) is the bread and butter of working with geoscience text files.</p>
+</section>
+</section>
+<section id="delimited-data-with-delimitedfiles" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="delimited-data-with-delimitedfiles"><span class="header-section-number">3.2</span> Delimited data with <code>DelimitedFiles</code></h2>
+<p>For files with a regular grid of numbers (like gravity measurements or temperature readings), Julia has a built-in module called <code>DelimitedFiles</code> that reads the whole file into a matrix in one step.</p>
+<p>Let’s create a small data file and read it:</p>
 <div id="10" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter rows</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(row <span class="op">-&gt;</span> row.age <span class="op">&gt;</span> <span class="fl">25</span>, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a space-delimited data file (no header, just numbers)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"gravity.txt"</span>, <span class="st">"w"</span>) <span class="cf">do</span> f</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"64.35  25.75  -12.3</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"64.40  25.80  -11.8</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"64.45  25.85  -13.1</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"64.50  25.90  -12.7</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write</span>(f, <span class="st">"64.55  25.95  -14.0</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<div><div style="float: left;"><span>2×3 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
-<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="columnLabelRow header">
-<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">name</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">age</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">city</th>
-</tr>
-<tr class="columnLabelRow even">
-<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-</tr>
-</thead>
-<tbody>
-<tr class="dataRow odd">
-<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: left;">Espoo</td>
-</tr>
-<tr class="dataRow even">
-<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">35</td>
-<td style="text-align: left;">Tampere</td>
-</tr>
-</tbody>
-</table>
-</div>
+<pre><code>20</code></pre>
 </div>
 </div>
 <div id="12" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new column</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.country <span class="op">=</span> [<span class="st">"Finland"</span>, <span class="st">"Finland"</span>, <span class="st">"Finland"</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DelimitedFiles</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">readdlm</span>(<span class="st">"gravity.txt"</span>)       <span class="co"># reads into a matrix</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Size: "</span>, <span class="fu">size</span>(data))        <span class="co"># 5 rows, 3 columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Size: (5, 3)</code></pre>
+</div>
+</div>
+<p>Now you can pull out individual columns:</p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lat <span class="op">=</span> data[<span class="op">:</span>, <span class="fl">1</span>]         <span class="co"># all rows, first column</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lon <span class="op">=</span> data[<span class="op">:</span>, <span class="fl">2</span>]         <span class="co"># all rows, second column</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>gz  <span class="op">=</span> data[<span class="op">:</span>, <span class="fl">3</span>]         <span class="co"># all rows, third column</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Latitudes: "</span>, lat)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Gravity anomalies: "</span>, gz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Latitudes: [64.35, 64.4, 64.45, 64.5, 64.55]
+Gravity anomalies: [-12.3, -11.8, -13.1, -12.7, -14.0]</code></pre>
+</div>
+</div>
+<p>The <code>[:, 1]</code> notation means “all rows, column 1.” This is the same notation used in MATLAB and NumPy.</p>
+<p>You can also write a matrix back out:</p>
+<div id="16" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add 1.0 to all gravity values and save</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gz_corrected <span class="op">=</span> gz <span class="op">.+</span> <span class="fl">1.0</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> <span class="fu">hcat</span>(lat, lon, gz_corrected)    <span class="co"># glue columns side by side</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">writedlm</span>(<span class="st">"gravity_corrected.txt"</span>, output, <span class="ch">'\t'</span>)   <span class="co"># tab-separated</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="fu">read</span>(<span class="st">"gravity_corrected.txt"</span>, <span class="dt">String</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>64.35   25.75   -11.3
+64.4    25.8    -10.8
+64.45   25.85   -12.1
+64.5    25.9    -11.7
+64.55   25.95   -13.0
+</code></pre>
+</div>
+</div>
+<p><code>hcat</code> stands for “horizontal concatenate”. It sticks columns together into a matrix. <code>writedlm</code> writes the matrix to a file, using the tab character <code>'\t'</code> as the separator.</p>
+</section>
+<section id="csv-files-and-dataframes" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="csv-files-and-dataframes"><span class="header-section-number">3.3</span> CSV files and DataFrames</h2>
+<p>CSV (Comma-Separated Values) is probably the most common data format in science. Julia has excellent CSV support through the <strong>CSV.jl</strong> and <strong>DataFrames.jl</strong> packages.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Installing packages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you haven’t installed these packages yet, press <code>]</code> in the REPL to enter Pkg mode and type:</p>
+<pre><code>add CSV DataFrames</code></pre>
+<p>Or from normal Julia code: <code>using Pkg; Pkg.add(["CSV", "DataFrames"])</code>. You only need to do this once.</p>
+</div>
+</div>
+<section id="creating-a-dataframe" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="creating-a-dataframe"><span class="header-section-number">3.3.1</span> Creating a DataFrame</h3>
+<p>A <strong>DataFrame</strong> is a table: rows and columns, like a spreadsheet. Each column has a name and all values in a column have the same type. If you have used pandas in Python, R’s <code>data.frame</code>, or even Excel, the concept is the same.</p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a table of borehole samples</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    borehole  <span class="op">=</span> [<span class="st">"BH-01"</span>, <span class="st">"BH-01"</span>, <span class="st">"BH-01"</span>, <span class="st">"BH-02"</span>, <span class="st">"BH-02"</span>],</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    depth_m   <span class="op">=</span> [<span class="fl">10.0</span>, <span class="fl">20.0</span>, <span class="fl">30.0</span>, <span class="fl">15.0</span>, <span class="fl">25.0</span>],</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    rock_type <span class="op">=</span> [<span class="st">"granite"</span>, <span class="st">"granite"</span>, <span class="st">"gneiss"</span>, <span class="st">"granite"</span>, <span class="st">"schist"</span>],</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    density   <span class="op">=</span> [<span class="fl">2.65</span>, <span class="fl">2.68</span>, <span class="fl">2.75</span>, <span class="fl">2.63</span>, <span class="fl">2.71</span>]</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<div><div style="float: left;"><span>3×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<div><div style="float: left;"><span>5×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="columnLabelRow header">
 <th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">name</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">age</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">city</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">country</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
 </tr>
 <tr class="columnLabelRow even">
 <th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
 <th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="Int64">Int64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
 <th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
 </tr>
 </thead>
 <tbody>
 <tr class="dataRow odd">
 <td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: left;">Helsinki</td>
-<td style="text-align: left;">Finland</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65</td>
 </tr>
 <tr class="dataRow even">
 <td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: left;">Espoo</td>
-<td style="text-align: left;">Finland</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.68</td>
 </tr>
 <tr class="dataRow odd">
 <td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">35</td>
-<td style="text-align: left;">Tampere</td>
-<td style="text-align: left;">Finland</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">30.0</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.63</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<p>Julia displays the table neatly. Each column is a named array, and you can work with them individually or together.</p>
 </section>
-<section id="grouping-and-aggregation" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="grouping-and-aggregation"><span class="header-section-number">3.2.3</span> Grouping and Aggregation</h3>
-<div id="14" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Group by and summarize</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>gdf <span class="op">=</span> <span class="fu">groupby</span>(df, <span class="op">:</span>country)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">combine</span>(gdf, <span class="op">:</span>age <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>avg_age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="writing-and-reading-csv" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="writing-and-reading-csv"><span class="header-section-number">3.3.2</span> Writing and reading CSV</h3>
+<p>Let’s save this table to a CSV file and read it back:</p>
+<div id="20" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Write to CSV</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>CSV.<span class="fu">write</span>(<span class="st">"samples.csv"</span>, samples)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read it back</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>samples_loaded <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"samples.csv"</span>, DataFrame)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<div><div style="float: left;"><span>1×2 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<div><div style="float: left;"><span>5×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
 <table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="columnLabelRow header">
 <th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">country</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">avg_age</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="InlineStrings.String7">String7</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="InlineStrings.String7">String7</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.68</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">30.0</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.63</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>That’s it. One line to write, one line to read. CSV.jl automatically detects column types, handles headers, and deals with missing values.</p>
+</section>
+<section id="selecting-columns" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="selecting-columns"><span class="header-section-number">3.3.3</span> Selecting columns</h3>
+<p>Grab one or more columns by name:</p>
+<div id="22" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One column - returns a vector</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>samples.depth_m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5-element Vector{Float64}:
+ 10.0
+ 20.0
+ 30.0
+ 15.0
+ 25.0</code></pre>
+</div>
+</div>
+<div id="24" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple columns - returns a new DataFrame</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(samples, <span class="op">:</span>borehole, <span class="op">:</span>density)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>5×2 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
 </tr>
 <tr class="columnLabelRow even">
 <th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
@@ -473,8 +584,125 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="dataRow odd">
 <td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
-<td style="text-align: left;">Finland</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">2.65</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">2.68</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">2.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">2.63</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">2.71</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The <code>:</code> before a column name makes it a <strong>Symbol</strong>, Julia’s way of referring to names. You will see this pattern everywhere in DataFrames.</p>
+</section>
+<section id="filtering-rows" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="filtering-rows"><span class="header-section-number">3.3.4</span> Filtering rows</h3>
+<p>Keep only rows that match a condition:</p>
+<div id="26" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Samples deeper than 20 m</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(row <span class="op">-&gt;</span> row.depth_m <span class="op">&gt;</span> <span class="fl">20</span>, samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>2×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
 <td style="text-align: right;">30.0</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The <code>row -&gt; row.depth_m &gt; 20</code> part is an <strong>anonymous function</strong>, a small throwaway function that takes one argument (<code>row</code>) and returns <code>true</code> or <code>false</code>. Don’t worry about the syntax too much; think of it as saying “keep rows where depth is greater than 20.”</p>
+<div id="28" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Only granite samples</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(row <span class="op">-&gt;</span> row.rock_type <span class="op">==</span> <span class="st">"granite"</span>, samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>3×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.68</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.63</td>
 </tr>
 </tbody>
 </table>
@@ -482,34 +710,768 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+<section id="adding-and-transforming-columns" class="level3" data-number="3.3.5">
+<h3 data-number="3.3.5" class="anchored" data-anchor-id="adding-and-transforming-columns"><span class="header-section-number">3.3.5</span> Adding and transforming columns</h3>
+<div id="30" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new column</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>samples.weight_kg <span class="op">=</span> samples.density <span class="op">.*</span> <span class="fl">1000.0</span>   <span class="co"># density × 1000</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>5×5 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">weight_kg</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65</td>
+<td style="text-align: right;">2650.0</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.68</td>
+<td style="text-align: right;">2680.0</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">30.0</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+<td style="text-align: right;">2750.0</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.63</td>
+<td style="text-align: right;">2630.0</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">2710.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The <code>.*</code> (dot-star) applies the multiplication to every row. You saw this broadcasting pattern in Chapter 1.</p>
 </section>
-<section id="working-with-geoscientific-data" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="working-with-geoscientific-data"><span class="header-section-number">3.3</span> Working with Geoscientific Data</h2>
-<section id="loading-geophysical-data" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="loading-geophysical-data"><span class="header-section-number">3.3.1</span> Loading Geophysical Data</h3>
-<div id="16" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DelimitedFiles</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read space-delimited data</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">readdlm</span>(<span class="st">"gravity_data.txt"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract columns</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>x, y, gz <span class="op">=</span> data[<span class="op">:</span>, <span class="fl">1</span>], data[<span class="op">:</span>, <span class="fl">2</span>], data[<span class="op">:</span>, <span class="fl">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="grouping-and-summarising" class="level3" data-number="3.3.6">
+<h3 data-number="3.3.6" class="anchored" data-anchor-id="grouping-and-summarising"><span class="header-section-number">3.3.6</span> Grouping and summarising</h3>
+<p>This is where DataFrames really shine. Group your data by a category and compute summaries:</p>
+<div id="32" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Average density per borehole</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>gdf <span class="op">=</span> <span class="fu">groupby</span>(samples, <span class="op">:</span>borehole)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">combine</span>(gdf, <span class="op">:</span>density <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>avg_density)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>2×2 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">avg_density</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">2.69333</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">2.67</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Read this as: “group the table by <code>:borehole</code>, then for the <code>:density</code> column compute the <code>mean</code> and call the result <code>:avg_density</code>.” The <code>=&gt;</code> arrows connect input → function → output name.</p>
+<div id="34" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple summaries at once</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">combine</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">groupby</span>(samples, <span class="op">:</span>rock_type),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>density <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>avg_density,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>density <span class="op">=&gt;</span> minimum <span class="op">=&gt;</span> <span class="op">:</span>min_density,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>depth_m <span class="op">=&gt;</span> maximum <span class="op">=&gt;</span> <span class="op">:</span>deepest</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>3×4 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">avg_density</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">min_density</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">deepest</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65333</td>
+<td style="text-align: right;">2.63</td>
+<td style="text-align: right;">20.0</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+<td style="text-align: right;">2.75</td>
+<td style="text-align: right;">30.0</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </section>
-<section id="netcdf-files" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="netcdf-files"><span class="header-section-number">3.3.2</span> NetCDF Files</h3>
-<div id="18" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">NCDatasets</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read NetCDF</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> <span class="fu">Dataset</span>(<span class="st">"climate_data.nc"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> ds[<span class="st">"temperature"</span>][<span class="op">:</span>]</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="joining-tables" class="level3" data-number="3.3.7">
+<h3 data-number="3.3.7" class="anchored" data-anchor-id="joining-tables"><span class="header-section-number">3.3.7</span> Joining tables</h3>
+<p>In real projects your data is often spread across multiple files. Joining brings them together:</p>
+<div id="36" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A second table with borehole coordinates</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>locations <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    borehole  <span class="op">=</span> [<span class="st">"BH-01"</span>, <span class="st">"BH-02"</span>, <span class="st">"BH-03"</span>],</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    latitude  <span class="op">=</span> [<span class="fl">64.35</span>, <span class="fl">64.40</span>, <span class="fl">64.45</span>],</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    longitude <span class="op">=</span> [<span class="fl">25.75</span>, <span class="fl">25.80</span>, <span class="fl">25.85</span>]</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Inner join - only boreholes that appear in both tables</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">innerjoin</span>(samples, locations, on <span class="op">=</span> <span class="op">:</span>borehole)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>5×7 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">borehole</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">depth_m</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">rock_type</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">density</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">weight_kg</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">latitude</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">longitude</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.65</td>
+<td style="text-align: right;">2650.0</td>
+<td style="text-align: right;">64.35</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.68</td>
+<td style="text-align: right;">2680.0</td>
+<td style="text-align: right;">64.35</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">BH-01</td>
+<td style="text-align: right;">30.0</td>
+<td style="text-align: left;">gneiss</td>
+<td style="text-align: right;">2.75</td>
+<td style="text-align: right;">2750.0</td>
+<td style="text-align: right;">64.35</td>
+<td style="text-align: right;">25.75</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: left;">granite</td>
+<td style="text-align: right;">2.63</td>
+<td style="text-align: right;">2630.0</td>
+<td style="text-align: right;">64.4</td>
+<td style="text-align: right;">25.8</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">5</td>
+<td style="text-align: left;">BH-02</td>
+<td style="text-align: right;">25.0</td>
+<td style="text-align: left;">schist</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">2710.0</td>
+<td style="text-align: right;">64.4</td>
+<td style="text-align: right;">25.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p><code>innerjoin</code> keeps only rows where the <code>:borehole</code> value exists in both tables. BH-03 has no samples, so it is dropped. If you want to keep all locations even when there are no matching samples, use <code>leftjoin</code> or <code>outerjoin</code> instead.</p>
+</section>
+<section id="handling-missing-data" class="level3" data-number="3.3.8">
+<h3 data-number="3.3.8" class="anchored" data-anchor-id="handling-missing-data"><span class="header-section-number">3.3.8</span> Handling missing data</h3>
+<p>Real data has gaps. Julia represents missing values with a special value called <code>missing</code>:</p>
+<div id="38" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data with a gap</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    station <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>],</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    temp_C  <span class="op">=</span> [<span class="fl">12.3</span>, <span class="cn">missing</span>, <span class="fl">14.1</span>, <span class="fl">13.7</span>]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>obs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>4×2 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">station</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">temp_C</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Union{Missing, Float64}">Float64?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">12.3</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">B</td>
+<td style="text-align: right; font-style: italic;">missing</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">14.1</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">4</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">13.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="40" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with missing values</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dropmissing</span>(obs, <span class="op">:</span>temp_C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div><div style="float: left;"><span>3×2 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
+<table class="data-frame caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="columnLabelRow header">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;">Row</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">station</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">temp_C</th>
+</tr>
+<tr class="columnLabelRow even">
+<th class="stubheadLabel" data-quarto-table-cell-role="th" style="text-align: right; font-weight: bold;"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="String">String</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th" title="Float64">Float64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">1</td>
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">12.3</td>
+</tr>
+<tr class="dataRow even">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">2</td>
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">14.1</td>
+</tr>
+<tr class="dataRow odd">
+<td class="rowLabel" style="text-align: right; font-weight: bold;">3</td>
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">13.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="42" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute mean, skipping missing values</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">skipmissing</span>(obs.temp_C))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>13.366666666666665</code></pre>
+</div>
+</div>
+<p><code>skipmissing</code> is a wrapper that tells functions to ignore the gaps. Without it, <code>mean</code> would return <code>missing</code> because any operation involving <code>missing</code> propagates the unknown.</p>
+</section>
+</section>
+<section id="working-with-file-paths" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="working-with-file-paths"><span class="header-section-number">3.4</span> Working with file paths</h2>
+<p>When your project has many data files, you need to build file paths correctly. Julia’s <code>joinpath</code> function handles this across operating systems (so you don’t have to worry about <code>/</code> vs <code>\</code>):</p>
+<div id="44" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build a path</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="fu">joinpath</span>(<span class="st">"data"</span>, <span class="st">"field_campaign"</span>, <span class="st">"gravity.txt"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data/field_campaign/gravity.txt</code></pre>
+</div>
+</div>
+<p>Other useful path functions:</p>
+<div id="46" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Current directory: "</span>, <span class="fu">pwd</span>())</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Files here: "</span>, <span class="fu">readdir</span>(<span class="st">"."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="48" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if a file exists before reading</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="fu">isfile</span>(<span class="st">"samples.csv"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"samples.csv exists!"</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"File not found"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>samples.csv exists!</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Organise your data early
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a <code>data/</code> folder in your project from the start. Put raw data in <code>data/raw/</code>, processed data in <code>data/processed/</code>. This habit will save you from chaos later, especially when you have 50 stations and 3 field campaigns.</p>
+</div>
+</div>
+</section>
+<section id="searching-copying-and-renaming-files" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="searching-copying-and-renaming-files"><span class="header-section-number">3.5</span> Searching, copying, and renaming files</h2>
+<p>In practice, geoscientific data rarely arrives in one tidy folder. You might receive a USB drive with hundreds of files scattered across nested directories, including raw measurements from field instruments, GPS logs, photos, metadata files, all mixed together. A common first task is: <strong>find all files of a certain type, rename them consistently, and copy them into a single clean folder.</strong></p>
+<p>Julia has everything you need for this built into the standard library, no extra packages required.</p>
+<section id="listing-files-in-a-directory" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="listing-files-in-a-directory"><span class="header-section-number">3.5.1</span> Listing files in a directory</h3>
+<div id="50" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># readdir returns the names of everything in a folder</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> <span class="fu">readdir</span>(<span class="st">"."</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(name)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>01-getting-started-julia.qmd
+02-files-data.qmd
+03-plotting-maps.qmd
+03-plotting-maps_files
+04-neural-networks.qmd
+gravity.txt
+gravity_corrected.txt
+samples.csv
+stations.txt</code></pre>
+</div>
+</div>
+<p>By default <code>readdir</code> gives you the names without the full path. Pass <code>join = true</code> to get complete paths:</p>
+<div id="52" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="fu">readdir</span>(<span class="st">"data/raw"</span>, join <span class="op">=</span> <span class="cn">true</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(path)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="searching-recursively-with-walkdir" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="searching-recursively-with-walkdir"><span class="header-section-number">3.5.2</span> Searching recursively with <code>walkdir</code></h3>
+<p><code>walkdir</code> is the key function for searching through directories and all their subdirectories. It yields a tuple <code>(root, dirs, files)</code> at each level:</p>
+<div id="54" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find every .csv file anywhere inside data/</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (root, dirs, files) <span class="kw">in</span> <span class="fu">walkdir</span>(<span class="st">"data"</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> files</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">endswith</span>(f, <span class="st">".csv"</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>            full_path <span class="op">=</span> <span class="fu">joinpath</span>(root, f)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">println</span>(full_path)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can wrap this into a reusable function:</p>
+<div id="56" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="st">    find_files(dir, ext)</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="st">Recursively find all files with extension `ext` in `dir` and its subdirectories.</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="st">Returns a vector of full paths.</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">find_files</span>(dir, ext)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> <span class="dt">String</span>[]</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (root, dirs, files) <span class="kw">in</span> <span class="fu">walkdir</span>(dir)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> f <span class="kw">in</span> files</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="fu">endswith</span>(f, ext)</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">push!</span>(results, <span class="fu">joinpath</span>(root, f))</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">end</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Main.Notebook.find_files</code></pre>
+</div>
+</div>
+<div id="58" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: find all .dat files under a field campaign folder</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>dat_files <span class="op">=</span> <span class="fu">find_files</span>(<span class="st">"data/raw"</span>, <span class="st">".dat"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Found </span><span class="sc">$</span>(<span class="fu">length</span>(dat_files))<span class="st"> .dat files"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="extracting-parts-of-a-file-path" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="extracting-parts-of-a-file-path"><span class="header-section-number">3.5.3</span> Extracting parts of a file path</h3>
+<p>Julia has several functions for splitting a path into its components:</p>
+<div id="60" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>example_path <span class="op">=</span> <span class="fu">joinpath</span>(<span class="st">"surveys"</span>, <span class="st">"2024"</span>, <span class="st">"gravity"</span>, <span class="st">"station_042.csv"</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Directory:  "</span>, <span class="fu">dirname</span>(example_path))</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Filename:   "</span>, <span class="fu">basename</span>(example_path))</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Name only:  "</span>, <span class="fu">splitext</span>(<span class="fu">basename</span>(example_path))[<span class="fl">1</span>])</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Extension:  "</span>, <span class="fu">splitext</span>(<span class="fu">basename</span>(example_path))[<span class="fl">2</span>])</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Split path: "</span>, <span class="fu">splitpath</span>(example_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Directory:  surveys/2024/gravity
+Filename:   station_042.csv
+Name only:  station_042
+Extension:  .csv
+Split path: ["surveys", "2024", "gravity", "station_042.csv"]</code></pre>
+</div>
+</div>
+</section>
+<section id="copying-and-renaming-files" class="level3" data-number="3.5.4">
+<h3 data-number="3.5.4" class="anchored" data-anchor-id="copying-and-renaming-files"><span class="header-section-number">3.5.4</span> Copying and renaming files</h3>
+<p>Suppose you have collected EM data from multiple campaigns and the instrument saved files with unhelpful names like <code>meas_001.dat</code>. You want to copy them into a single <code>processed/</code> folder, renaming each file to include the station name and date.</p>
+<p>Here is a complete worked example. We first create a fake directory tree so you can run everything:</p>
+<div id="62" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Set up a fake directory tree ---</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> station <span class="kw">in</span> [<span class="st">"EM01"</span>, <span class="st">"EM02"</span>, <span class="st">"EM03"</span>]</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    dir <span class="op">=</span> <span class="fu">joinpath</span>(<span class="st">"fake_survey"</span>, station)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mkpath</span>(dir)    <span class="co"># like mkdir -p: creates all intermediate directories</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>        filepath <span class="op">=</span> <span class="fu">joinpath</span>(dir, <span class="st">"meas_</span><span class="sc">$</span>(<span class="fu">lpad</span>(i, <span class="fl">3</span>, <span class="ch">'0'</span>))<span class="st">.dat"</span>)</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">write</span>(filepath, <span class="st">"fake data for </span><span class="sc">$</span>station<span class="st"> measurement </span><span class="sc">$</span>i<span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Created fake survey tree:"</span>)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (root, dirs, files) <span class="kw">in</span> <span class="fu">walkdir</span>(<span class="st">"fake_survey"</span>)</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> files</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"  "</span>, <span class="fu">joinpath</span>(root, f))</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Created fake survey tree:
+  fake_survey/EM01/meas_001.dat
+  fake_survey/EM01/meas_002.dat
+  fake_survey/EM01/meas_003.dat
+  fake_survey/EM02/meas_001.dat
+  fake_survey/EM02/meas_002.dat
+  fake_survey/EM02/meas_003.dat
+  fake_survey/EM03/meas_001.dat
+  fake_survey/EM03/meas_002.dat
+  fake_survey/EM03/meas_003.dat</code></pre>
+</div>
+</div>
+<p>Now let’s search for all <code>.dat</code> files, rename them to include the station name, and copy them into a clean output folder:</p>
+<div id="64" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Find, rename, and copy ---</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> <span class="st">"collected_data"</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkpath</span>(output_dir)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (root, dirs, files) <span class="kw">in</span> <span class="fu">walkdir</span>(<span class="st">"fake_survey"</span>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> files</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">endswith</span>(f, <span class="st">".dat"</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># The station name is the immediate parent folder</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>            station <span class="op">=</span> <span class="fu">basename</span>(root)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Build a new name: EM01_meas_001.dat</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>            new_name <span class="op">=</span> station <span class="op">*</span> <span class="st">"_"</span> <span class="op">*</span> f</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>            src <span class="op">=</span> <span class="fu">joinpath</span>(root, f)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>            dst <span class="op">=</span> <span class="fu">joinpath</span>(output_dir, new_name)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>            <span class="fu">cp</span>(src, dst, force <span class="op">=</span> <span class="cn">true</span>)   <span class="co"># copy; force=true overwrites if exists</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the result</span></span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Files in </span><span class="sc">$</span>(output_dir)<span class="st">:"</span>)</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="fu">sort</span>(<span class="fu">readdir</span>(output_dir))</span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"  "</span>, f)</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Files in collected_data:
+  EM01_meas_001.dat
+  EM01_meas_002.dat
+  EM01_meas_003.dat
+  EM02_meas_001.dat
+  EM02_meas_002.dat
+  EM02_meas_003.dat
+  EM03_meas_001.dat
+  EM03_meas_002.dat
+  EM03_meas_003.dat</code></pre>
+</div>
+</div>
+</section>
+<section id="key-functions-at-a-glance" class="level3" data-number="3.5.5">
+<h3 data-number="3.5.5" class="anchored" data-anchor-id="key-functions-at-a-glance"><span class="header-section-number">3.5.5</span> Key functions at a glance</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>readdir(dir)</code></td>
+<td>List contents of a directory</td>
+</tr>
+<tr class="even">
+<td><code>readdir(dir, join=true)</code></td>
+<td>Same, but returns full paths</td>
+</tr>
+<tr class="odd">
+<td><code>walkdir(dir)</code></td>
+<td>Recursively walk through all subdirectories</td>
+</tr>
+<tr class="even">
+<td><code>mkpath(dir)</code></td>
+<td>Create a directory (and parents), like <code>mkdir -p</code></td>
+</tr>
+<tr class="odd">
+<td><code>cp(src, dst)</code></td>
+<td>Copy a file</td>
+</tr>
+<tr class="even">
+<td><code>mv(src, dst)</code></td>
+<td>Move or rename a file</td>
+</tr>
+<tr class="odd">
+<td><code>rm(path)</code></td>
+<td>Delete a file</td>
+</tr>
+<tr class="even">
+<td><code>rm(path, recursive=true)</code></td>
+<td>Delete a directory and everything inside it</td>
+</tr>
+<tr class="odd">
+<td><code>isfile(path)</code></td>
+<td>Check if a path points to an existing file</td>
+</tr>
+<tr class="even">
+<td><code>isdir(path)</code></td>
+<td>Check if a path points to an existing directory</td>
+</tr>
+<tr class="odd">
+<td><code>joinpath(parts...)</code></td>
+<td>Build a path from pieces (cross-platform)</td>
+</tr>
+<tr class="even">
+<td><code>basename(path)</code></td>
+<td>Filename from a path</td>
+</tr>
+<tr class="odd">
+<td><code>dirname(path)</code></td>
+<td>Directory from a path</td>
+</tr>
+<tr class="even">
+<td><code>splitext(name)</code></td>
+<td>Split into <code>(name, ".ext")</code></td>
+</tr>
+<tr class="odd">
+<td><code>splitpath(path)</code></td>
+<td>Split into a vector of path components</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="geoscientific-file-formats" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="geoscientific-file-formats"><span class="header-section-number">3.6</span> Geoscientific file formats</h2>
+<p>Geoscience uses several specialised binary formats to store large, multidimensional datasets efficiently. Julia has packages for all the common ones. Here is a brief overview. Detailed usage will be added in future updates of this chapter.</p>
+<section id="netcdf" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="netcdf"><span class="header-section-number">3.6.1</span> NetCDF</h3>
+<p>NetCDF (Network Common Data Form) is the standard format for climate, ocean, and atmospheric data. Use the <strong>NCDatasets.jl</strong> package:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">NCDatasets</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read a NetCDF file</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> <span class="fu">NCDataset</span>(<span class="st">"temperature.nc"</span>)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>temp <span class="op">=</span> ds[<span class="st">"temperature"</span>][<span class="op">:</span>, <span class="op">:</span>, <span class="op">:</span>]    <span class="co"># read the full 3D array</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>lat  <span class="op">=</span> ds[<span class="st">"latitude"</span>][<span class="op">:</span>]</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>lon  <span class="op">=</span> ds[<span class="st">"longitude"</span>][<span class="op">:</span>]</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(ds)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Or use the do-block pattern (auto-closes)</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="fu">NCDataset</span>(<span class="st">"temperature.nc"</span>) <span class="cf">do</span> ds</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> ds[<span class="st">"temperature"</span>][<span class="op">:</span>, <span class="op">:</span>, <span class="op">:</span>]</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"Shape: "</span>, <span class="fu">size</span>(temp))</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a NetCDF file</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">NCDataset</span>(<span class="st">"output.nc"</span>, <span class="st">"c"</span>) <span class="cf">do</span> ds</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">defDim</span>(ds, <span class="st">"x"</span>, <span class="fl">10</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">defDim</span>(ds, <span class="st">"y"</span>, <span class="fl">20</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> <span class="fu">defVar</span>(ds, <span class="st">"elevation"</span>, <span class="dt">Float64</span>, (<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    v[<span class="op">:</span>, <span class="op">:</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">10</span>, <span class="fl">20</span>)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="hdf5" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="hdf5"><span class="header-section-number">3.6.2</span> HDF5</h3>
+<p>HDF5 (Hierarchical Data Format) is widely used in geophysics, remote sensing, and seismology. Use <strong>HDF5.jl</strong>:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">HDF5</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Write</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">h5open</span>(<span class="st">"model.h5"</span>, <span class="st">"w"</span>) <span class="cf">do</span> f</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    f[<span class="st">"resistivity"</span>] <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">100</span>, <span class="fl">100</span>, <span class="fl">50</span>)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    f[<span class="st">"depth"</span>] <span class="op">=</span> <span class="fu">collect</span>(<span class="fl">0.0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">24.5</span>)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Read</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="fu">h5open</span>(<span class="st">"model.h5"</span>, <span class="st">"r"</span>) <span class="cf">do</span> f</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>    rho   <span class="op">=</span> <span class="fu">read</span>(f, <span class="st">"resistivity"</span>)</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>    depth <span class="op">=</span> <span class="fu">read</span>(f, <span class="st">"depth"</span>)</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"Model size: "</span>, <span class="fu">size</span>(rho))</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="seg-y" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="seg-y"><span class="header-section-number">3.6.3</span> SEG-Y</h3>
+<p>SEG-Y is the seismic industry standard. Use <strong>SegyIO.jl</strong>:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">SegyIO</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read a SEG-Y file</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>block <span class="op">=</span> <span class="fu">segy_read</span>(<span class="st">"seismic_line.segy"</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>traces <span class="op">=</span> block.data           <span class="co"># matrix of traces</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> block.traceheaders   <span class="co"># trace header information</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="shapefiles-and-geojson" class="level3" data-number="3.6.4">
+<h3 data-number="3.6.4" class="anchored" data-anchor-id="shapefiles-and-geojson"><span class="header-section-number">3.6.4</span> Shapefiles and GeoJSON</h3>
+<p>For vector geospatial data (points, polygons, map boundaries), use <strong>Shapefile.jl</strong> or <strong>GeoJSON.jl</strong>:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Shapefile</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> Shapefile.<span class="fu">Table</span>(<span class="st">"geology_map.shp"</span>)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Access as a DataFrame</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="fu">DataFrame</span>(table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+These examples are not executed
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The geoscientific format examples above use <code>eval: false</code> style. They show the code patterns but don’t run here because they require actual data files. When you have your own NetCDF, HDF5, or SEG-Y files, copy the pattern and replace the file name.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Want more formats or deeper coverage?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This section will grow as the book develops. If there is a specific geoscience format or workflow you need (GRIB, GeoTIFF, ASDF, miniSEED, EDI, ModEM, or anything else) please <a href="https://github.com/pankajkmishra/geo-sciml/issues">open an issue on GitHub</a> and describe your use case. Your request will help us prioritise what to add next.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="clean-up" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="clean-up"><span class="header-section-number">3.7</span> Clean up</h2>
+<p>Let’s remove the temporary files we created in this chapter:</p>
+<div id="68" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> [<span class="st">"stations.txt"</span>, <span class="st">"gravity.txt"</span>, <span class="st">"gravity_corrected.txt"</span>, <span class="st">"samples.csv"</span>]</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">isfile</span>(f) <span class="op">&amp;&amp;</span> <span class="fu">rm</span>(f)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Cleaned up."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cleaned up.</code></pre>
+</div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -919,8 +1881,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/03-plotting-maps.html" class="pagination-link" aria-label="Plotting &amp; Maps">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Maps</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/03-plotting-maps.html" class="pagination-link" aria-label="Plotting &amp; Data Visualisation">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Data Visualisation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

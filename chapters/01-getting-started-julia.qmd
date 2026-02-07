@@ -2,70 +2,119 @@
 title: "Getting started with Julia"
 ---
 
-We recommend starting with **VS Code** and adding **Julia** via juliaup. Keep it lean: install VS Code, install Julia, point VS Code to Julia, set your depot location, and add a few key extensions.
+You are starting from scratch, and that is perfectly fine. No prior programming experience is assumed.
 
-## Quick setup (Windows, macOS, Linux)
+In this chapter we will install Julia and VS Code, write our first lines of code, and build up to functions, loops, and custom types. By the end you will be comfortable running Julia interactively, saving scripts, and managing packages in reproducible environments. If you have used another language before (Python, R, MATLAB), you will notice how little setup Julia needs to get going.
 
-1. Install VS Code from [code.visualstudio.com](https://code.visualstudio.com/).
-2. Install Julia with juliaup (recommended everywhere):
+## Install Julia and VS Code
+
+You need two things: **Julia** (the language) and **VS Code** (the editor you will write code in). Install them in this order:
+
+1. Install **VS Code** from [code.visualstudio.com](https://code.visualstudio.com/).
+2. Install **Julia** using juliaup, a small tool that manages Julia versions for you:
+
    - **Windows (PowerShell)**
      ```powershell
      winget install julia -s msstore
      juliaup add release
      ```
-   - **macOS (Terminal, zsh/bash)**
+   - **macOS (Terminal)**
      ```bash
      curl -fsSL https://install.julialang.org | sh
      juliaup add release
      ```
-   - **Linux (Terminal, bash/zsh)**
+   - **Linux (Terminal)**
      ```bash
      curl -fsSL https://install.julialang.org | sh
      juliaup add release
      ```
-3. Verify Julia is on PATH:
+
+3. Open a new terminal and check that Julia is available:
    ```bash
    julia --version
    ```
 
-## Set Julia depot location (where .julia lives)
+   If it prints something like `julia version 1.11.2`, you are ready.
 
-Pick a location (e.g., `D:\JuliaDepot` on Windows, `/opt/julia-depot` or `~/julia-depot` on macOS/Linux) and set `JULIA_DEPOT_PATH` before launching Julia/VS Code.
+4. Open VS Code, go to the **Extensions** panel (the square icon on the left sidebar, or press Ctrl/Cmd+Shift+X), and search for **Julia**. Install the one published by **julialang**. This single extension gives you syntax highlighting, code execution, an integrated REPL, a debugger, and a plot viewer. That is everything you need to get started.
 
-- **Windows (PowerShell, per-shell)**
-  ```powershell
-  $env:JULIA_DEPOT_PATH = "D:\JuliaDepot"
-  julia --version
-  ```
-- **Windows (persist system/user env var)**
-  ```powershell
-  setx JULIA_DEPOT_PATH "D:\JuliaDepot"
-  ```
-- **macOS/Linux (zsh/bash)**
-  ```bash
-  export JULIA_DEPOT_PATH="$HOME/julia-depot"
-  julia --version
-  ```
-- To keep multiple depots (rare), separate with `;` on Windows or `:` on macOS/Linux.
+::: {.callout-tip}
+## Reading code blocks in this book
+Throughout this book you will see two styles of code block. **Julia code** has a thick coloured bar on the left edge:
 
-## Point VS Code to Julia
+```{julia}
+#| eval: false
+println("I am Julia code")
+```
 
-If auto-detect fails, set **Settings → Julia: Executable Path**:
+**Shell commands, configuration files, and other non-Julia text** have a plain border with no coloured bar:
 
-- **Windows**: `%LOCALAPPDATA%\Programs\Julia-*\bin\julia.exe` or `%USERPROFILE%\.juliaup\bin\julia.exe`
-- **macOS**: `/Applications/Julia-*.app/Contents/Resources/julia/bin/julia` or `$HOME/.juliaup/bin/julia`
-- **Linux**: `/usr/bin/julia` or `$HOME/.juliaup/bin/julia`
+```bash
+echo "I am a shell command"
+```
 
-## Must-have VS Code extensions
+If a block has the coloured side bar, you can type it into the Julia REPL or a `.jl` file. If it does not, it is meant for your terminal, a config file, or is just illustrative output.
+:::
 
-- **Julia** (julialang)
-- **Quarto**
-- **Rainbow CSV** (handy for data files)
-- **GitLens** (git UX)
+## Three ways to run Julia code
 
-## Quick check
+Before we start writing code, it helps to know that there are three ways to run Julia. Each is useful in different situations:
 
-Create `test.jl` and run in VS Code (Ctrl/Cmd+Enter):
+### 1. Inside VS Code (recommended for beginners)
+
+This is the easiest way. Create a file ending in `.jl` (e.g., `test.jl`), type your code, and press **Ctrl+Enter** (Windows/Linux) or **Cmd+Enter** (macOS) to run one line or a selected block. The Julia extension opens a built-in REPL panel at the bottom of VS Code and sends your code there. You see the results immediately, and you can go back and edit your file at any time.
+
+This is what we will use throughout this book. It combines the best of both worlds: your code is saved in a file you can come back to, but you can run pieces of it interactively.
+
+### 2. Interactively in the REPL (command line)
+
+Open a terminal and type `julia` to start the **REPL** (Read-Eval-Print Loop). You get a `julia>` prompt where you can type expressions and see results instantly:
+
+```
+$ julia
+               _
+   _       _ _(_)_     |
+  (_)     | (_) (_)    |  Version 1.11.2
+   _ _   _| |_  __ _   |
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |
+ _/ |\__'_|_|_|\__'_|  |
+|__/                   |
+
+julia> 2 + 3
+5
+
+julia> sqrt(144)
+12.0
+```
+
+The REPL is great for quick experiments: testing a formula, checking how a function works, or exploring a dataset. But nothing is saved to a file, so it is not ideal for work you want to keep.
+
+### 3. Running a script from the terminal
+
+If you have a file called `myscript.jl`, you can run the whole thing at once from the terminal:
+
+```bash
+julia myscript.jl
+```
+
+Julia reads the file from top to bottom, executes every line, prints any output, and exits. This is how you run production code, batch jobs on a cluster, or automated workflows. You don't see intermediate results, only what the script explicitly prints.
+
+### Which one should I use?
+
+| Situation | Best option |
+|-----------|-------------|
+| Learning and exploring | VS Code (Ctrl/Cmd+Enter) or REPL |
+| Developing code you want to keep | VS Code (code is in a file, but you run it interactively) |
+| Quick one-off calculations | REPL |
+| Running a finished analysis on a cluster | `julia myscript.jl` |
+| Automated or scheduled jobs | `julia myscript.jl` |
+
+You will naturally switch between these as you get more comfortable. For now, open VS Code and follow along.
+
+## Hello, Julia!
+
+Let's make sure everything works. In VS Code, create a new file called `test.jl` and type the following:
 
 ```julia
 println("Hello, Julia!")
@@ -73,15 +122,28 @@ x = [1, 2, 3, 4, 5]
 println("Sum: ", sum(x))
 ```
 
-## Basic numerics
+Press **Ctrl+Enter** (Windows/Linux) or **Cmd+Enter** (macOS) to run each line. You should see:
 
-Now that your environment is set up, let's explore some basic Julia syntax.
+```
+Hello, Julia!
+Sum: 15
+```
+
+Congratulations, you just ran your first Julia program. Everything after this point builds on what you just did.
+
+## Your first calculations
+
+Julia works like a calculator right out of the box. You don't need to import anything or set anything up:
 
 ```{julia}
 1 + 2, sin(1.0)
 ```
 
-### Arithmetic
+This computed `1 + 2` and the sine of `1.0` (in radians) and returned both results as a pair. The comma groups them into a **tuple**, just a way of showing multiple answers together.
+
+### Storing values in variables
+
+In programming, a **variable** is a name you give to a value so you can use it later. Think of it as a sticky note on a number:
 
 ```{julia}
 a = 10
@@ -89,23 +151,76 @@ b = 3
 a + b, a - b, a * b, a / b
 ```
 
-### Arrays
+Here `a` is a label for `10` and `b` is a label for `3`. The next line asks Julia to add, subtract, multiply, and divide them, all at once.
+
+You can name variables almost anything: `temperature`, `depth_km`, `n_samples`. Use names that describe what the value means. Your future self will thank you.
+
+### Collecting values in a list
+
+In real work you almost never deal with just one number. You have a list of measurements, a column of data, a time series. In Julia, a list of values is called an **Array** (or **Vector** when it is one-dimensional). You create one with square brackets:
 
 ```{julia}
 x = [1, 2, 3, 4, 5]
 sum(x), length(x)
 ```
 
-## Functions
+`sum(x)` adds up all the values. `length(x)` counts how many there are. No imports, no setup.
+
+### What about text?
+
+Not everything is a number. Julia handles text (called **strings**) too. Strings are wrapped in double quotes:
+
+```julia
+name = "Julia"
+println("Hello, $name!")
+```
+
+The `$` inside a string inserts the value of a variable. This is called **string interpolation**. You can also insert expressions: `"2 + 3 = $(2 + 3)"`.
+
+## Reusing code with functions
+
+If you find yourself doing the same calculation over and over, wrap it in a **function**. A function is like a recipe: you give it inputs (ingredients) and it gives you back a result (the dish).
+
+The simplest way to define a function is the one-liner:
 
 ```{julia}
 f(x) = x^2 + 2x + 1
 f(3)
 ```
 
-## Control Flow
+This says: "define `f` so that it takes `x`, squares it, adds twice `x`, adds 1, and returns the result." Now `f(3)` gives `16`, `f(10)` gives `121`, and so on.
 
-### Conditionals
+For anything longer than one line, use the multi-line form:
+
+```julia
+function kinetic_energy(mass, velocity)
+    return 0.5 * mass * velocity^2
+end
+
+kinetic_energy(70.0, 3.0)   # a 70 kg person walking at 3 m/s
+```
+
+Functions can also return more than one value. Unpack them into separate variables:
+
+```julia
+function minmax(x)
+    return minimum(x), maximum(x)
+end
+
+lo, hi = minmax([4, 1, 7, 2])
+println("min = $lo, max = $hi")
+```
+
+::: {.callout-tip}
+## Why functions matter
+Julia's compiler makes code inside functions run very fast, often as fast as C or Fortran. Code typed at the top level (outside a function) cannot be optimised the same way. So the habit of wrapping your work in functions is not just about tidiness, it is about speed.
+:::
+
+## Making decisions and repeating things
+
+### If / else: choosing what to do
+
+Programs often need to choose what to do based on a condition. In Julia, this reads almost like English:
 
 ```{julia}
 x = 5
@@ -118,7 +233,11 @@ else
 end
 ```
 
-### Loops
+`println` means "print this line of text." Julia checks the conditions from top to bottom and runs the first one that is true, then skips the rest.
+
+### Loops: repeating work
+
+A **loop** lets you repeat something many times without copying and pasting. The most common loop says "for each value in this range, do something":
 
 ```{julia}
 for i in 1:5
@@ -126,7 +245,11 @@ for i in 1:5
 end
 ```
 
-## Types and Structs
+`1:5` means the numbers 1, 2, 3, 4, 5. For each one, Julia squares it and prints the result. In geoscience, you might use a loop to process every station in a survey, every layer in a model, or every time step in a simulation.
+
+## Organising data with custom types
+
+A geoscience measurement is rarely just a single number. It has coordinates, a value, an uncertainty, maybe a timestamp. Julia lets you bundle related values together using a **struct** (short for structure):
 
 ```{julia}
 struct Point
@@ -137,3 +260,476 @@ end
 p = Point(1.0, 2.0)
 p.x, p.y
 ```
+
+This creates a new type called `Point` with two fields. `Float64` means "a decimal number with double precision." Once defined, you create a point by writing `Point(1.0, 2.0)` and access its parts with `p.x` and `p.y`.
+
+::: {.callout-tip}
+## Why bother with structs?
+As your projects grow, structs keep things organised. Instead of passing around loose variables like `lat`, `lon`, `elevation`, you pass a single `Station` object that holds all of them together. Julia's compiler also uses the type information to make your code faster.
+:::
+
+## Getting comfortable with the REPL
+
+The **REPL** (Read-Eval-Print Loop) is the interactive prompt you see when you type `julia` in a terminal. It is a great place to try things out quickly.
+
+### Built-in modes
+
+The REPL has several modes. You switch by pressing a single key at the start of an empty line:
+
+| Key | Mode | What it does |
+|-----|------|------|
+| `]` | **Pkg** | Package manager: add, remove, update packages |
+| `;` | **Shell** | Run shell commands without leaving Julia |
+| `?` | **Help** | Look up documentation for any function or type |
+| Backspace | **Julia** | Return to normal Julia mode |
+
+Try it: press `?` then type `sum` and hit Enter. Julia shows you the documentation for `sum`, with examples.
+
+### Tab completion and Unicode
+
+Press **Tab** to autocomplete names. This works for functions, variables, file paths, and even Unicode:
+
+- Type `pri` then Tab → `print`
+- Type `\alpha` then Tab → `α`
+- Type `\sqrt` then Tab → `√`
+
+This is how you type mathematical symbols in Julia code. Any LaTeX name works.
+
+### Handy shortcuts
+
+- **Semicolons suppress output**: `x = rand(1000);` assigns the array without printing all 1000 numbers.
+- **`ans` holds the last result**: after typing `2 + 3`, typing `ans * 10` gives `50`.
+- **Underscores in numbers**: write `1_000_000` instead of `1000000` for readability. Julia ignores the underscores.
+
+## Everyday patterns
+
+These are practical patterns you will use constantly.
+
+### Broadcasting with the dot `.`
+
+Apply any function or operator to every element of an array by adding a dot:
+
+```julia
+x = [1, 2, 3, 4]
+sin.(x)              # sine of each element
+x .^ 2               # square each element
+x .+ 10              # add 10 to each element
+```
+
+This works with your own functions too:
+
+```julia
+f(x) = x^2 + 1
+f.([1, 2, 3])        # returns [2, 5, 10]
+```
+
+### Finding documentation and methods
+
+Use `methods()` to see all versions of a function, and `@which` to find out which version gets called:
+
+```julia
+methods(+)                # all methods for +
+@which 1.0 + 2.0          # which method handles Float64 + Float64
+```
+
+### Timing your code
+
+Use `@time` for a quick measurement. Run it **twice** because the first call includes compilation time:
+
+```julia
+@time sum(rand(1_000_000))     # first call: includes compilation
+@time sum(rand(1_000_000))     # second call: actual speed
+```
+
+For serious benchmarking, use the BenchmarkTools package:
+
+```julia
+using BenchmarkTools
+@btime sum(rand(1_000_000))
+```
+
+## Performance habits
+
+These two habits will save you hours of debugging slow code.
+
+### Put work inside functions
+
+Code at the top level (the global scope) runs slowly because Julia cannot predict the types of global variables. The same code inside a function runs orders of magnitude faster:
+
+```julia
+# Slow — top level
+x = rand(1_000_000)
+total = 0.0
+for val in x
+    total += val
+end
+
+# Fast — inside a function
+function mysum(x)
+    total = 0.0
+    for val in x
+        total += val
+    end
+    return total
+end
+mysum(rand(1_000_000))
+```
+
+### Loop in the right order
+
+Julia stores matrices **column by column** in memory (like Fortran), not row by row (like C or Python). When looping over a matrix, always loop over rows in the inner loop:
+
+```julia
+A = rand(1000, 1000)
+
+# Fast — columns in the outer loop, rows in the inner loop
+for j in 1:1000       # column
+    for i in 1:1000   # row
+        A[i, j] += 1
+    end
+end
+```
+
+## Customising your Julia setup
+
+### Startup file {#startup-file}
+
+If you load the same packages every session, add them to your startup file. Julia runs this file automatically on launch.
+
+The file lives at `~/.julia/config/startup.jl`. Create the directory and file if they don't exist:
+
+```bash
+mkdir -p ~/.julia/config
+echo 'try using Revise catch end' > ~/.julia/config/startup.jl
+```
+
+On Windows (PowerShell):
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.julia\config"
+Set-Content "$env:USERPROFILE\.julia\config\startup.jl" 'try using Revise catch end'
+```
+
+::: {.callout-note}
+## Revise.jl
+Revise watches your source files and automatically picks up changes without restarting Julia. Install it once with `] add Revise`, then load it from your startup file as shown above. It is one of the most useful Julia packages.
+:::
+
+### Point VS Code to Julia manually
+
+In most cases VS Code finds Julia automatically. If it does not, go to **Settings → Julia: Executable Path** and enter the path:
+
+- **Windows**
+  ```
+  %LOCALAPPDATA%\Programs\Julia-*\bin\julia.exe
+  ```
+  or
+  ```
+  %USERPROFILE%\.juliaup\bin\julia.exe
+  ```
+- **macOS**
+  ```
+  /Applications/Julia-*.app/Contents/Resources/julia/bin/julia
+  ```
+  or
+  ```
+  $HOME/.juliaup/bin/julia
+  ```
+- **Linux**
+  ```
+  /usr/bin/julia
+  ```
+  or
+  ```
+  $HOME/.juliaup/bin/julia
+  ```
+
+## The `.julia` directory: where packages live
+
+When you install Julia and start adding packages, Julia creates a hidden directory called `.julia` in your home folder:
+
+| OS | Default location |
+|----|-----------------|
+| Windows | `C:\Users\YourName\.julia\` |
+| macOS | `/Users/YourName/.julia/` |
+| Linux | `/home/YourName/.julia/` |
+
+This directory is called the **depot**. It stores everything Julia needs:
+
+| Subfolder | What's inside |
+|-----------|---------------|
+| `packages/` | Source code of every package you install |
+| `compiled/` | Precompiled versions of those packages |
+| `artifacts/` | Binary libraries and datasets that packages download |
+| `registries/` | The General registry, Julia's index of all public packages |
+| `logs/` | Build and install logs |
+| `environments/` | Project environments and their `Manifest.toml` files |
+| `config/` | Your `startup.jl` file |
+
+### Why it grows large
+
+Every package brings its own dependencies, compiled caches, and sometimes large binary artefacts. A plotting library like CairoMakie can pull in hundreds of megabytes. Over time, `.julia` can easily reach **5–20 GB**.
+
+On a personal laptop this is fine. But on **university HPC clusters and shared Linux servers**, your home directory often has a quota, sometimes as little as 5 or 10 GB. If `.julia` fills it up, you will see "disk quota exceeded" errors and Julia will stop installing packages.
+
+### Moving `.julia` to a larger disk
+
+Set the `JULIA_DEPOT_PATH` environment variable to point somewhere with more space:
+
+- **Windows (PowerShell, persist permanently)**
+  ```powershell
+  setx JULIA_DEPOT_PATH "D:\JuliaDepot"
+  ```
+- **macOS / Linux** — add to `~/.bashrc` or `~/.zshrc`:
+  ```bash
+  export JULIA_DEPOT_PATH="$HOME/julia-depot"
+  ```
+- **On a cluster** (use scratch or project space):
+  ```bash
+  export JULIA_DEPOT_PATH="/scratch/$USER/julia-depot"
+  ```
+
+::: {.callout-tip}
+## Already have a large `.julia` in your home?
+Move the existing directory first, then set the variable:
+
+```bash
+mv ~/.julia /scratch/$USER/julia-depot
+export JULIA_DEPOT_PATH="/scratch/$USER/julia-depot"
+```
+
+On Windows (PowerShell):
+
+```powershell
+Move-Item "$env:USERPROFILE\.julia" "D:\JuliaDepot"
+setx JULIA_DEPOT_PATH "D:\JuliaDepot"
+```
+:::
+
+## Using Julia behind a proxy
+
+On university and corporate networks, internet traffic often goes through a proxy. Julia needs to know about this to download packages. If you skip this step, `Pkg.add(...)` will hang or time out.
+
+Ask your IT department for the proxy address. Then set it as an environment variable:
+
+**Windows (PowerShell, persist permanently)**
+
+```powershell
+setx HTTP_PROXY  "http://proxy.example.com:8080"
+setx HTTPS_PROXY "http://proxy.example.com:8080"
+```
+
+Close and reopen your terminal after running `setx`.
+
+**macOS / Linux** — add to `~/.bashrc` or `~/.zshrc`:
+
+```bash
+export HTTP_PROXY="http://proxy.example.com:8080"
+export HTTPS_PROXY="http://proxy.example.com:8080"
+```
+
+Then reload:
+
+```bash
+source ~/.zshrc   # or ~/.bashrc
+```
+
+If authentication is required, include credentials in the URL:
+
+```
+http://username:password@proxy.example.com:8080
+```
+
+### Verify it works
+
+Open the Julia REPL and try:
+
+```julia
+ENV["HTTP_PROXY"]       # should print your proxy address
+using Pkg
+Pkg.add("Example")      # should download successfully
+```
+
+::: {.callout-tip}
+## No-proxy for local addresses
+If internal servers should bypass the proxy:
+
+```bash
+export NO_PROXY="localhost,127.0.0.1,.internal.example.com"
+```
+
+On Windows (PowerShell):
+
+```powershell
+$env:NO_PROXY = "localhost,127.0.0.1,.internal.example.com"
+```
+:::
+
+## Reproducible environments
+
+Imagine you wrote a script that reads geoscientific data, runs an inversion, and produces a beautiful map. It works perfectly today. Six months later your colleague tries to run it and gets errors everywhere. A package was updated, a function was renamed, a dependency now needs a newer Julia version. This is the *"it works on my machine"* problem, and it is one of the biggest obstacles to reproducible science.
+
+Julia's **built-in package manager** solves this at the language level. Every Julia project can carry two small text files that record *exactly* which packages (and which versions) were used. Anyone, anywhere, can recreate the identical environment with a single command.
+
+### What a Julia project looks like
+
+A typical Julia project is just a folder with a few files:
+
+```
+MyProject/
+├── Project.toml      # what you depend on
+├── Manifest.toml     # exact snapshot of every version
+└── src/
+    └── MyProject.jl  # your code
+```
+
+You may also have a `test/`, `docs/`, or `scripts/` folder, but the two `.toml` files are the heart of reproducibility.
+
+### `Project.toml`: what your project needs
+
+This file lists the **direct dependencies**, the packages *you* asked for. Here is the `Project.toml` for this very book:
+
+```toml
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+```
+
+Each entry has a name and a **UUID** (a unique identifier so Julia never confuses two packages with the same name). You rarely type UUIDs by hand; the package manager fills them in when you run `Pkg.add("CSV")`.
+
+You can optionally add a `[compat]` section to pin version ranges:
+
+```toml
+[compat]
+CSV = "0.10"
+DataFrames = "1.6"
+julia = "1.10"
+```
+
+This tells Julia: "My code is tested with CSV 0.10.x, DataFrames 1.6.x, and Julia 1.10 or newer." It prevents someone from accidentally installing an incompatible future version.
+
+### `Manifest.toml`: the exact snapshot
+
+When you install packages, Julia resolves every dependency (and every dependency's dependency) and writes the result into `Manifest.toml`. This file records the **exact version** of every single package in the tree. It can be hundreds of lines long, and that is normal.
+
+Think of it this way:
+
+| File | Analogy | You edit it? |
+|------|---------|:------------:|
+| `Project.toml` | A recipe's ingredient list ("flour, eggs, sugar") | Yes |
+| `Manifest.toml` | The supermarket receipt with exact brands and batch numbers | No (generated automatically) |
+
+:::{.callout-tip}
+## Should you commit `Manifest.toml` to Git?
+
+**For applications and papers: yes.** It guarantees bit-for-bit reproducibility. Anyone who checks out your repo and runs `Pkg.instantiate()` gets exactly the same package versions.
+
+**For libraries (reusable packages): usually no.** You want downstream users to resolve versions against *their* environment, not yours.
+:::
+
+### Creating and using environments
+
+**Start a new project** in any empty folder:
+
+```julia
+using Pkg
+Pkg.activate(".")      # use the current folder as the environment
+Pkg.add("CSV")         # adds CSV to Project.toml and resolves Manifest.toml
+Pkg.add("DataFrames")
+```
+
+Or in the REPL's Pkg mode (press `]`):
+
+```
+(@v1.11) pkg> activate .
+(MyProject) pkg> add CSV DataFrames
+```
+
+Julia creates `Project.toml` and `Manifest.toml` for you.
+
+**Reproduce someone else's environment:**
+
+```julia
+using Pkg
+Pkg.activate(".")       # point to the folder containing their Project.toml
+Pkg.instantiate()       # download the exact versions from Manifest.toml
+```
+
+That is it. Two commands and you have an identical setup. No guessing, no version conflicts.
+
+### The default (global) environment
+
+When you start Julia without activating a project, you are in the **global environment** (shown as `@v1.11` in the REPL prompt). Packages you add here are available everywhere, which is convenient for everyday tools like `Revise` or `BenchmarkTools`. But for actual research work, always create a **project-specific environment** so your results are reproducible.
+
+:::{.callout-note}
+## How other languages handle this
+
+If you come from **Python**, Julia's `Project.toml` is similar to `requirements.txt` or `pyproject.toml`, and `Manifest.toml` is like a `pip freeze` snapshot or a Poetry/PDM lock file. The difference is that Julia's package manager is built into the language, with no separate tool to install.
+
+If you come from **C++**, reproducible builds are traditionally much harder. You might use CMake with pinned versions, Conan, or vcpkg, but there is no single built-in standard. Julia's approach is closer to Rust's `Cargo.toml` / `Cargo.lock` system.
+
+In all cases the idea is the same: **separate what you want from what you got**, so someone else can recreate the exact same setup later.
+:::
+
+### Key Pkg commands explained
+
+Here is what the most common `Pkg` functions actually do:
+
+`Pkg.activate(".")`
+: **Switch into a project environment.** This tells Julia: "use the `Project.toml` in this folder instead of the global one." The REPL prompt changes from `(@v1.11)` to the project name. Nothing is installed yet; you are just pointing Julia at a folder.
+
+`Pkg.add("CSV")`
+: **Add a package.** Writes the package name and UUID into `Project.toml`, resolves a compatible set of versions, downloads everything needed, and records the result in `Manifest.toml`. If `Project.toml` does not exist yet, Julia creates it for you.
+
+`Pkg.instantiate()`
+: **Recreate an environment from existing files.** If a `Manifest.toml` is present, it downloads the *exact* versions listed there. If only a `Project.toml` exists (no manifest), it resolves fresh versions and creates the manifest. This is the command you run after cloning someone else's repository.
+
+`Pkg.resolve()`
+: **Re-resolve versions without adding or removing anything.** Useful after you edit `Project.toml` by hand (for example, adding a `[compat]` entry). It updates `Manifest.toml` to match the current `Project.toml` without downloading new packages.
+
+`Pkg.update()`
+: **Update all packages** to the newest versions that are still compatible with your `[compat]` constraints. This rewrites `Manifest.toml`. Run this periodically to pick up bug fixes and performance improvements.
+
+`Pkg.status()`
+: **List installed packages** and their versions. In Pkg-mode just type `st` or `status`.
+
+`Pkg.pin("CSV")`
+: **Lock a package at its current version** so that `Pkg.update()` will not change it. Useful when you know a newer release breaks your workflow. Unpin with `Pkg.free("CSV")`.
+
+`Pkg.rm("CSV")`
+: **Remove a package** from the project. Deletes it from `Project.toml` and re-resolves the manifest.
+
+`Pkg.gc()`
+: **Garbage-collect.** Removes cached packages that are no longer used by any environment on your machine. Helpful when your `.julia` folder grows large (see the earlier section on the `.julia` directory).
+
+`Pkg.build()`
+: **Re-run build scripts** for installed packages. Occasionally needed after system-level changes (new compiler, updated shared libraries).
+
+### Quick reference
+
+| Task | REPL Pkg-mode (`]`) | Script |
+|------|---------------------|--------|
+| Activate an environment | `activate .` | `Pkg.activate(".")` |
+| Add a package | `add CSV` | `Pkg.add("CSV")` |
+| Remove a package | `rm CSV` | `Pkg.rm("CSV")` |
+| Recreate from lock file | `instantiate` | `Pkg.instantiate()` |
+| Re-resolve after hand edits | `resolve` | `Pkg.resolve()` |
+| See what is installed | `status` | `Pkg.status()` |
+| Update all packages | `update` | `Pkg.update()` |
+| Pin a version | `pin CSV@0.10.14` | `Pkg.pin("CSV", v"0.10.14")` |
+| Unpin | `free CSV` | `Pkg.free("CSV")` |
+| Clean unused caches | `gc` | `Pkg.gc()` |
+| Re-run build scripts | `build` | `Pkg.build()` |
+
+:::{.callout-tip}
+## Learn more
+
+The official **Pkg documentation** covers everything in detail, including custom registries, private packages, artifacts, and more:
+
+<https://pkgdocs.julialang.org/>
+:::
+
+With these two files and a handful of commands, your work stays reproducible, whether you revisit it next year or share it with a colleague on the other side of the world.

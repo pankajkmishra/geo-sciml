@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +65,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/05-inverse-modeling.html" rel="next">
 <link href="../chapters/03-plotting-maps.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -41,7 +75,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-372530e246b3615d47d8e4c87af5ccc6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2ac785514e0db027eb4fd00e2dd5fee8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c17ae8301deaf22bc4af9fbc4f87a88f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -70,6 +104,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -132,31 +195,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/03-plotting-maps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Maps</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Data Visualisation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/04-neural-networks.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Neural Networks</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/05-inverse-modeling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inverse Modeling</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/06-ai-surrogates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">AI Surrogates</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/07-applications.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Applications</span></span></a>
   </div>
 </li>
     </ul>
@@ -169,16 +214,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#introduction-to-neural-networks" id="toc-introduction-to-neural-networks" class="nav-link active" data-scroll-target="#introduction-to-neural-networks"><span class="header-section-number">5.1</span> Introduction to Neural Networks</a></li>
-  <li><a href="#flux.jl-basics" id="toc-flux.jl-basics" class="nav-link" data-scroll-target="#flux.jl-basics"><span class="header-section-number">5.2</span> Flux.jl Basics</a></li>
-  <li><a href="#deep-learning-architectures" id="toc-deep-learning-architectures" class="nav-link" data-scroll-target="#deep-learning-architectures"><span class="header-section-number">5.3</span> Deep Learning Architectures</a>
+  <li><a href="#your-first-neural-network-sauna-satisfaction-predictor" id="toc-your-first-neural-network-sauna-satisfaction-predictor" class="nav-link active" data-scroll-target="#your-first-neural-network-sauna-satisfaction-predictor"><span class="header-section-number">5.1</span> Your first neural network: Sauna Satisfaction Predictor</a>
   <ul class="collapse">
-  <li><a href="#convolutional-neural-networks-cnns" id="toc-convolutional-neural-networks-cnns" class="nav-link" data-scroll-target="#convolutional-neural-networks-cnns"><span class="header-section-number">5.3.1</span> Convolutional Neural Networks (CNNs)</a></li>
-  <li><a href="#recurrent-neural-networks-rnns" id="toc-recurrent-neural-networks-rnns" class="nav-link" data-scroll-target="#recurrent-neural-networks-rnns"><span class="header-section-number">5.3.2</span> Recurrent Neural Networks (RNNs)</a></li>
-  <li><a href="#autoencoders" id="toc-autoencoders" class="nav-link" data-scroll-target="#autoencoders"><span class="header-section-number">5.3.3</span> Autoencoders</a></li>
+  <li><a href="#the-problem" id="toc-the-problem" class="nav-link" data-scroll-target="#the-problem"><span class="header-section-number">5.1.1</span> The problem</a></li>
+  <li><a href="#the-training-data" id="toc-the-training-data" class="nav-link" data-scroll-target="#the-training-data"><span class="header-section-number">5.1.2</span> The training data</a></li>
+  <li><a href="#setting-up-packages" id="toc-setting-up-packages" class="nav-link" data-scroll-target="#setting-up-packages"><span class="header-section-number">5.1.3</span> Setting up packages</a></li>
+  <li><a href="#generate-the-visitor-log" id="toc-generate-the-visitor-log" class="nav-link" data-scroll-target="#generate-the-visitor-log"><span class="header-section-number">5.1.4</span> Generate the visitor log</a></li>
+  <li><a href="#read-the-data-and-normalise" id="toc-read-the-data-and-normalise" class="nav-link" data-scroll-target="#read-the-data-and-normalise"><span class="header-section-number">5.1.5</span> Read the data and normalise</a></li>
+  <li><a href="#split-into-train-and-test" id="toc-split-into-train-and-test" class="nav-link" data-scroll-target="#split-into-train-and-test"><span class="header-section-number">5.1.6</span> Split into train and test</a></li>
+  <li><a href="#build-the-model" id="toc-build-the-model" class="nav-link" data-scroll-target="#build-the-model"><span class="header-section-number">5.1.7</span> Build the model</a></li>
+  <li><a href="#define-the-loss-function" id="toc-define-the-loss-function" class="nav-link" data-scroll-target="#define-the-loss-function"><span class="header-section-number">5.1.8</span> Define the loss function</a></li>
+  <li><a href="#train-the-network" id="toc-train-the-network" class="nav-link" data-scroll-target="#train-the-network"><span class="header-section-number">5.1.9</span> Train the network</a></li>
+  <li><a href="#evaluate-on-test-data" id="toc-evaluate-on-test-data" class="nav-link" data-scroll-target="#evaluate-on-test-data"><span class="header-section-number">5.1.10</span> Evaluate on test data</a></li>
+  <li><a href="#predict-new-scenarios" id="toc-predict-new-scenarios" class="nav-link" data-scroll-target="#predict-new-scenarios"><span class="header-section-number">5.1.11</span> Predict new scenarios</a></li>
   </ul></li>
-  <li><a href="#training-best-practices" id="toc-training-best-practices" class="nav-link" data-scroll-target="#training-best-practices"><span class="header-section-number">5.4</span> Training Best Practices</a></li>
-  <li><a href="#gpu-computing-with-cuda.jl" id="toc-gpu-computing-with-cuda.jl" class="nav-link" data-scroll-target="#gpu-computing-with-cuda.jl"><span class="header-section-number">5.5</span> GPU Computing with CUDA.jl</a></li>
+  <li><a href="#what-is-a-neural-network" id="toc-what-is-a-neural-network" class="nav-link" data-scroll-target="#what-is-a-neural-network"><span class="header-section-number">5.2</span> What is a neural network?</a>
+  <ul class="collapse">
+  <li><a href="#how-does-it-learn" id="toc-how-does-it-learn" class="nav-link" data-scroll-target="#how-does-it-learn"><span class="header-section-number">5.2.1</span> How does it learn?</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -204,164 +257,284 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>At this point you know how to handle data files, manipulate tables, and create plots.</p>
+<p>In this chapter we will build <strong>neural networks</strong> that learn patterns directly from data. We start with a hands-on example (generate data, train, evaluate) before unpacking the theory. The framework is <strong>Lux.jl</strong>, a modern Julia library that keeps model parameters and state explicit.</p>
+<section id="your-first-neural-network-sauna-satisfaction-predictor" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="your-first-neural-network-sauna-satisfaction-predictor"><span class="header-section-number">5.1</span> Your first neural network: Sauna Satisfaction Predictor</h2>
+<p>Let’s skip the theory for now and train a neural network end to end. Data goes in, a model learns, predictions come out. Everything fits on your laptop in under a minute.</p>
+<section id="the-problem" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-problem"><span class="header-section-number">5.1.1</span> The problem</h3>
+<p>In an alternate universe, the Geological Survey of Finland has an office sauna in every building, and geologists are allowed to use it after a single qualifying event: surviving a long meeting with geophysicists.</p>
+<p>Since this is a government office sauna, a visitor log is maintained with the seriousness usually reserved for core samples. For each sauna visit the log records three things:</p>
+<ul>
+<li><strong>Sauna temperature</strong> (°C)</li>
+<li><strong>Outside temperature</strong> (°C)</li>
+<li><strong>Minutes since last coffee</strong></li>
+</ul>
+<p>After the session the visitor assigns a <strong>Satisfaction Score</strong> between 0 and 1, where 0 means “this was a management idea” and 1 means “I love my job.”</p>
+<p>We will train a small neural network to predict the Satisfaction Score from these three inputs. This is a <strong>regression</strong> problem (the output is a continuous number) rather than classification, so we will use mean squared error (MSE) as the loss function.</p>
+</section>
+<section id="the-training-data" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="the-training-data"><span class="header-section-number">5.1.2</span> The training data</h3>
+<p>The logbook has 200 visits. The hidden satisfaction rule works like this: satisfaction peaks around 80 °C, gets a boost when it is freezing outside, drops when the last coffee was too long ago, and includes random noise because people are unpredictable. The relationships are non-linear, so a straight line cannot capture them, but a small neural network can.</p>
+</section>
+<section id="setting-up-packages" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="setting-up-packages"><span class="header-section-number">5.1.3</span> Setting up packages</h3>
+<div id="2" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Lux</span>, <span class="bu">Random</span>, <span class="bu">Optimisers</span>, <span class="bu">Zygote</span>, <span class="bu">Statistics</span>, <span class="bu">Printf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Installing Lux
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you have not installed Lux yet, open the Julia REPL and run:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Pkg</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>([<span class="st">"Lux"</span>, <span class="st">"Optimisers"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="generate-the-visitor-log" class="level3" data-number="5.1.4">
+<h3 data-number="5.1.4" class="anchored" data-anchor-id="generate-the-visitor-log"><span class="header-section-number">5.1.4</span> Generate the visitor log</h3>
+<p>The logbook has been transcribed into a tidy text file called <code>sauna_log.txt</code>. Each row is one visit, with columns separated by commas. Here are the first few lines:</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Peek at the file</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i, line) <span class="kw">in</span> <span class="fu">enumerate</span>(<span class="fu">eachline</span>(<span class="st">"sauna_log.txt"</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    i <span class="op">&gt;</span> <span class="fl">6</span> <span class="op">&amp;&amp;</span> <span class="cf">break</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(line)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sauna_temp,outside_temp,coffee_min,score
+78.2,-6.8,76.7,1.0000
+66.9,8.8,8.2,0.1861
+86.4,-21.4,49.2,0.9703
+72.9,-29.5,119.1,0.5900
+86.8,-23.7,90.2,0.5756</code></pre>
+</div>
+</div>
+</section>
+<section id="read-the-data-and-normalise" class="level3" data-number="5.1.5">
+<h3 data-number="5.1.5" class="anchored" data-anchor-id="read-the-data-and-normalise"><span class="header-section-number">5.1.5</span> Read the data and normalise</h3>
+<p>We read the file, parse the numbers, and normalise each feature to zero mean and unit variance so the network treats all inputs equally:</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> <span class="fu">readlines</span>(<span class="st">"sauna_log.txt"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>header <span class="op">=</span> <span class="fu">split</span>(lines[<span class="fl">1</span>], <span class="st">","</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">reduce</span>(hcat, [<span class="fu">parse</span>.(<span class="dt">Float32</span>, <span class="fu">split</span>(l, <span class="st">","</span>)) for l <span class="kw">in</span> lines[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>]])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rows: sauna_temp, outside_temp, coffee_min, score</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>X_raw <span class="op">=</span> data[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">:</span>]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Y     <span class="op">=</span> data[<span class="fl">4</span><span class="op">:</span><span class="fl">4</span>, <span class="op">:</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalise inputs</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>mu  <span class="op">=</span> <span class="fu">mean</span>(X_raw, dims <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sig <span class="op">=</span> <span class="fu">std</span>(X_raw, dims <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>X   <span class="op">=</span> (X_raw <span class="op">.-</span> mu) <span class="op">./</span> sig</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span> <span class="st">"Visits: %d   Features: %s   Output: %s</span><span class="sc">\n</span><span class="st">"</span> <span class="fu">size</span>(X, <span class="fl">2</span>) <span class="fu">string</span>(<span class="fu">size</span>(X)) <span class="fu">string</span>(<span class="fu">size</span>(Y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Visits: 200   Features: (3, 200)   Output: (1, 200)</code></pre>
+</div>
+</div>
+</section>
+<section id="split-into-train-and-test" class="level3" data-number="5.1.6">
+<h3 data-number="5.1.6" class="anchored" data-anchor-id="split-into-train-and-test"><span class="header-section-number">5.1.6</span> Split into train and test</h3>
+<div id="10" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> <span class="fu">Xoshiro</span>(<span class="fl">123</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n_train <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">round</span>(<span class="fl">0.8</span> <span class="op">*</span> <span class="fu">size</span>(X, <span class="fl">2</span>)))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="fu">randperm</span>(rng, <span class="fu">size</span>(X, <span class="fl">2</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X[<span class="op">:</span>, idx[<span class="fl">1</span><span class="op">:</span>n_train]]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>Y_train <span class="op">=</span> Y[<span class="op">:</span>, idx[<span class="fl">1</span><span class="op">:</span>n_train]]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>X_test  <span class="op">=</span> X[<span class="op">:</span>, idx[n_train<span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="kw">end</span>]]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>Y_test  <span class="op">=</span> Y[<span class="op">:</span>, idx[n_train<span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="kw">end</span>]]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Train: "</span>, <span class="fu">size</span>(X_train, <span class="fl">2</span>), <span class="st">"  Test: "</span>, <span class="fu">size</span>(X_test, <span class="fl">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train: 160  Test: 40</code></pre>
+</div>
+</div>
+</section>
+<section id="build-the-model" class="level3" data-number="5.1.7">
+<h3 data-number="5.1.7" class="anchored" data-anchor-id="build-the-model"><span class="header-section-number">5.1.7</span> Build the model</h3>
+<p>One hidden layer, 8 neurons, <code>tanh</code> activation, and a single linear output. No sigmoid at the end because this is regression, not classification.</p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> <span class="fu">Chain</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fl">3</span> <span class="op">=&gt;</span> <span class="fl">8</span>, tanh),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Dense</span>(<span class="fl">8</span> <span class="op">=&gt;</span> <span class="fl">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="ansi-escaped-output">
+<pre>Chain(
+    layer_1 = Dense(3 =&gt; 8, tanh),                <span class="ansi-bright-black-fg"># 32 parameters</span>
+    layer_2 = Dense(8 =&gt; 1),                      <span class="ansi-bright-black-fg"># 9 parameters</span>
+) <span class="ansi-bright-black-fg">        # Total: </span>41 parameters,
+<span class="ansi-bright-black-fg">          #        plus </span>0 states.</pre>
+</div>
+</div>
+</div>
+<p>In Lux the model is just a blueprint. Parameters and state are initialised separately:</p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ps, st <span class="op">=</span> Lux.<span class="fu">setup</span>(rng, model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>((layer_1 = (weight = Float32[-0.71197426 0.5440084 -0.9027876; -0.62075335 -0.5090574 1.4643831; … ; 0.7166022 -0.17811993 0.5175801; -1.5047655 -0.24505515 1.5166628], bias = Float32[0.23182774, -0.18704338, 0.17974052, 0.15094592, -0.023374384, 0.47140634, -0.18232994, 0.08013492]), layer_2 = (weight = Float32[-0.48614922 0.6079607 … -0.5020537 -0.45970005], bias = Float32[0.24544002])), (layer_1 = NamedTuple(), layer_2 = NamedTuple()))</code></pre>
+</div>
+</div>
+<p>This separation means you can save parameters, swap them between models, or pass them to a differential equation solver without any fuss.</p>
+</section>
+<section id="define-the-loss-function" class="level3" data-number="5.1.8">
+<h3 data-number="5.1.8" class="anchored" data-anchor-id="define-the-loss-function"><span class="header-section-number">5.1.8</span> Define the loss function</h3>
+<p><strong>Mean squared error</strong> (MSE): predictions far from the truth get penalised quadratically.</p>
+<div id="16" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">mse_loss</span>(model, ps, st, data)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    x, y_true <span class="op">=</span> data</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    y_pred, st_new <span class="op">=</span> <span class="fu">model</span>(x, ps, st)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="fu">mean</span>((y_pred <span class="op">.-</span> y_true) <span class="op">.^</span> <span class="fl">2</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss, st_new, ()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>mse_loss (generic function with 1 method)</code></pre>
+</div>
+</div>
+</section>
+<section id="train-the-network" class="level3" data-number="5.1.9">
+<h3 data-number="5.1.9" class="anchored" data-anchor-id="train-the-network"><span class="header-section-number">5.1.9</span> Train the network</h3>
+<p>Adam optimiser, 500 epochs:</p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>opt <span class="op">=</span> <span class="fu">Adam</span>(<span class="fl">0.01f0</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tstate <span class="op">=</span> Training.<span class="fu">TrainState</span>(model, ps, st, opt)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">500</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    _, loss, _, tstate <span class="op">=</span> Training.<span class="fu">single_train_step!</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">AutoZygote</span>(), mse_loss, (X_train, Y_train), tstate</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> epoch <span class="op">==</span> <span class="fl">1</span> <span class="op">||</span> epoch <span class="op">%</span> <span class="fl">100</span> <span class="op">==</span> <span class="fl">0</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="pp">@printf</span> <span class="st">"Epoch %4d  MSE = %.6f</span><span class="sc">\n</span><span class="st">"</span> epoch loss</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch    1  MSE = 0.298768
+Epoch  100  MSE = 0.021929
+Epoch  200  MSE = 0.008098
+Epoch  300  MSE = 0.006308
+Epoch  400  MSE = 0.005393
+Epoch  500  MSE = 0.005107</code></pre>
+</div>
+</div>
+</section>
+<section id="evaluate-on-test-data" class="level3" data-number="5.1.10">
+<h3 data-number="5.1.10" class="anchored" data-anchor-id="evaluate-on-test-data"><span class="header-section-number">5.1.10</span> Evaluate on test data</h3>
+<div id="20" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Y_pred_test, _ <span class="op">=</span> <span class="fu">model</span>(X_test, tstate.parameters, tstate.states)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>test_mse <span class="op">=</span> <span class="fu">mean</span>((Y_pred_test <span class="op">.-</span> Y_test) <span class="op">.^</span> <span class="fl">2</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>test_mae <span class="op">=</span> <span class="fu">mean</span>(<span class="fu">abs</span>.(Y_pred_test <span class="op">.-</span> Y_test))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span> <span class="st">"Test MSE:  %.6f</span><span class="sc">\n</span><span class="st">"</span> test_mse</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">@printf</span> <span class="st">"Test MAE:  %.4f  (average error in satisfaction score)</span><span class="sc">\n</span><span class="st">"</span> test_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Test MSE:  0.006323
+Test MAE:  0.0615  (average error in satisfaction score)</code></pre>
+</div>
+</div>
+</section>
+<section id="predict-new-scenarios" class="level3" data-number="5.1.11">
+<h3 data-number="5.1.11" class="anchored" data-anchor-id="predict-new-scenarios"><span class="header-section-number">5.1.11</span> Predict new scenarios</h3>
+<p>Now for the important part. HR wants to know: what sauna settings should they recommend after the next geophysicist meeting?</p>
+<div id="22" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>scenarios <span class="op">=</span> [</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    (sauna<span class="op">=</span><span class="fl">80</span>, outside<span class="op">=-</span><span class="fl">20</span>, coffee<span class="op">=</span><span class="fl">10</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>     label<span class="op">=</span><span class="st">"Perfect: 80°C, -20°C, fresh coffee"</span>),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    (sauna<span class="op">=</span><span class="fl">65</span>, outside<span class="op">=</span><span class="fl">5</span>,   coffee<span class="op">=</span><span class="fl">100</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>     label<span class="op">=</span><span class="st">"Sad: lukewarm, mild day, stale coffee"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    (sauna<span class="op">=</span><span class="fl">95</span>, outside<span class="op">=-</span><span class="fl">25</span>, coffee<span class="op">=</span><span class="fl">30</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>     label<span class="op">=</span><span class="st">"Extreme: 95°C, deep winter, recent coffee"</span>),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    (sauna<span class="op">=</span><span class="fl">75</span>, outside<span class="op">=</span><span class="fl">0</span>,   coffee<span class="op">=</span><span class="fl">60</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>     label<span class="op">=</span><span class="st">"Average: 75°C, 0°C, 1 h since coffee"</span>),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">predict_score</span>(s, model, ps, st, mu, sig)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="fu">Float32</span>.([(s.sauna  <span class="op">-</span> mu[<span class="fl">1</span>]) <span class="op">/</span> sig[<span class="fl">1</span>],</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>                  (s.outside <span class="op">-</span> mu[<span class="fl">2</span>]) <span class="op">/</span> sig[<span class="fl">2</span>],</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>                  (s.coffee  <span class="op">-</span> mu[<span class="fl">3</span>]) <span class="op">/</span> sig[<span class="fl">3</span>]])</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    pred, _ <span class="op">=</span> <span class="fu">model</span>(<span class="fu">reshape</span>(x, <span class="fl">3</span>, <span class="fl">1</span>), ps, st)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pred[<span class="fl">1</span>]</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Sauna Satisfaction Predictions"</span>)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"─"</span><span class="op">^</span><span class="fl">40</span>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> s <span class="kw">in</span> scenarios</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    sc <span class="op">=</span> <span class="fu">predict_score</span>(s, model,</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        tstate.parameters, tstate.states, mu, sig)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@printf</span> <span class="st">"  %-38s  %.2f</span><span class="sc">\n</span><span class="st">"</span> s.label sc</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"─"</span><span class="op">^</span><span class="fl">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sauna Satisfaction Predictions
+────────────────────────────────────────
+  Perfect: 80°C, -20°C, fresh coffee      1.04
+  Sad: lukewarm, mild day, stale coffee   0.07
+  Extreme: 95°C, deep winter, recent coffee  0.41
+  Average: 75°C, 0°C, 1 h since coffee    0.77
+────────────────────────────────────────</code></pre>
+</div>
+</div>
+<p>The predictions match intuition: 80 °C with freezing weather and fresh coffee scores high; a lukewarm room on a mild day with stale coffee scores low. HR can now issue sauna recommendations with full scientific confidence.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Try it yourself
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Add a fourth input, “meeting duration (minutes).” Does the network improve?</li>
+<li>Make it deeper: <code>3 =&gt; 16 =&gt; 8 =&gt; 1</code>. Does it overfit on 200 samples?</li>
+<li>Swap <code>tanh</code> for <code>relu</code>. How does the test error change?</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="what-is-a-neural-network" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="what-is-a-neural-network"><span class="header-section-number">5.2</span> What is a neural network?</h2>
+<p>A <strong>neuron</strong> multiplies inputs by weights, adds a bias, and passes the result through a non-linear activation:</p>
+<p><span class="math display">\[
+z = \sigma\!\bigl(\mathbf{w}^\top \mathbf{x} + b\bigr)
+\]</span></p>
+<p>Stack neurons side by side to get a <strong>layer</strong>; chain layers to get a <strong>network</strong>. Our <code>Chain(Dense(3 =&gt; 8, tanh), Dense(8 =&gt; 1))</code> is two layers.</p>
+<section id="how-does-it-learn" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="how-does-it-learn"><span class="header-section-number">5.2.1</span> How does it learn?</h3>
+<p>Four steps, repeated many times:</p>
+<ol type="1">
+<li><strong>Forward pass</strong>: run data through the network.</li>
+<li><strong>Loss</strong>: measure how wrong the predictions are.</li>
+<li><strong>Backward pass</strong>: compute gradients of the loss with respect to every weight using automatic differentiation.</li>
+<li><strong>Update</strong>: nudge each parameter to reduce the loss (Adam, SGD, etc.).</li>
+</ol>
+<p>That is the entire recipe.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-🚧 Under Construction
+Work in progress
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter is currently being developed. Check back soon for updates!</p>
-</div>
-</div>
-<section id="introduction-to-neural-networks" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="introduction-to-neural-networks"><span class="header-section-number">5.1</span> Introduction to Neural Networks</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Perceptrons and activation functions</li>
-<li>Feedforward networks</li>
-<li>Backpropagation</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="flux.jl-basics" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="flux.jl-basics"><span class="header-section-number">5.2</span> Flux.jl Basics</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Installing Flux.jl</li>
-<li>Building your first neural network</li>
-<li>Training loops</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="deep-learning-architectures" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="deep-learning-architectures"><span class="header-section-number">5.3</span> Deep Learning Architectures</h2>
-<section id="convolutional-neural-networks-cnns" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="convolutional-neural-networks-cnns"><span class="header-section-number">5.3.1</span> Convolutional Neural Networks (CNNs)</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Convolution operations</li>
-<li>Pooling layers</li>
-<li>Image classification for geoscience</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="recurrent-neural-networks-rnns" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="recurrent-neural-networks-rnns"><span class="header-section-number">5.3.2</span> Recurrent Neural Networks (RNNs)</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>LSTM and GRU cells</li>
-<li>Time series prediction</li>
-<li>Sequence modeling for seismic data</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="autoencoders" class="level3" data-number="5.3.3">
-<h3 data-number="5.3.3" class="anchored" data-anchor-id="autoencoders"><span class="header-section-number">5.3.3</span> Autoencoders</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Encoder-decoder architecture</li>
-<li>Variational autoencoders</li>
-<li>Dimensionality reduction</li>
-</ul>
-</div>
-</div>
-</section>
-</section>
-<section id="training-best-practices" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="training-best-practices"><span class="header-section-number">5.4</span> Training Best Practices</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Data preprocessing and normalization</li>
-<li>Batch training</li>
-<li>Learning rate scheduling</li>
-<li>Regularization techniques</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="gpu-computing-with-cuda.jl" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="gpu-computing-with-cuda.jl"><span class="header-section-number">5.5</span> GPU Computing with CUDA.jl</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Coming Soon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>GPU setup</li>
-<li>Moving data to GPU</li>
-<li>Performance optimization</li>
-</ul>
+<p>Some sections are still being written. The example below is complete and ready to run. Now that you have all the things in place, we will start with detailed discussios about machine learning especially scientific machine learning and learn how to use best of both: domain knowlege and data and machine learning to solve geoscientific problems.</p>
 </div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -766,14 +939,11 @@ Coming Soon
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/03-plotting-maps.html" class="pagination-link" aria-label="Plotting &amp; Maps">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Maps</span></span>
+      <a href="../chapters/03-plotting-maps.html" class="pagination-link" aria-label="Plotting &amp; Data Visualisation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Plotting &amp; Data Visualisation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/05-inverse-modeling.html" class="pagination-link" aria-label="Inverse Modeling">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inverse Modeling</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

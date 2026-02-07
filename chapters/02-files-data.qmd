@@ -2,102 +2,579 @@
 title: "Files & Data Manipulation"
 ---
 
-## Reading and Writing Files
+At this point you know how to install Julia, run code in VS Code or the REPL, write functions, and create reproducible environments with `Project.toml`.
 
-### Text Files
+In this chapter we will put those skills to work on something you will do constantly in geoscience: **reading data from files, reshaping it, and writing results back out**. We start with plain text files, move on to delimited numeric data, then to CSV tables with the `DataFrames` ecosystem, and finish with a tour of specialised geoscientific formats (NetCDF, HDF5, SEG-Y, Shapefiles). We create small example files right here in the code so you can run every block and see the results yourself.
+
+If some of the syntax looks unfamiliar at first, especially the `do ... end` pattern or the `=>` arrow, don't worry. These are common Julia patterns that will become second nature with practice. The important thing is to understand *what* each block does, not to memorise the syntax right now.
+
+## Writing and reading text files
+
+The simplest kind of file is plain text. Let's create one:
 
 ```{julia}
-# Writing to a file
-open("example.txt", "w") do f
-    write(f, "Hello, Julia!")
+# Create a small text file
+open("stations.txt", "w") do f
+    write(f, "Station  Latitude  Longitude  Elevation_m\n")
+    write(f, "AAL      64.35     25.75      120\n")
+    write(f, "BBR      61.50     23.80      95\n")
+    write(f, "CCK      60.17     24.94      15\n")
 end
+```
 
-# Reading from a file
-content = read("example.txt", String)
+What happened here? `open("stations.txt", "w")` creates (or overwrites) a file named `stations.txt`. The `"w"` means "write mode." The `do f ... end` block is Julia's way of saying "while the file is open, call it `f` and do these things, then close it automatically." Each `write` call puts a line of text into the file.
+
+Now let's read it back:
+
+```{julia}
+content = read("stations.txt", String)
 println(content)
 ```
 
-### CSV Files
+`read("stations.txt", String)` loads the entire file into a single string. For a small file like this, that is perfectly fine.
+
+### Reading line by line
+
+Sometimes you want to process a file one line at a time, for instance to skip a header or to parse each row:
 
 ```{julia}
-#| eval: false
-using CSV, DataFrames
-
-# Read CSV
-df = CSV.read("data.csv", DataFrame)
-
-# Write CSV
-CSV.write("output.csv", df)
+open("stations.txt", "r") do f
+    for line in eachline(f)
+        println("→ ", line)
+    end
+end
 ```
 
-## DataFrames
+The `"r"` means "read mode." `eachline(f)` gives you one line at a time, which is memory-efficient even for very large files.
 
-DataFrames are tabular data structures similar to pandas in Python or data.frames in R.
+### Splitting lines into columns
 
-### Creating DataFrames
+In geoscience data files, columns are usually separated by spaces, tabs, or commas. You can split a line into pieces with `split()`:
+
+```{julia}
+open("stations.txt", "r") do f
+    header = readline(f)              # read and skip the header
+    for line in eachline(f)
+        parts = split(line)           # splits on whitespace by default
+        name  = parts[1]
+        lat   = parse(Float64, parts[2])
+        lon   = parse(Float64, parts[3])
+        elev  = parse(Float64, parts[4])
+        println("$name is at ($lat, $lon), elevation $elev m")
+    end
+end
+```
+
+`split(line)` breaks the string into a list of substrings. `parse(Float64, ...)` converts a text string like `"64.35"` into an actual number. This pattern (read a line, split it, parse the pieces) is the bread and butter of working with geoscience text files.
+
+## Delimited data with `DelimitedFiles`
+
+For files with a regular grid of numbers (like gravity measurements or temperature readings), Julia has a built-in module called `DelimitedFiles` that reads the whole file into a matrix in one step.
+
+Let's create a small data file and read it:
+
+```{julia}
+# Create a space-delimited data file (no header, just numbers)
+open("gravity.txt", "w") do f
+    write(f, "64.35  25.75  -12.3\n")
+    write(f, "64.40  25.80  -11.8\n")
+    write(f, "64.45  25.85  -13.1\n")
+    write(f, "64.50  25.90  -12.7\n")
+    write(f, "64.55  25.95  -14.0\n")
+end
+```
+
+```{julia}
+using DelimitedFiles
+
+data = readdlm("gravity.txt")       # reads into a matrix
+println("Size: ", size(data))        # 5 rows, 3 columns
+```
+
+Now you can pull out individual columns:
+
+```{julia}
+lat = data[:, 1]         # all rows, first column
+lon = data[:, 2]         # all rows, second column
+gz  = data[:, 3]         # all rows, third column
+
+println("Latitudes: ", lat)
+println("Gravity anomalies: ", gz)
+```
+
+The `[:, 1]` notation means "all rows, column 1." This is the same notation used in MATLAB and NumPy.
+
+You can also write a matrix back out:
+
+```{julia}
+# Add 1.0 to all gravity values and save
+gz_corrected = gz .+ 1.0
+output = hcat(lat, lon, gz_corrected)    # glue columns side by side
+writedlm("gravity_corrected.txt", output, '\t')   # tab-separated
+
+# Verify
+println(read("gravity_corrected.txt", String))
+```
+
+`hcat` stands for "horizontal concatenate". It sticks columns together into a matrix. `writedlm` writes the matrix to a file, using the tab character `'\t'` as the separator.
+
+## CSV files and DataFrames
+
+CSV (Comma-Separated Values) is probably the most common data format in science. Julia has excellent CSV support through the **CSV.jl** and **DataFrames.jl** packages.
+
+::: {.callout-note}
+## Installing packages
+If you haven't installed these packages yet, press `]` in the REPL to enter Pkg mode and type:
+
+```
+add CSV DataFrames
+```
+
+Or from normal Julia code: `using Pkg; Pkg.add(["CSV", "DataFrames"])`. You only need to do this once.
+:::
+
+### Creating a DataFrame
+
+A **DataFrame** is a table: rows and columns, like a spreadsheet. Each column has a name and all values in a column have the same type. If you have used pandas in Python, R's `data.frame`, or even Excel, the concept is the same.
 
 ```{julia}
 using DataFrames
 
-# Create from columns
-df = DataFrame(
-    name = ["Alice", "Bob", "Charlie"],
-    age = [25, 30, 35],
-    city = ["Helsinki", "Espoo", "Tampere"]
+# Create a table of borehole samples
+samples = DataFrame(
+    borehole  = ["BH-01", "BH-01", "BH-01", "BH-02", "BH-02"],
+    depth_m   = [10.0, 20.0, 30.0, 15.0, 25.0],
+    rock_type = ["granite", "granite", "gneiss", "granite", "schist"],
+    density   = [2.65, 2.68, 2.75, 2.63, 2.71]
 )
 ```
 
-### Basic Operations
+Julia displays the table neatly. Each column is a named array, and you can work with them individually or together.
+
+### Writing and reading CSV
+
+Let's save this table to a CSV file and read it back:
 
 ```{julia}
-# Select columns
-df[:, :name]
+using CSV
+
+# Write to CSV
+CSV.write("samples.csv", samples)
+
+# Read it back
+samples_loaded = CSV.read("samples.csv", DataFrame)
+```
+
+That's it. One line to write, one line to read. CSV.jl automatically detects column types, handles headers, and deals with missing values.
+
+### Selecting columns
+
+Grab one or more columns by name:
+
+```{julia}
+# One column - returns a vector
+samples.depth_m
 ```
 
 ```{julia}
-# Filter rows
-filter(row -> row.age > 25, df)
+# Multiple columns - returns a new DataFrame
+select(samples, :borehole, :density)
 ```
+
+The `:` before a column name makes it a **Symbol**, Julia's way of referring to names. You will see this pattern everywhere in DataFrames.
+
+### Filtering rows
+
+Keep only rows that match a condition:
 
 ```{julia}
-# Add new column
-df.country = ["Finland", "Finland", "Finland"]
-df
+# Samples deeper than 20 m
+filter(row -> row.depth_m > 20, samples)
 ```
 
-### Grouping and Aggregation
+The `row -> row.depth_m > 20` part is an **anonymous function**, a small throwaway function that takes one argument (`row`) and returns `true` or `false`. Don't worry about the syntax too much; think of it as saying "keep rows where depth is greater than 20."
+
+```{julia}
+# Only granite samples
+filter(row -> row.rock_type == "granite", samples)
+```
+
+### Adding and transforming columns
+
+```{julia}
+# Add a new column
+samples.weight_kg = samples.density .* 1000.0   # density × 1000
+samples
+```
+
+The `.* ` (dot-star) applies the multiplication to every row. You saw this broadcasting pattern in Chapter 1.
+
+### Grouping and summarising
+
+This is where DataFrames really shine. Group your data by a category and compute summaries:
 
 ```{julia}
 using Statistics
 
-# Group by and summarize
-gdf = groupby(df, :country)
-combine(gdf, :age => mean => :avg_age)
+# Average density per borehole
+gdf = groupby(samples, :borehole)
+combine(gdf, :density => mean => :avg_density)
 ```
 
-## Working with Geoscientific Data
+Read this as: "group the table by `:borehole`, then for the `:density` column compute the `mean` and call the result `:avg_density`." The `=>` arrows connect input → function → output name.
 
-### Loading Geophysical Data
+```{julia}
+# Multiple summaries at once
+combine(
+    groupby(samples, :rock_type),
+    :density => mean => :avg_density,
+    :density => minimum => :min_density,
+    :depth_m => maximum => :deepest
+)
+```
+
+### Joining tables
+
+In real projects your data is often spread across multiple files. Joining brings them together:
+
+```{julia}
+# A second table with borehole coordinates
+locations = DataFrame(
+    borehole  = ["BH-01", "BH-02", "BH-03"],
+    latitude  = [64.35, 64.40, 64.45],
+    longitude = [25.75, 25.80, 25.85]
+)
+
+# Inner join - only boreholes that appear in both tables
+innerjoin(samples, locations, on = :borehole)
+```
+
+`innerjoin` keeps only rows where the `:borehole` value exists in both tables. BH-03 has no samples, so it is dropped. If you want to keep all locations even when there are no matching samples, use `leftjoin` or `outerjoin` instead.
+
+### Handling missing data
+
+Real data has gaps. Julia represents missing values with a special value called `missing`:
+
+```{julia}
+# Create data with a gap
+obs = DataFrame(
+    station = ["A", "B", "C", "D"],
+    temp_C  = [12.3, missing, 14.1, 13.7]
+)
+obs
+```
+
+```{julia}
+# Drop rows with missing values
+dropmissing(obs, :temp_C)
+```
+
+```{julia}
+# Compute mean, skipping missing values
+using Statistics
+mean(skipmissing(obs.temp_C))
+```
+
+`skipmissing` is a wrapper that tells functions to ignore the gaps. Without it, `mean` would return `missing` because any operation involving `missing` propagates the unknown.
+
+## Working with file paths
+
+When your project has many data files, you need to build file paths correctly. Julia's `joinpath` function handles this across operating systems (so you don't have to worry about `/` vs `\`):
+
+```{julia}
+# Build a path
+path = joinpath("data", "field_campaign", "gravity.txt")
+println(path)
+```
+
+Other useful path functions:
 
 ```{julia}
 #| eval: false
-using DelimitedFiles
-
-# Read space-delimited data
-data = readdlm("gravity_data.txt")
-
-# Extract columns
-x, y, gz = data[:, 1], data[:, 2], data[:, 3]
+println("Current directory: ", pwd())
+println("Files here: ", readdir("."))
 ```
 
-### NetCDF Files
+```{julia}
+# Check if a file exists before reading
+if isfile("samples.csv")
+    println("samples.csv exists!")
+else
+    println("File not found")
+end
+```
+
+::: {.callout-tip}
+## Organise your data early
+Create a `data/` folder in your project from the start. Put raw data in `data/raw/`, processed data in `data/processed/`. This habit will save you from chaos later, especially when you have 50 stations and 3 field campaigns.
+:::
+
+## Searching, copying, and renaming files
+
+In practice, geoscientific data rarely arrives in one tidy folder. You might receive a USB drive with hundreds of files scattered across nested directories, including raw measurements from field instruments, GPS logs, photos, metadata files, all mixed together. A common first task is: **find all files of a certain type, rename them consistently, and copy them into a single clean folder.**
+
+Julia has everything you need for this built into the standard library, no extra packages required.
+
+### Listing files in a directory
+
+```{julia}
+# readdir returns the names of everything in a folder
+for name in readdir(".")
+    println(name)
+end
+```
+
+By default `readdir` gives you the names without the full path. Pass `join = true` to get complete paths:
 
 ```{julia}
 #| eval: false
+for path in readdir("data/raw", join = true)
+    println(path)
+end
+```
+
+### Searching recursively with `walkdir`
+
+`walkdir` is the key function for searching through directories and all their subdirectories. It yields a tuple `(root, dirs, files)` at each level:
+
+```{julia}
+#| eval: false
+# Find every .csv file anywhere inside data/
+for (root, dirs, files) in walkdir("data")
+    for f in files
+        if endswith(f, ".csv")
+            full_path = joinpath(root, f)
+            println(full_path)
+        end
+    end
+end
+```
+
+You can wrap this into a reusable function:
+
+```{julia}
+"""
+    find_files(dir, ext)
+
+Recursively find all files with extension `ext` in `dir` and its subdirectories.
+Returns a vector of full paths.
+"""
+function find_files(dir, ext)
+    results = String[]
+    for (root, dirs, files) in walkdir(dir)
+        for f in files
+            if endswith(f, ext)
+                push!(results, joinpath(root, f))
+            end
+        end
+    end
+    return results
+end
+```
+
+```{julia}
+#| eval: false
+# Example: find all .dat files under a field campaign folder
+dat_files = find_files("data/raw", ".dat")
+println("Found $(length(dat_files)) .dat files")
+```
+
+### Extracting parts of a file path
+
+Julia has several functions for splitting a path into its components:
+
+```{julia}
+example_path = joinpath("surveys", "2024", "gravity", "station_042.csv")
+
+println("Directory:  ", dirname(example_path))
+println("Filename:   ", basename(example_path))
+println("Name only:  ", splitext(basename(example_path))[1])
+println("Extension:  ", splitext(basename(example_path))[2])
+println("Split path: ", splitpath(example_path))
+```
+
+### Copying and renaming files
+
+Suppose you have collected EM data from multiple campaigns and the instrument saved files with unhelpful names like `meas_001.dat`. You want to copy them into a single `processed/` folder, renaming each file to include the station name and date.
+
+Here is a complete worked example. We first create a fake directory tree so you can run everything:
+
+```{julia}
+# --- Set up a fake directory tree ---
+for station in ["EM01", "EM02", "EM03"]
+    dir = joinpath("fake_survey", station)
+    mkpath(dir)    # like mkdir -p: creates all intermediate directories
+    for i in 1:3
+        filepath = joinpath(dir, "meas_$(lpad(i, 3, '0')).dat")
+        write(filepath, "fake data for $station measurement $i\n")
+    end
+end
+println("Created fake survey tree:")
+for (root, dirs, files) in walkdir("fake_survey")
+    for f in files
+        println("  ", joinpath(root, f))
+    end
+end
+```
+
+Now let's search for all `.dat` files, rename them to include the station name, and copy them into a clean output folder:
+
+```{julia}
+# --- Find, rename, and copy ---
+output_dir = "collected_data"
+mkpath(output_dir)
+
+for (root, dirs, files) in walkdir("fake_survey")
+    for f in files
+        if endswith(f, ".dat")
+            # The station name is the immediate parent folder
+            station = basename(root)
+
+            # Build a new name: EM01_meas_001.dat
+            new_name = station * "_" * f
+
+            src = joinpath(root, f)
+            dst = joinpath(output_dir, new_name)
+
+            cp(src, dst, force = true)   # copy; force=true overwrites if exists
+        end
+    end
+end
+
+# Check the result
+println("Files in $(output_dir):")
+for f in sort(readdir(output_dir))
+    println("  ", f)
+end
+```
+
+### Key functions at a glance
+
+| Function | What it does |
+|----------|-------------|
+| `readdir(dir)` | List contents of a directory |
+| `readdir(dir, join=true)` | Same, but returns full paths |
+| `walkdir(dir)` | Recursively walk through all subdirectories |
+| `mkpath(dir)` | Create a directory (and parents), like `mkdir -p` |
+| `cp(src, dst)` | Copy a file |
+| `mv(src, dst)` | Move or rename a file |
+| `rm(path)` | Delete a file |
+| `rm(path, recursive=true)` | Delete a directory and everything inside it |
+| `isfile(path)` | Check if a path points to an existing file |
+| `isdir(path)` | Check if a path points to an existing directory |
+| `joinpath(parts...)` | Build a path from pieces (cross-platform) |
+| `basename(path)` | Filename from a path |
+| `dirname(path)` | Directory from a path |
+| `splitext(name)` | Split into `(name, ".ext")` |
+| `splitpath(path)` | Split into a vector of path components |
+
+```{julia}
+#| echo: false
+#| output: false
+# Clean up the fake directories
+rm("fake_survey", recursive = true)
+rm("collected_data", recursive = true)
+```
+
+## Geoscientific file formats
+
+Geoscience uses several specialised binary formats to store large, multidimensional datasets efficiently. Julia has packages for all the common ones. Here is a brief overview. Detailed usage will be added in future updates of this chapter.
+
+### NetCDF
+
+NetCDF (Network Common Data Form) is the standard format for climate, ocean, and atmospheric data. Use the **NCDatasets.jl** package:
+
+```julia
 using NCDatasets
 
-# Read NetCDF
-ds = Dataset("climate_data.nc")
-temp = ds["temperature"][:]
+# Read a NetCDF file
+ds = NCDataset("temperature.nc")
+temp = ds["temperature"][:, :, :]    # read the full 3D array
+lat  = ds["latitude"][:]
+lon  = ds["longitude"][:]
 close(ds)
+
+# Or use the do-block pattern (auto-closes)
+NCDataset("temperature.nc") do ds
+    temp = ds["temperature"][:, :, :]
+    println("Shape: ", size(temp))
+end
+```
+
+```julia
+# Write a NetCDF file
+NCDataset("output.nc", "c") do ds
+    defDim(ds, "x", 10)
+    defDim(ds, "y", 20)
+    v = defVar(ds, "elevation", Float64, ("x", "y"))
+    v[:, :] = rand(10, 20)
+end
+```
+
+### HDF5
+
+HDF5 (Hierarchical Data Format) is widely used in geophysics, remote sensing, and seismology. Use **HDF5.jl**:
+
+```julia
+using HDF5
+
+# Write
+h5open("model.h5", "w") do f
+    f["resistivity"] = rand(100, 100, 50)
+    f["depth"] = collect(0.0:0.5:24.5)
+end
+
+# Read
+h5open("model.h5", "r") do f
+    rho   = read(f, "resistivity")
+    depth = read(f, "depth")
+    println("Model size: ", size(rho))
+end
+```
+
+### SEG-Y
+
+SEG-Y is the seismic industry standard. Use **SegyIO.jl**:
+
+```julia
+using SegyIO
+
+# Read a SEG-Y file
+block = segy_read("seismic_line.segy")
+traces = block.data           # matrix of traces
+headers = block.traceheaders   # trace header information
+```
+
+### Shapefiles and GeoJSON
+
+For vector geospatial data (points, polygons, map boundaries), use **Shapefile.jl** or **GeoJSON.jl**:
+
+```julia
+using Shapefile
+
+table = Shapefile.Table("geology_map.shp")
+# Access as a DataFrame
+using DataFrames
+df = DataFrame(table)
+```
+
+::: {.callout-warning}
+## These examples are not executed
+The geoscientific format examples above use `eval: false` style. They show the code patterns but don't run here because they require actual data files. When you have your own NetCDF, HDF5, or SEG-Y files, copy the pattern and replace the file name.
+:::
+
+::: {.callout-important}
+## Want more formats or deeper coverage?
+This section will grow as the book develops. If there is a specific geoscience format or workflow you need (GRIB, GeoTIFF, ASDF, miniSEED, EDI, ModEM, or anything else) please [open an issue on GitHub](https://github.com/pankajkmishra/geo-sciml/issues) and describe your use case. Your request will help us prioritise what to add next.
+:::
+
+## Clean up
+
+Let's remove the temporary files we created in this chapter:
+
+```{julia}
+for f in ["stations.txt", "gravity.txt", "gravity_corrected.txt", "samples.csv"]
+    isfile(f) && rm(f)
+end
+println("Cleaned up.")
 ```
