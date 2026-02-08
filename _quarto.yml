@@ -57,6 +57,9 @@ format:
     code-copy: true
     code-overflow: wrap
     code-block-border-left: "#088F8F"
+    code-block-bg: true
+    code-block-border: true
+    code-block-border-radius: 5pt
     highlight-style: github
     callout-appearance: simple
     grid:
@@ -83,7 +86,12 @@ format:
     sansfont: "Libertinus Sans"
     monofont: "JuliaMono"
     mathfont: "Libertinus Math"
-    highlight-style: github
+    geometry:
+      - top=1in
+      - bottom=1in
+      - inner=0.75in
+      - outer=1.25in
+      - twoside
     code-block-bg: false
     header-includes: |
       \usepackage{fancyhdr}
