@@ -7,6 +7,11 @@ engines: ["julia"]
 execute:
   freeze: auto
 
+bibliography: references.bib
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+link-citations: true
+link-bibliography: true
+
 book:
   title: "Geoscientific Machine Learning"
   author: "Pankaj K Mishra"
@@ -14,41 +19,52 @@ book:
   output-file: "geo-sciml"
   downloads: [pdf]
   search: true
+  repo-url: https://github.com/pankajkmishra/geo-sciml
+  repo-branch: main
+  repo-actions: [edit, issue]
   sidebar:
     style: docked
     collapse-level: 2
-    tools:
-      - icon: github
-        href: https://github.com/pankajkmishra/geo-sciml
   page-navigation: true
   chapters:
-    - text: "About this book"
-      file: index.md
-    - chapters/01-getting-started-julia.qmd
-    - text: "Files & Data Manipulation"
-      file: chapters/02-files-data.qmd
-    - chapters/03-plotting-maps.qmd
-    - chapters/04-neural-networks.qmd
+    - index.md
+
+    - part: "Julia Programming for Geoscience"
+      chapters:
+        - chapters/01-getting-started-julia.qmd
+        - chapters/02-files-data.qmd
+        - chapters/03-plotting-maps.qmd
+
+    - part: "Neural Networks"
+      chapters:
+        - chapters/04-neural-networks.qmd
+
+    - part: "Scientific Machine Learning"
+      chapters:
+        - chapters/05-inverse-modeling.qmd
+
+    - part: "Applications"
+      chapters:
+        - chapters/06-applications.qmd
+
+    - references.qmd
 
 format:
   html:
-    title-block-banner: false
     theme:
       light: [cosmo, styles.scss]
-    toc: true
-    toc-title: "Contents"
-    toc-depth: 3
-    toc-location: right
-    number-sections: true
     code-link: true
     code-copy: true
     code-overflow: wrap
     code-block-border-left: "#088F8F"
     highlight-style: github
+    callout-appearance: simple
     grid:
-      sidebar-width: 400px
-      body-width: 1000px
-      gutter-width: 1.5em
+      sidebar-width: 420px
+      body-width: 800px
+      margin-width: 250px
+      gutter-width: 2.5em
+    
   pdf:
     number-sections: true
     number-depth: 2

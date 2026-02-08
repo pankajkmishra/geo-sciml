@@ -2,6 +2,7 @@
 
 // Color scheme
 $dark-grey: #2d2c2c;
+$body-color: #2d2c2c;
 $link-blue: #0000EE;
 $link-hover: #000066;
 $icon-blue: #00008B;
@@ -18,13 +19,8 @@ $link-color: $link-blue;
 $link-hover-color: $link-hover;
 
 // Code / mono font stack
-$font-family-monospace: 'Monaco', 'Consolas', 'JetBrains Mono', 'Fira Mono', 'Menlo', monospace;
+$font-family-monospace: 'Monaco', 'Consolas', 'JetBrains Mono';
 $code-font-size: 0.9em;
-
-// Layout
-$content-max: 1800px;
-$gutter: 40px;
-$gutter-sm: 0.5rem;
 
 /*-- scss:rules --*/
 
@@ -42,65 +38,23 @@ pre {
   box-shadow: none !important;
 }
 
-// ── Page layout ──────────────────────────────────────────────
-#quarto-content {
-  min-height: 100vh;
-  box-sizing: border-box;
-  width: min($content-max, calc(100% - (2 * #{$gutter})));
-  margin-inline: auto;
-  background: #fff !important;
-  padding-bottom: 2.5rem;
+// ── Sidebar inner padding (entire sidebar) ──────────────────
+#quarto-sidebar {
+  padding-left: 0.75rem !important;
+  padding-right: 0.5rem !important;
 }
 
-body {
-  background: #444445 !important;
-  overflow-x: hidden;
+// ── Site title + subtitle + icons box ────────────────────────
+#quarto-sidebar .sidebar-header {
+  margin: 1rem 0 1.25rem !important;
+  padding: 1rem 0.75rem !important;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #fafafa 0%, #f3f3f3 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 }
 
-@media (max-width: 1200px) {
-  #quarto-content,
-  .quarto-page-footer .footer {
-    width: 100%;
-    padding-inline: $gutter-sm;
-  }
-}
-
-// ── Navbar brand / book title ────────────────────────────────
-.navbar-brand-container {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-
-  .navbar-brand {
-    margin: 10px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-
-    &::after {
-      content: "Geoscience | SciML | Julia" !important;
-      display: block !important;
-      font-size: 0.95rem !important;
-      color: $link-blue !important;
-      font-weight: 400 !important;
-      margin-top: 4px !important;
-      letter-spacing: 0.05em !important;
-    }
-  }
-}
-
-.navbar-title,
-.navbar-brand .navbar-title {
-  color: $dark-grey !important;
-  font-weight: 700 !important;
-  font-size: 1.25rem !important;
-  line-height: 1.1;
-  word-break: break-word;
-}
-
-// ── Sidebar title ────────────────────────────────────────────
 .sidebar-title,
 #quarto-sidebar .sidebar-title {
   display: flex !important;
@@ -110,11 +64,10 @@ body {
   font-weight: 700 !important;
   font-size: 1.25rem !important;
   line-height: 1.15;
-  word-break: break-word;
   text-align: center !important;
-  margin: 10px 5px !important;
-  white-space: nowrap !important;
-  width: calc(100% - 10px) !important;
+  margin: 10px 0 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::after {
     content: "Geoscience | SciML | Julia" !important;
@@ -133,13 +86,29 @@ body {
   }
 }
 
-@media (max-width: 600px) {
-  .navbar-title,
-  .navbar-brand .navbar-title,
-  .sidebar-title,
-  #quarto-sidebar .sidebar-title {
-    font-size: 1.1rem !important;
+// Mobile navbar (shown when sidebar collapses)
+.navbar-brand-container .navbar-brand {
+  margin: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+
+  &::after {
+    content: "Geoscience | SciML | Julia" !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+    color: $link-blue !important;
+    font-weight: 400 !important;
+    margin-top: 4px !important;
+    letter-spacing: 0.05em !important;
   }
+}
+
+.navbar-title {
+  color: $dark-grey !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.1;
 }
 
 // ── Sidebar tools / icons ────────────────────────────────────
@@ -147,12 +116,10 @@ body {
   display: flex !important;
   justify-content: center !important;
   width: 100% !important;
-  margin-top: 1.5rem !important;
+  margin-top: 0.75rem !important;
   gap: 0.4rem !important;
 
-  a i,
-  a svg,
-  .bi {
+  a i, a svg, .bi {
     font-size: 1.5rem !important;
     width: 1.3rem !important;
     height: 1.3rem !important;
@@ -161,22 +128,28 @@ body {
   }
 }
 
-// ── Sidebar items ────────────────────────────────────────────
-.sidebar-item {
-  .sidebar-item-text {
-    font-weight: 400 !important;
-  }
-
-  &.active .sidebar-item-text {
-    color: $link-blue !important;
-    font-weight: 400 !important;
-  }
+// ── Sidebar parts: Roman numeral index ───────────────────────
+#quarto-sidebar .sidebar-menu-container > ul {
+  counter-reset: part-counter;
 }
 
-.sidebar-item-section .sidebar-item-text {
-  color: $dark-grey !important;
-  font-weight: 400 !important;
-  text-transform: none !important;
+.sidebar-item-section > .sidebar-item-container > a.sidebar-item-text > .menu-text::before {
+  counter-increment: part-counter;
+  content: counter(part-counter, upper-roman) "\00a0\00a0";
+}
+
+// ── Sidebar font sizes ──────────────────────────────────────
+.sidebar-item-section > .sidebar-item-container > a.sidebar-item-text {
+  font-size: 1rem !important;
+}
+
+.sidebar-item .sidebar-item-text {
+  font-size: 0.95rem !important;
+}
+
+// ── Sidebar: bold only the active item (left sidebar) ────────
+#quarto-sidebar div.sidebar-item-container .active {
+  font-weight: 600;
 }
 
 // ── Page navigation ──────────────────────────────────────────
@@ -190,14 +163,12 @@ body {
 }
 
 // ── Code blocks ──────────────────────────────────────────────
-// code-block-bg and code-block-border-left are handled in _quarto.yml
 pre,
 .code {
   border: 1px solid #c3c5c7;
   border-radius: 5px;
 }
 
-// Shell / terminal blocks: no coloured left border
 pre.sourceCode.bash,
 pre.sourceCode.powershell,
 pre.sourceCode.sh,
@@ -211,14 +182,6 @@ code {
   border: none !important;
   border-radius: 0 !important;
   padding: 0.3em;
-}
-
-// ── TOC title ────────────────────────────────────────────────
-.toc-title {
-  color: $dark-grey;
-  font-weight: 500 !important;
-  text-transform: none !important;
-  margin-right: 0.5em;
 }
 
 // ── Navbar icons hover ───────────────────────────────────────
@@ -249,18 +212,13 @@ figure,
 }
 
 @media (max-width: 768px) {
-  img,
-  .quarto-figure img,
-  .cell-output img,
-  figure img {
+  img, .quarto-figure img, .cell-output img, figure img {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
   }
 
-  .quarto-figure,
-  figure,
-  .cell-output-display {
+  .quarto-figure, figure, .cell-output-display {
     width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;

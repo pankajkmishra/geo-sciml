@@ -1,24 +1,19 @@
 ---
-title: "Geoscientific Machine Learning"
 number-sections: false
 title-block-banner: false
 ---
 
+# Preface {.unnumbered}
+
 <style>
-.title {
-  display: none !important;
-}
-.quarto-title-meta,
-.quarto-title-authors,
-.quarto-title-author {
-  display: none !important;
-}
+h1.title,
+#title-block-header,
+#preface > h1 {
+  display: none !important; 
+} 
 </style>
 
-
-
 Welcome to **Geoscientific Machine Learning**.
-
 
 If you’re reading this, you probably already have some familiarity with geoscience. You’re used to thinking in terms of physical processes, models, scales, and uncertainty. When it comes to computation, though, you may have mostly worked through existing tools: running models, adjusting parameters, or modifying scripts written by someone else. That’s a common place to be, and it works, until you want to change the model itself or test an idea that doesn’t fit into the existing workflow.
 
@@ -31,7 +26,7 @@ By **scientific machine learning**, we mean instead of training a model only on 
 If you don’t yet have a favorite programming language, or you’re still deciding what’s worth learning, here’s the important part: the exact language matters less than having *one*. You need a way to talk to computers clearly, so they can help you turn ideas into experiments and hypotheses into something you can test. 
 
 
-In this book we’ll choose **Julia**. If you spend time with it, you’ll see why—especially once you start doing more demanding computation. We’ll begin slowly and keep things practical, using Julia to express ideas you already know. Machine learning comes later where it connects naturally geoscience practices.
+In this book we'll choose **Julia** [@bezanson2017julia]. If you spend time with it, you'll see why—especially once you start doing more demanding computation. We'll begin slowly and keep things practical, using Julia to express ideas you already know. Machine learning comes later where it connects naturally geoscience practices.
 
 If you’re new to programming, expect some friction at first (we'll try to minimise that). That’s normal. The payoff is that you gain more control over your models and more confidence in the results they produce.
 
