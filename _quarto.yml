@@ -1,6 +1,10 @@
 project:
   type: book
   output-dir: docs
+  resources:
+    - 404.html
+  post-render:
+    - python _scripts/inline-js.py
 
 engines: ["julia"]
 
