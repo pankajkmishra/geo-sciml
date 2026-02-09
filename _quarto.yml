@@ -15,6 +15,7 @@ bibliography: references.bib
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
 link-citations: true
 link-bibliography: true
+description: "Geoscientific machine learning with Julia: tutorials, methods, and applications in geophysics, inverse problems, and scientific ML."
 
 book:
   title: "Geoscientific Machine Learning"
@@ -57,6 +58,8 @@ format:
   html:
     theme:
       light: [cosmo, styles.scss]
+    open-graph: true
+    twitter-card: true
     code-link: true
     code-copy: true
     code-overflow: wrap
@@ -67,7 +70,7 @@ format:
     highlight-style: github
     callout-appearance: simple
     grid:
-      sidebar-width: 420px
+      sidebar-width: 480px
       body-width: 800px
       margin-width: 250px
       gutter-width: 2.5em

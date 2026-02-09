@@ -1,7 +1,8 @@
 /*-- scss:defaults --*/
 
 // Color scheme
-$dark-grey: #2d2c2c;
+$dark-grey: #383838;
+$gutter-bg: #ffffff;
 $body-color: #2d2c2c;
 $link-blue: #0000EE;
 $link-hover: #0404da;
@@ -21,8 +22,51 @@ $link-hover-color: $link-hover;
 // Code / mono font stack
 $font-family-monospace: 'Monaco', 'Consolas', 'JetBrains Mono';
 $code-font-size: 0.9em;
+$left-gutter-extra: 60px;
 
 /*-- scss:rules --*/
+
+// ── Page gutters ───────────────────────────────────────────
+body {
+  background: $gutter-bg;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+#quarto-content.quarto-container {
+  max-width: 1700px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+@media (min-width: 1800px) {
+  #quarto-content.quarto-container {
+    margin-left: calc((100vw - 1700px) / 2 + $left-gutter-extra);
+    margin-right: auto;
+  }
+}
+
+#quarto-content,
+#quarto-sidebar,
+#quarto-margin-sidebar,
+main.content {
+  background: #ffffff;
+}
+
+#quarto-sidebar,
+#quarto-margin-sidebar {
+  min-height: 100vh;
+}
+
+@media (max-width: 992px) {
+  #quarto-content.quarto-container {
+    max-width: 100%;
+  }
+}
 
 // ── Cell output ──────────────────────────────────────────────
 .cell-output,
@@ -40,6 +84,7 @@ pre {
 
 // ── Sidebar inner padding (entire sidebar) ──────────────────
 #quarto-sidebar {
+  background: #f0f0f0;
   padding-left: 0.75rem !important;
   padding-right: 0.5rem !important;
 }
@@ -212,6 +257,10 @@ figure,
 }
 
 @media (max-width: 768px) {
+  .quarto-page-breadcrumbs {
+    display: none !important;
+  }
+
   img, .quarto-figure img, .cell-output img, figure img {
     width: 100% !important;
     max-width: 100% !important;
