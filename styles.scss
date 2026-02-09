@@ -22,7 +22,6 @@ $link-hover-color: $link-hover;
 // Code / mono font stack
 $font-family-monospace: 'Monaco', 'Consolas', 'JetBrains Mono';
 $code-font-size: 0.9em;
-$left-gutter-extra: 60px;
 
 /*-- scss:rules --*/
 
@@ -41,13 +40,6 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-}
-
-@media (min-width: 1800px) {
-  #quarto-content.quarto-container {
-    margin-left: calc((100vw - 1700px) / 2 + $left-gutter-extra);
-    margin-right: auto;
-  }
 }
 
 #quarto-content,
