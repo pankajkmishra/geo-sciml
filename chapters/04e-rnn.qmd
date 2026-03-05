@@ -1,0 +1,166 @@
+---
+title: "Recurrent Neural Networks"
+---
+
+::: {.callout-tip}
+## Key references
+- **Simple RNN** — the idea that a network can process sequences by maintaining a hidden state [@elman1990rnn].
+- **LSTM** — Long Short-Term Memory, which solved the vanishing-gradient problem for sequences and enabled learning over hundreds of time steps [@hochreiter1997lstm].
+- **GRU** — Gated Recurrent Unit, a simplified variant of LSTM with comparable performance [@cho2014gru].
+- **ConvLSTM** — combining convolutional and recurrent structures for spatiotemporal prediction [@shi2015convlstm].
+:::
+
+Feedforward and convolutional networks process each input independently. But many geoscience datasets are **sequential**: seismograms, well-log curves, climate records, and satellite time series all have a natural ordering in time (or depth). A **recurrent neural network** (RNN) is designed for this: it processes a sequence one step at a time, maintaining a hidden state that carries information from earlier steps to later ones.
+
+## The simple RNN
+
+At each time step $t$, a simple RNN receives the current input $\mathbf{x}_t$ and the previous hidden state $\mathbf{h}_{t-1}$, and produces a new hidden state:
+
+$$
+\mathbf{h}_t = \tanh\!\bigl(W_h\, \mathbf{h}_{t-1} + W_x\, \mathbf{x}_t + \mathbf{b}\bigr)
+$$
+
+The hidden state acts as the network's *memory*. The output at each step can be read from $\mathbf{h}_t$ directly or passed through an additional dense layer.
+
+**Problem**: In practice, simple RNNs struggle to learn long-range dependencies because gradients either vanish (shrink to zero) or explode (grow unboundedly) when propagated backward through many time steps.
+
+## Long Short-Term Memory (LSTM)
+
+The **LSTM** [@hochreiter1997lstm] solves the vanishing-gradient problem by introducing a **cell state** $\mathbf{c}_t$ alongside the hidden state $\mathbf{h}_t$, controlled by three learned gates:
+
+- **Forget gate** $\mathbf{f}_t$ — decides what information to discard from the cell state.
+- **Input gate** $\mathbf{i}_t$ — decides what new information to store.
+- **Output gate** $\mathbf{o}_t$ — decides what part of the cell state to expose.
+
+$$
+\begin{aligned}
+\mathbf{f}_t &= \sigma\bigl(W_f [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_f\bigr) \\
+\mathbf{i}_t &= \sigma\bigl(W_i [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_i\bigr) \\
+\tilde{\mathbf{c}}_t &= \tanh\bigl(W_c [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_c\bigr) \\
+\mathbf{c}_t &= \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t \\
+\mathbf{o}_t &= \sigma\bigl(W_o [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_o\bigr) \\
+\mathbf{h}_t &= \mathbf{o}_t \odot \tanh(\mathbf{c}_t)
+\end{aligned}
+$$
+
+The cell state can carry information unchanged through many time steps, and the gates learn to open and close during training, allowing the network to decide what to remember and what to forget.
+
+## Gated Recurrent Unit (GRU)
+
+The **GRU** [@cho2014gru] is a simplification of the LSTM that merges the cell state and hidden state into a single state vector, using two gates instead of three:
+
+$$
+\begin{aligned}
+\mathbf{r}_t &= \sigma\bigl(W_r [\mathbf{h}_{t-1}, \mathbf{x}_t]\bigr) \\
+\mathbf{z}_t &= \sigma\bigl(W_z [\mathbf{h}_{t-1}, \mathbf{x}_t]\bigr) \\
+\tilde{\mathbf{h}}_t &= \tanh\bigl(W_h [\mathbf{r}_t \odot \mathbf{h}_{t-1}, \mathbf{x}_t]\bigr) \\
+\mathbf{h}_t &= (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t
+\end{aligned}
+$$
+
+GRUs have fewer parameters than LSTMs and train faster, while producing similar results on many tasks.
+
+## Code example: predicting a synthetic geophysical time series
+
+We generate a synthetic oscillating signal (simulating a geophysical measurement with periodic and trend components) and train an LSTM to predict the next value given the recent past.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+
+# Generate a synthetic time series: trend + oscillation + noise
+t = Float32.(0:0.05:10)
+signal = 0.3f0 .* t .+ sin.(2π .* 0.5f0 .* t) .+ 0.3f0 .* sin.(2π .* 1.3f0 .* t) .+
+         0.15f0 .* randn(rng, Float32, length(t))
+
+# Create input/output pairs using a sliding window
+window = 20
+n_pairs = length(signal) - window
+X_seq = zeros(Float32, 1, window, n_pairs)  # (features, time_steps, batch)
+Y_seq = zeros(Float32, 1, n_pairs)          # (features, batch)
+
+for i in 1:n_pairs
+    X_seq[1, :, i] = signal[i:i+window-1]
+    Y_seq[1, i]    = signal[i+window]
+end
+
+# Train/test split (chronological split to respect time ordering)
+n_train = Int(round(0.8 * n_pairs))
+X_train, Y_train = X_seq[:, :, 1:n_train], Y_seq[:, 1:n_train]
+X_test,  Y_test  = X_seq[:, :, n_train+1:end], Y_seq[:, n_train+1:end]
+```
+
+```{julia}
+# Build an LSTM model that reads the sequence, then maps the final hidden state to a prediction
+model = Chain(
+    Recurrence(LSTMCell(1 => 16)),
+    WrappedFunction(x -> x[:, end:end, :]),  # take last time step
+    Dense(16 => 1)
+)
+
+ps, st = Lux.setup(rng, model)
+
+function mse_loss(model, ps, st, data)
+    x, y = data
+    ŷ, st_new = model(x, ps, st)
+    ŷ = dropdims(ŷ, dims = 2)
+    loss = mean((ŷ .- y) .^ 2)
+    return loss, st_new, ()
+end
+```
+
+```{julia}
+opt = Adam(0.005f0)
+tstate = Training.TrainState(model, ps, st, opt)
+
+for epoch in 1:300
+    _, loss, _, tstate = Training.single_train_step!(
+        AutoZygote(), mse_loss, (X_train, Y_train), tstate
+    )
+    if epoch == 1 || epoch % 60 == 0
+        @printf "Epoch %3d  MSE = %.6f\n" epoch loss
+    end
+end
+
+# Holdout evaluation
+Y_test_pred, _ = model(X_test, tstate.parameters, tstate.states)
+Y_test_pred = dropdims(Y_test_pred, dims = 2)
+test_mse = mean((Y_test_pred .- Y_test) .^ 2)
+@printf "Holdout test MSE = %.6f\n" test_mse
+```
+
+```{julia}
+# Predict and plot
+Y_pred, _ = model(X_seq, tstate.parameters, tstate.states)
+Y_pred = dropdims(Y_pred, dims = 2)
+
+fig = Figure(size = (700, 350))
+ax = Axis(fig[1, 1], xlabel = "Time step", ylabel = "Value",
+          title = "LSTM time-series prediction")
+lines!(ax, window+1:length(signal), signal[window+1:end],
+       color = :black, label = "True", linewidth = 2)
+lines!(ax, window+1:length(signal), vec(Y_pred),
+       color = :coral, label = "LSTM prediction", linestyle = :dash)
+axislegend(ax, position = :lt)
+fig
+```
+
+## When to use RNNs
+
+RNNs are the natural choice when:
+
+- Data has a **sequential or temporal structure** (time series, depth-indexed logs).
+- **Order matters** — shuffling the data would destroy information.
+- You need to **capture dependencies** between earlier and later parts of a sequence.
+
+For very long sequences (thousands of steps), **transformers** (next chapter) often outperform RNNs because they can attend to any part of the sequence without passing information step by step.
+
+## Geoscience applications
+
+Recurrent networks have been applied to a wide range of sequential geoscience problems:
+
+- **Seismic phase picking** — @zhu2019phasenet used a combination of recurrent and convolutional layers (PhaseNet) to detect P- and S-wave arrivals in continuous seismic data, achieving state-of-the-art accuracy across diverse seismic networks.
+- **Climate and weather forecasting** — @ham2019enso used a CNN-LSTM hybrid to forecast the El Niño–Southern Oscillation (ENSO) up to 18 months ahead, significantly outperforming physics-based dynamical models.
+- **Precipitation nowcasting** — @shi2015convlstm introduced the ConvLSTM, combining convolutional and LSTM operations to predict radar echo sequences, a spatiotemporal forecasting task.
+- **Machine learning in geoscience overview** — @dramsch2020rnnseismic provides a comprehensive review of 70 years of machine learning in the geosciences, covering many recurrent-network applications in seismology, well-log analysis, and geophysical signal processing.

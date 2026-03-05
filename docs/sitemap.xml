@@ -2,38 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://geo-sciml.com/index.html</loc>
-    <lastmod>2026-02-09T08:36:24.558Z</lastmod>
+    <lastmod>2026-02-25T23:14:25.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/chapters/01-getting-started-julia.html</loc>
-    <lastmod>2026-02-09T08:36:24.509Z</lastmod>
+    <lastmod>2026-02-25T23:00:48.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/chapters/02-files-data.html</loc>
-    <lastmod>2026-02-09T08:36:24.510Z</lastmod>
+    <lastmod>2026-02-13T22:36:18.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/chapters/03-plotting-maps.html</loc>
-    <lastmod>2026-02-09T08:36:24.511Z</lastmod>
+    <lastmod>2026-02-13T22:36:18.000Z</lastmod>
   </url>
   <url>
-    <loc>https://geo-sciml.com/chapters/04-neural-networks.html</loc>
-    <lastmod>2026-02-09T08:36:24.511Z</lastmod>
+    <loc>https://geo-sciml.com/chapters/04a-nn-teaser.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
   </url>
   <url>
-    <loc>https://geo-sciml.com/chapters/05-inverse-modeling.html</loc>
-    <lastmod>2026-02-09T08:36:24.511Z</lastmod>
+    <loc>https://geo-sciml.com/chapters/04b-nn-basics.html</loc>
+    <lastmod>2026-02-16T22:26:16.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04c-feedforward.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04d-cnn.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04e-rnn.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04f-transformers.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04g-autoencoders.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04h-gan.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/04i-gnn.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/05a-pinn.html</loc>
+    <lastmod>2026-02-16T20:42:37.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/05b-physics-ml-inversion.html</loc>
+    <lastmod>2026-02-16T23:32:41.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/05c-deeponet.html</loc>
+    <lastmod>2026-02-16T23:32:41.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/05d-pi-deeponet.html</loc>
+    <lastmod>2026-02-16T23:32:41.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geo-sciml.com/chapters/05e-fno.html</loc>
+    <lastmod>2026-02-16T23:32:41.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/chapters/06-applications.html</loc>
-    <lastmod>2026-02-09T08:36:24.511Z</lastmod>
+    <lastmod>2026-02-16T23:45:54.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/references.html</loc>
-    <lastmod>2026-02-09T08:36:24.559Z</lastmod>
+    <lastmod>2026-02-13T22:36:18.000Z</lastmod>
   </url>
   <url>
     <loc>https://geo-sciml.com/geo-sciml.pdf</loc>
-    <lastmod>2026-02-09T12:58:01.708Z</lastmod>
+    <lastmod>2026-03-05T23:19:41.937Z</lastmod>
   </url>
 </urlset>

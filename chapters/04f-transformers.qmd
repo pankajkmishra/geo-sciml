@@ -1,0 +1,155 @@
+---
+title: "Transformers"
+---
+
+::: {.callout-tip}
+## Key references
+- **Attention is all you need** — the paper that introduced the transformer architecture [@vaswani2017attention].
+- **BERT** — bidirectional transformer pre-training that reshaped NLP [@devlin2019bert].
+- **Vision Transformer (ViT)** — showed that transformers can match or beat CNNs on image classification [@dosovitskiy2021vit].
+:::
+
+The **transformer** is the architecture behind large language models and, increasingly, behind state-of-the-art models in vision, time-series forecasting, and scientific computing. Unlike RNNs, which process sequences one step at a time, transformers process the entire sequence at once using a mechanism called **self-attention** that lets each element directly attend to every other element.
+
+## Self-attention
+
+The core idea: for each element in the input sequence, compute how much attention it should pay to every other element, then produce an output that is a weighted combination of the values.
+
+Given an input sequence $\mathbf{X} \in \mathbb{R}^{n \times d}$ (n tokens, d features), three linear projections produce:
+
+$$
+Q = XW_Q, \quad K = XW_K, \quad V = XW_V
+$$
+
+where $Q$ (queries), $K$ (keys), and $V$ (values) are matrices. The attention output is:
+
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
+$$
+
+The softmax row gives the **attention weights** — how much each position attends to every other position. The $\sqrt{d_k}$ scaling prevents the dot products from becoming too large.
+
+## Multi-head attention
+
+Instead of computing a single attention, the transformer uses **multi-head attention**: it runs $h$ parallel attention functions with different learned projections, then concatenates and projects the results:
+
+$$
+\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\, W_O
+$$
+
+Each head can learn to focus on different types of relationships (e.g., one head might attend to nearby positions, another to distant ones).
+
+## The transformer block
+
+A single transformer block consists of:
+
+1. **Multi-head self-attention** — with a residual connection and layer normalization.
+2. **Feed-forward network** — two dense layers with a non-linearity, also with a residual connection and layer normalization.
+
+$$
+\begin{aligned}
+\mathbf{z} &= \text{LayerNorm}\!\bigl(\mathbf{x} + \text{MultiHeadAttn}(\mathbf{x})\bigr) \\
+\mathbf{y} &= \text{LayerNorm}\!\bigl(\mathbf{z} + \text{FFN}(\mathbf{z})\bigr)
+\end{aligned}
+$$
+
+Stacking many such blocks gives the transformer its depth.
+
+## Positional encoding
+
+Self-attention is **permutation-invariant** — it does not know the order of the input. To inject sequence order, transformers add a **positional encoding** to the input embeddings. The original paper used sinusoidal functions:
+
+$$
+\begin{aligned}
+PE_{(pos, 2i)} &= \sin\!\bigl(pos / 10000^{2i/d}\bigr) \\
+PE_{(pos, 2i+1)} &= \cos\!\bigl(pos / 10000^{2i/d}\bigr)
+\end{aligned}
+$$
+
+This gives each position a unique signature that the network can learn to interpret.
+
+## Code example: minimal self-attention
+
+We implement a minimal self-attention mechanism from scratch to illustrate the core computation. This is not meant for production use, but shows exactly what happens inside the attention layer.
+
+```{julia}
+using LinearAlgebra, Random, CairoMakie
+
+rng = Xoshiro(42)
+
+# Sequence of 6 tokens, each with 4 features
+seq_len, d_model = 6, 4
+X = randn(rng, Float32, seq_len, d_model)
+
+# Learned projections (in practice, these are Dense layers)
+d_k = d_model
+W_Q = randn(rng, Float32, d_model, d_k) .* 0.5f0
+W_K = randn(rng, Float32, d_model, d_k) .* 0.5f0
+W_V = randn(rng, Float32, d_model, d_k) .* 0.5f0
+
+Q = X * W_Q
+K = X * W_K
+V = X * W_V
+
+# Compute attention weights
+scores = Q * K' ./ sqrt(Float32(d_k))
+
+# Softmax over each row
+function row_softmax(S)
+    exp_S = exp.(S .- maximum(S, dims = 2))
+    return exp_S ./ sum(exp_S, dims = 2)
+end
+
+attn_weights = row_softmax(scores)
+
+# Output: weighted combination of values
+output = attn_weights * V
+
+println("Attention weights (each row sums to 1):")
+for i in 1:seq_len
+    println("  Token $i → ", round.(attn_weights[i, :], digits = 3))
+end
+```
+
+```{julia}
+# Visualize the attention pattern
+fig = Figure(size = (400, 350))
+ax = Axis(fig[1, 1], title = "Self-attention weights",
+          xlabel = "Key position", ylabel = "Query position",
+          xticks = 1:seq_len, yticks = 1:seq_len,
+          yreversed = true)
+hm = heatmap!(ax, 1:seq_len, 1:seq_len, attn_weights',
+              colormap = :viridis)
+Colorbar(fig[1, 2], hm, label = "Weight")
+fig
+```
+
+How to read this plot:
+
+- Each **row** corresponds to one query token.
+- Bright cells indicate which key positions that query attends to most.
+- Rows should sum to 1 (a probability distribution).
+
+This chapter demonstrates the mechanics of attention, not end-to-end benchmark performance. In real geoscience transformer models, evaluation should include holdout skill metrics (e.g., MAE/RMSE, event detection F1, or forecast skill scores) and comparisons against RNN/CNN baselines.
+
+## Advantages over RNNs
+
+| Feature | RNN | Transformer |
+|---------|-----|-------------|
+| Long-range dependencies | Difficult (vanishing gradients) | Direct attention |
+| Parallelization | Sequential (slow) | Fully parallel |
+| Memory cost | $O(n)$ per step | $O(n^2)$ for full attention |
+| Positional awareness | Built-in (sequential processing) | Requires positional encoding |
+
+Transformers scale better to long sequences and large datasets, which explains their dominance in modern AI. For very long sequences, efficient variants (sparse attention, linear attention) reduce the $O(n^2)$ cost.
+
+## Geoscience applications
+
+Transformers are rapidly entering geoscience, especially for tasks where long-range dependencies and large-scale data matter:
+
+- **Earthquake detection** — @mousavi2020earthquake introduced the Earthquake Transformer (EQTransformer), which uses attention mechanisms to simultaneously detect earthquakes and pick seismic phases from continuous waveform data, achieving superior performance over CNN and RNN baselines.
+- **Weather forecasting** — @pathak2022fourcastnet developed FourCastNet, a vision-transformer-based model for global weather forecasting that runs orders of magnitude faster than traditional numerical weather models while producing competitive forecasts. @bi2023pangu (Pangu-Weather) used 3D transformers for medium-range forecasting published in Nature.
+- **Graph-based weather prediction** — @lam2023graphcast (GraphCast) combined transformer-style attention with graph neural networks for global weather forecasting, achieving state-of-the-art accuracy at 0.25° resolution.
+- **Earth observation** — Vision transformers are being applied to satellite imagery for land-cover classification, change detection, and environmental monitoring, following the success of ViT [@dosovitskiy2021vit] in computer vision.
+
+The transformer is increasingly the architecture of choice for problems involving long sequences, multimodal data, or large-scale pre-training in geoscience.

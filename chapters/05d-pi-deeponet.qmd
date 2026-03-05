@@ -1,0 +1,323 @@
+---
+title: "Physics-Informed DeepONet"
+execute:
+  eval: false
+---
+
+::: {.callout-tip}
+## Key references
+- **Physics-Informed DeepONets** — the foundational paper combining DeepONet with PDE residual constraints, enabling operator learning with little or no labeled data [@wang2021pideeponet].
+- **DeepONet** — the underlying architecture based on the universal approximation theorem for operators [@lu2021deeponet].
+- **PI-DeepONet for fracture mechanics** — application of physics-informed operator learning to complex multi-physics problems [@goswami2023pideeponet_fracture].
+- **Reliable extrapolation** — improving neural operator generalization through physics constraints and sparse observations [@zhu2023pinnco2].
+- **Physics-informed ML review** — comprehensive treatment of PINNs, neural operators, and hybrid approaches [@karniadakis2021pinn_review].
+:::
+
+The [DeepONet chapter](05c-deeponet.qmd) showed how to learn a solution operator from input–output function pairs. But generating those pairs requires running a traditional PDE solver many times — which can be expensive. **Physics-Informed DeepONet** (PI-DeepONet) [@wang2021pideeponet] eliminates or reduces this requirement by embedding the PDE directly into the DeepONet training loss, just as PINNs embed the PDE into a single-instance solver.
+
+## The key idea
+
+Recall the DeepONet prediction:
+
+$$
+\mathcal{G}_\theta(a)(y) = \sum_{k=1}^{p} b_k(a) \cdot \tau_k(y) + b_0
+$$
+
+In a standard DeepONet, we train by minimizing the data loss:
+
+$$
+\mathcal{L}_{\text{data}} = \frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{Q} \bigl|\mathcal{G}_\theta(a_i)(y_j) - u_i(y_j)\bigr|^2
+$$
+
+where the $u_i$ are computed by a PDE solver. In PI-DeepONet, we replace (or supplement) this with a **PDE residual loss**: since the DeepONet output is differentiable with respect to the query location $y$, we can compute $\frac{\partial \mathcal{G}_\theta}{\partial y}$, $\frac{\partial^2 \mathcal{G}_\theta}{\partial y^2}$, etc. via automatic differentiation and penalize violations of the PDE.
+
+## PI-DeepONet loss function
+
+$$
+\mathcal{L}(\theta) = \underbrace{\lambda_r \frac{1}{N \cdot N_c}\sum_{i=1}^{N}\sum_{j=1}^{N_c}\bigl|\mathcal{N}[\mathcal{G}_\theta(a_i)](y_j^c)\bigr|^2}_{\text{PDE residual}} + \underbrace{\lambda_{ic} \frac{1}{N \cdot N_{ic}}\sum_{i=1}^{N}\sum_{k=1}^{N_{ic}}\bigl|\mathcal{G}_\theta(a_i)(y_k^{ic}) - g_i(y_k^{ic})\bigr|^2}_{\text{initial/boundary conditions}}
+$$
+
+The crucial difference from a PINN: the loss is evaluated over **many different input functions** $a_i$ simultaneously, so the network learns an operator, not just one solution. And the crucial difference from a standard DeepONet: no PDE solver is needed to generate training data — the physics is enforced directly.
+
+## When to use PI-DeepONet
+
+```
+                    Have training data?
+                    ┌───────┴───────┐
+                   Yes              No
+                    │                │
+              Standard           PI-DeepONet
+              DeepONet           (physics only)
+                    │
+               Want better
+               generalization?
+               ┌────┴────┐
+              No         Yes
+               │          │
+          Standard    PI-DeepONet
+          DeepONet    (physics + data)
+```
+
+PI-DeepONet is most valuable when:
+
+1. **No training data** — you know the PDE but can't afford to run a solver thousands of times.
+2. **Limited data** — you have a few solver runs and want to supplement with physics.
+3. **Extrapolation** — physics constraints improve generalization beyond the training distribution.
+
+## Code example: 1D diffusion–reaction operator
+
+We train a PI-DeepONet to learn the solution operator for the 1D diffusion–reaction equation:
+
+$$
+\frac{\partial u}{\partial t} = D\frac{\partial^2 u}{\partial x^2} - k\, u + a(x), \quad x \in [0, 1], \quad t \in [0, 0.5]
+$$
+
+with $u(x, 0) = 0$, $u(0, t) = u(1, t) = 0$, and varying source term $a(x)$.
+
+The operator maps $a(x) \mapsto u(x, t)$ at a chosen final time $T$. We train the PI-DeepONet **without any solver data** — purely from the PDE.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+
+D = 0.01f0   # diffusion coefficient
+k = 1.0f0    # reaction rate
+T_final = 0.5f0
+```
+
+```{julia}
+# Sensor locations for the branch input (fixed)
+n_sensors = 30
+x_sensors = Float32.(range(0, 1, length = n_sensors))
+
+# Generate random source functions a(x)
+function random_source(rng)
+    n_modes = rand(rng, 2:4)
+    coeffs = 0.5f0 .* randn(rng, Float32, n_modes)
+    freqs = Float32.(rand(rng, 1:4, n_modes))
+    phases = 2π .* rand(rng, Float32, n_modes)
+    function a(x)
+        val = 0.0f0
+        for j in 1:n_modes
+            val += coeffs[j] * sin(2π * freqs[j] * x + phases[j])
+        end
+        return val
+    end
+    return a
+end
+
+# Sample source functions and evaluate at sensors
+n_funcs = 200   # number of different source functions per batch
+function sample_batch(rng, n)
+    A = zeros(Float32, n_sensors, n)
+    funcs = []
+    for i in 1:n
+        f = random_source(rng)
+        A[:, i] = f.(x_sensors)
+        push!(funcs, f)
+    end
+    return A, funcs
+end
+```
+
+```{julia}
+# Build the PI-DeepONet
+p = 64   # basis dimension
+
+branch_net = Chain(
+    Dense(n_sensors => 128, tanh),
+    Dense(128 => 128, tanh),
+    Dense(128 => p)
+)
+
+# Trunk input: (x, t) → p basis functions
+trunk_net = Chain(
+    Dense(2 => 128, tanh),
+    Dense(128 => 128, tanh),
+    Dense(128 => p)
+)
+
+ps_branch, st_branch = Lux.setup(rng, branch_net)
+ps_trunk, st_trunk = Lux.setup(rng, trunk_net)
+bias_init = zeros(Float32, 1)
+
+ps = (branch = ps_branch, trunk = ps_trunk, bias = bias_init)
+st = (branch = st_branch, trunk = st_trunk)
+```
+
+```{julia}
+# DeepONet forward for a single (a, y) pair — needed for AD through y
+function deeponet_single(a_sensors, y_xt, ps, st)
+    # a_sensors: (n_sensors,) — branch input
+    # y_xt: (2,) — trunk input [x, t]
+    b_out, _ = branch_net(reshape(a_sensors, :, 1), ps.branch, st.branch)  # (p, 1)
+    t_out, _ = trunk_net(reshape(y_xt, :, 1), ps.trunk, st.trunk)          # (p, 1)
+    output = sum(b_out .* t_out) + ps.bias[1]
+    return output
+end
+```
+
+```{julia}
+# PI-DeepONet loss: PDE residual + IC + BC
+function pi_deeponet_loss(ps, st)
+    A_batch, funcs = sample_batch(rng, n_funcs)
+
+    n_colloc = 30   # collocation points per function
+    loss_pde = 0.0f0
+    loss_ic = 0.0f0
+    loss_bc = 0.0f0
+    n_pde_total = 0
+    n_ic_total = 0
+    n_bc_total = 0
+
+    for i in 1:n_funcs
+        a_i = A_batch[:, i]
+        source_fn = funcs[i]
+
+        # Collocation points in interior
+        x_c = rand(rng, Float32, n_colloc) .* 0.98f0 .+ 0.01f0
+        t_c = rand(rng, Float32, n_colloc) .* T_final .* 0.98f0 .+ 0.01f0 * T_final
+
+        for j in 1:n_colloc
+            xt = Float32[x_c[j], t_c[j]]
+
+            # u prediction
+            u_val = deeponet_single(a_i, xt, ps, st)
+
+            # du/dt and d²u/dx² via AD
+            grad_xt = Zygote.gradient(y -> deeponet_single(a_i, y, ps, st), xt)[1]
+            du_dx = grad_xt[1]
+            du_dt = grad_xt[2]
+
+            # d²u/dx² — gradient of du/dx w.r.t. x
+            d2u_dx2 = Zygote.gradient(
+                y -> Zygote.gradient(z -> deeponet_single(a_i, z, ps, st), y)[1][1],
+                xt
+            )[1][1]
+
+            # PDE: du/dt - D * d²u/dx² + k*u - a(x) = 0
+            residual = du_dt - D * d2u_dx2 + k * u_val - source_fn(x_c[j])
+            loss_pde += residual^2
+            n_pde_total += 1
+        end
+
+        # Initial condition: u(x, 0) = 0
+        n_ic_pts = 10
+        for j in 1:n_ic_pts
+            x_ic = rand(rng, Float32)
+            xt_ic = Float32[x_ic, 0.0f0]
+            u_ic = deeponet_single(a_i, xt_ic, ps, st)
+            loss_ic += u_ic^2
+            n_ic_total += 1
+        end
+
+        # Boundary conditions: u(0,t) = 0, u(1,t) = 0
+        n_bc_pts = 5
+        for j in 1:n_bc_pts
+            t_bc = rand(rng, Float32) * T_final
+            u_bc0 = deeponet_single(a_i, Float32[0.0f0, t_bc], ps, st)
+            u_bc1 = deeponet_single(a_i, Float32[1.0f0, t_bc], ps, st)
+            loss_bc += u_bc0^2 + u_bc1^2
+            n_bc_total += 2
+        end
+    end
+
+    total = loss_pde / n_pde_total +
+            10.0f0 * loss_ic / n_ic_total +
+            10.0f0 * loss_bc / n_bc_total
+    return total, st
+end
+```
+
+```{julia}
+# Training loop (this is slow due to per-point AD — reduce iterations for demo)
+opt = Adam(0.001f0)
+opt_state = Optimisers.setup(opt, ps)
+
+for epoch in 1:200
+    (loss_val, st_new), grads = Zygote.withgradient(ps) do p
+        pi_deeponet_loss(p, st)
+    end
+    opt_state, ps = Optimisers.update(opt_state, ps, grads[1])
+    st = st_new
+
+    if epoch == 1 || epoch % 50 == 0
+        @printf "Epoch %3d  Loss = %.6f\n" epoch loss_val
+    end
+end
+```
+
+```{julia}
+# Evaluate on new source functions (not seen during training)
+fig = Figure(size = (700, 500))
+n_show = 4
+nx_eval = 50
+
+for i in 1:n_show
+    rng_test = Xoshiro(2000 + i)
+    f_test = random_source(rng_test)
+    a_test = f_test.(x_sensors)
+
+    x_eval = Float32.(range(0, 1, length = nx_eval))
+    u_pred_T = zeros(Float32, nx_eval)
+
+    for j in 1:nx_eval
+        xt = Float32[x_eval[j], T_final]
+        u_pred_T[j] = deeponet_single(a_test, xt, ps, st)
+    end
+
+    row = (i - 1) ÷ 2 + 1
+    col = (i - 1) % 2 + 1
+    ax = Axis(fig[row, col], xlabel = "x",
+              title = "Source $i — u(x, T=$T_final)")
+    lines!(ax, x_sensors, a_test .* 0.1f0, color = (:gray, 0.4),
+           label = "a(x) × 0.1")
+    lines!(ax, x_eval, u_pred_T, color = :steelblue, linewidth = 2,
+           label = "PI-DeepONet u(x,T)")
+    if i == 1
+        axislegend(ax, position = :rt, labelsize = 10)
+    end
+end
+
+Label(fig[0, :],
+      "PI-DeepONet: diffusion-reaction — trained without solver data",
+      fontsize = 14)
+fig
+```
+
+## How PI-DeepONet differs from PINN + DeepONet
+
+| | PINN | DeepONet | PI-DeepONet |
+|---|---|---|---|
+| **Learns** | One PDE solution | Solution operator | Solution operator |
+| **Training data** | None (physics only) | Input–output pairs from solver | None or few (physics + optional data) |
+| **Generalizes to new inputs?** | No (retrain) | Yes | Yes |
+| **PDE knowledge used?** | Yes (residual loss) | No | Yes (residual loss) |
+| **Solver needed?** | No | Yes | No (or optional) |
+
+## The training trade-off
+
+PI-DeepONet is more expensive per training step than standard DeepONet because it requires computing PDE derivatives via AD for each collocation point. However, it saves the *offline cost* of generating training data with a PDE solver. The break-even depends on:
+
+- **Solver cost** — if the PDE is cheap to solve (e.g., 1D Poisson), generate data and use standard DeepONet. If expensive (e.g., 3D wave equation), PI-DeepONet saves significant compute.
+- **Number of input functions** — PI-DeepONet scales well because it can sample random input functions during training without ever solving the PDE.
+
+## Geoscience applications
+
+PI-DeepONet is especially valuable in geoscience where:
+
+- **Forward solvers are expensive** — seismic wave propagation in 3D, coupled multiphysics simulations (thermo-hydro-mechanical), and full Navier-Stokes for mantle convection all have high per-solve costs. PI-DeepONet avoids running these solvers thousands of times.
+- **Physics is well known** — geophysical PDEs (wave equation, diffusion equation, Darcy flow) are well established, making physics-informed training reliable.
+- **Generalization is needed** — during uncertainty quantification or Bayesian inversion, the operator must be evaluated for thousands of different parameter configurations. A PI-DeepONet trained once can provide all of these evaluations instantly.
+
+Specific applications include:
+
+- **Seismic waveform modeling** — learn the mapping from velocity models to seismograms, with the wave equation enforced during training [@rasht2022pinn_seismic_wave].
+- **Groundwater flow** — learn the mapping from hydraulic conductivity fields to pressure heads, constrained by Darcy's law and the groundwater flow equation [@he2021pinngroundwater].
+- **Fracture mechanics** — PI-DeepONet has been applied to predict stress intensity factors and crack propagation under varying loading conditions [@goswami2023pideeponet_fracture].
+
+::: {.callout-note}
+## Practical tip
+When training PI-DeepONet, start with strong weights on the initial/boundary condition losses ($\lambda_{ic} = \lambda_{bc} = 10$–$100$) and a moderate weight on the PDE residual ($\lambda_r = 1$). The network must first learn to satisfy the boundary conditions before the PDE residual becomes meaningful.
+:::

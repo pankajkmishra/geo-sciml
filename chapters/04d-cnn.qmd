@@ -1,0 +1,170 @@
+---
+title: "Convolutional Neural Networks"
+---
+
+::: {.callout-tip}
+## Key references
+- **LeNet** — the first successful convolutional neural network for image recognition [@lecun1989cnn].
+- **AlexNet** — deep CNN that won the ImageNet competition and launched the deep-learning era [@krizhevsky2012alexnet].
+- **U-Net** — encoder-decoder architecture with skip connections for dense prediction [@ronneberger2015unet].
+- **ResNet** — residual connections enabling very deep networks (100+ layers) [@he2016resnet].
+:::
+
+A **convolutional neural network** (CNN) exploits the spatial structure in data — the fact that nearby pixels or grid cells tend to be related. Instead of connecting every input to every neuron, a CNN slides small learned filters across the data, detecting local patterns such as edges, textures, and shapes. This makes CNNs far more parameter-efficient than feedforward networks for image-like data.
+
+## The convolution operation
+
+In a CNN, a **filter** (or **kernel**) is a small weight matrix, typically $3 \times 3$ or $5 \times 5$. The filter slides across the input and at each position computes a dot product between the filter weights and the local patch of input values. This produces a **feature map** — a new grid where each cell represents how strongly that local pattern was detected at that position.
+
+For a 2D input $\mathbf{X}$ and a filter $\mathbf{K}$ of size $k \times k$, the convolution at position $(i, j)$ is:
+
+$$
+(\mathbf{X} * \mathbf{K})_{i,j} = \sum_{m=0}^{k-1} \sum_{n=0}^{k-1} \mathbf{K}_{m,n} \cdot \mathbf{X}_{i+m,\, j+n}
+$$
+
+A convolutional layer applies many such filters in parallel, each learning to detect a different pattern.
+
+## Pooling
+
+After convolution, **pooling** layers reduce the spatial size of the feature maps, keeping only the most important information. The most common type is **max pooling**, which takes the maximum value in each small window (e.g., $2 \times 2$). Pooling reduces computation, provides some translation invariance, and increases the receptive field of deeper layers.
+
+## A typical CNN architecture
+
+A CNN usually alternates convolutional and pooling layers, progressively reducing spatial resolution while increasing the number of feature channels:
+
+1. **Input** — e.g., a $28 \times 28$ single-channel image.
+2. **Conv → ReLU → Pool** — repeated 2–3 times.
+3. **Flatten** — reshape the 2D feature maps into a 1D vector.
+4. **Dense layers** — one or two fully connected layers for the final prediction.
+
+## Code example: edge detection on a synthetic signal
+
+We demonstrate a 1D convolution that learns to detect edges in a step-function signal — a simplified analogue of detecting layer boundaries in geophysical logs.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+
+# Generate synthetic 1D "well-log" signals with step changes
+function make_step_signal(rng, n=128)
+    signal = zeros(Float32, n)
+    n_steps = rand(rng, 2:5)
+    positions = sort(rand(rng, 1:n, n_steps))
+    val = randn(rng, Float32)
+    pos_idx = 1
+    for i in 1:n
+        if pos_idx <= n_steps && i >= positions[pos_idx]
+            val += randn(rng, Float32)
+            pos_idx += 1
+        end
+        signal[i] = val + 0.1f0 * randn(rng, Float32)
+    end
+    # Target: 1 where there's a step, 0 otherwise
+    target = zeros(Float32, n)
+    for p in positions
+        for j in max(1, p-2):min(n, p+2)
+            target[j] = 1.0f0
+        end
+    end
+    return signal, target
+end
+
+# Create a small dataset
+n_samples = 100
+signals = zeros(Float32, 128, 1, n_samples)    # (length, channels, batch)
+targets = zeros(Float32, 128, 1, n_samples)
+
+for i in 1:n_samples
+    s, t = make_step_signal(rng)
+    signals[:, 1, i] .= s
+    targets[:, 1, i] .= t
+end
+
+# Train/test split
+idx = randperm(rng, n_samples)
+n_train = Int(round(0.8 * n_samples))
+tr = idx[1:n_train]
+te = idx[n_train+1:end]
+
+X_train, Y_train = signals[:, :, tr], targets[:, :, tr]
+X_test,  Y_test  = signals[:, :, te], targets[:, :, te]
+```
+
+```{julia}
+# Build a small 1D CNN
+model = Chain(
+    Conv((7,), 1 => 8, relu; pad = 3),
+    Conv((7,), 8 => 8, relu; pad = 3),
+    Conv((7,), 8 => 1, sigmoid; pad = 3)
+)
+
+ps, st = Lux.setup(rng, model)
+
+function bce_loss(model, ps, st, data)
+    x, y = data
+    ŷ, st_new = model(x, ps, st)
+    ε = 1.0f-7
+    loss = -mean(y .* log.(ŷ .+ ε) .+ (1 .- y) .* log.(1 .- ŷ .+ ε))
+    return loss, st_new, ()
+end
+```
+
+```{julia}
+opt = Adam(0.001f0)
+tstate = Training.TrainState(model, ps, st, opt)
+
+for epoch in 1:200
+    _, loss, _, tstate = Training.single_train_step!(
+        AutoZygote(), bce_loss, (X_train, Y_train), tstate
+    )
+    if epoch == 1 || epoch % 50 == 0
+        @printf "Epoch %3d  Loss = %.4f\n" epoch loss
+    end
+end
+
+# Holdout evaluation
+test_pred, _ = model(X_test, tstate.parameters, tstate.states)
+ε = 1.0f-7
+test_bce = -mean(Y_test .* log.(test_pred .+ ε) .+ (1 .- Y_test) .* log.(1 .- test_pred .+ ε))
+test_acc = mean((test_pred .> 0.5f0) .== (Y_test .> 0.5f0))
+@printf "Holdout BCE: %.4f  Holdout pixel accuracy: %.3f\n" test_bce test_acc
+```
+
+```{julia}
+# Visualize one example
+test_sig, test_tgt = make_step_signal(Xoshiro(99))
+x_in = reshape(test_sig, 128, 1, 1)
+pred, _ = model(x_in, tstate.parameters, tstate.states)
+
+fig = Figure(size = (700, 350))
+ax1 = Axis(fig[1, 1], title = "Signal", ylabel = "Amplitude")
+lines!(ax1, test_sig, color = :steelblue)
+
+ax2 = Axis(fig[2, 1], title = "Edge detection", xlabel = "Sample",
+           ylabel = "Probability")
+lines!(ax2, test_tgt, color = :black, label = "True edges", linewidth = 2)
+lines!(ax2, vec(pred), color = :coral, label = "CNN prediction",
+       linewidth = 2, linestyle = :dash)
+axislegend(ax2, position = :rt)
+fig
+```
+
+## Key CNN architectures
+
+Several landmark architectures expanded the capabilities of CNNs:
+
+- **ResNet** [@he2016resnet] — introduces skip connections that add the input of a block to its output, enabling training of very deep networks (100+ layers) without vanishing gradients.
+- **U-Net** [@ronneberger2015unet] — an encoder-decoder architecture with skip connections at each resolution level, originally designed for biomedical image segmentation. Widely adopted in geoscience for dense prediction tasks.
+
+## Geoscience applications
+
+CNNs are the dominant architecture for geoscience tasks involving gridded spatial data:
+
+- **Seismic fault detection** — @wu2019faultseg trained a 3D CNN (FaultSeg3D) on synthetic seismic volumes to segment faults in 3D, demonstrating that CNNs can detect complex fault geometries directly from seismic data.
+- **Earthquake detection** — @perol2018convquake developed ConvQuake, a CNN that detects and locates earthquakes directly from raw seismic waveforms, outperforming traditional detection methods in noisy environments.
+- **Seismic facies classification** — CNNs have been applied to classify seismic facies from 2D/3D seismic data, mapping geological features across large volumes [@yuan2020seismicfacies].
+- **Remote sensing** — land-use classification, mineral mapping, and change detection from satellite and airborne imagery are natural CNN applications, as the data is inherently image-like.
+- **Well-log interpretation** — 1D CNNs can classify lithology or detect formation boundaries from wireline log curves, as demonstrated in the code example above.
+
+The key insight is: **whenever your geoscience data lives on a regular grid, a CNN is likely a good starting point**. The spatial weight sharing built into convolutions matches the physics of spatially correlated earth properties.

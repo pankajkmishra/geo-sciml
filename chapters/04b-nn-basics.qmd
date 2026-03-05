@@ -1,0 +1,191 @@
+---
+title: "Building Blocks of Neural Networks"
+---
+
+::: {.callout-tip}
+## Key references
+The modern understanding of neural networks rests on a small number of milestone contributions:
+
+- **The perceptron** — the first trainable artificial neuron [@rosenblatt1958perceptron].
+- **Backpropagation** — the algorithm that makes training deep networks practical [@rumelhart1986backprop].
+- **ReLU activations** — simple non-linearity that solved the vanishing-gradient problem for deep networks [@nair2010relu].
+- **Adam optimizer** — an adaptive learning-rate method that became the default for most deep-learning work [@kingma2015adam].
+- **Dropout** — a regularization technique that prevents overfitting by randomly zeroing neurons during training [@srivastava2014dropout].
+- **Batch normalization** — stabilizes and accelerates training by normalizing layer inputs [@ioffe2015batchnorm].
+- **Deep learning review** — an authoritative overview of the entire field [@lecun2015deep].
+:::
+
+In the previous chapter you trained a neural network without knowing what was going on inside. Now we unpack every piece.
+
+## The artificial neuron
+
+A biological neuron receives signals, integrates them, and fires if the total exceeds a threshold. An artificial neuron follows the same idea in simplified form. Given an input vector $\mathbf{x} \in \mathbb{R}^n$, a neuron computes:
+
+$$
+z = \sigma\!\bigl(\mathbf{w}^\top \mathbf{x} + b\bigr)
+$$
+
+where:
+
+- $\mathbf{w} \in \mathbb{R}^n$ is the **weight vector** — one weight per input.
+- $b \in \mathbb{R}$ is the **bias** — a constant shift.
+- $\sigma$ is the **activation function** — a non-linear function applied to the weighted sum.
+
+The weights and bias are the *learnable parameters*. Training a neural network means finding values of $\mathbf{w}$ and $b$ (across all neurons) that make the network's output match the desired target.
+
+## Activation functions
+
+Without an activation function, stacking many layers would still produce a linear mapping — no matter how deep the network. The activation introduces non-linearity, which gives the network the ability to learn complex patterns. Common choices include:
+
+| Function | Formula | Notes |
+|----------|---------|-------|
+| **Sigmoid** | $\sigma(x) = \frac{1}{1+e^{-x}}$ | Squashes output to $(0,1)$. Used in early networks. |
+| **Tanh** | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ | Centered at zero; range $(-1,1)$. |
+| **ReLU** | $\text{ReLU}(x) = \max(0, x)$ | Default for most modern networks [@nair2010relu]. |
+| **Leaky ReLU** | $\max(\alpha x, x)$ for small $\alpha$ | Avoids "dead neurons" where ReLU outputs zero permanently. |
+
+```{julia}
+using CairoMakie
+
+x = -4:0.01:4
+fig = Figure(size = (700, 250))
+ax1 = Axis(fig[1, 1], title = "Sigmoid", xlabel = "x")
+lines!(ax1, x, 1 ./ (1 .+ exp.(-x)), color = :steelblue)
+ax2 = Axis(fig[1, 2], title = "Tanh", xlabel = "x")
+lines!(ax2, x, tanh.(x), color = :coral)
+ax3 = Axis(fig[1, 3], title = "ReLU", xlabel = "x")
+lines!(ax3, x, max.(0, x), color = :seagreen)
+fig
+```
+
+## Layers
+
+A **layer** is a collection of neurons that operate in parallel on the same input. In a **dense** (fully connected) layer, every neuron receives every input:
+
+$$
+\mathbf{z} = \sigma\!\bigl(W\,\mathbf{x} + \mathbf{b}\bigr)
+$$
+
+where $W \in \mathbb{R}^{m \times n}$ is the weight matrix ($m$ neurons, $n$ inputs) and $\mathbf{b} \in \mathbb{R}^m$ is the bias vector.
+
+In Lux.jl, creating a dense layer with 3 inputs and 8 outputs using the `tanh` activation looks like:
+
+```{julia}
+using Lux, Random
+
+layer = Dense(3 => 8, tanh)
+rng = Xoshiro(0)
+ps, st = Lux.setup(rng, layer)
+println("Weight matrix size: ", size(ps.weight))
+println("Bias vector size:   ", size(ps.bias))
+```
+
+## Networks: stacking layers
+
+A neural network is formed by **chaining layers** so that the output of one layer becomes the input to the next. In Lux.jl this is done with `Chain`:
+
+```{julia}
+model = Chain(
+    Dense(3 => 16, relu),   # hidden layer 1
+    Dense(16 => 8, relu),   # hidden layer 2
+    Dense(8 => 1)            # output layer (no activation → raw value)
+)
+ps, st = Lux.setup(rng, model)
+```
+
+The number of layers and the number of neurons per layer are **hyperparameters** — choices made by the user, not learned from data.
+
+## The loss function
+
+The **loss function** (or cost function) measures how far the network's predictions are from the true targets. Training tries to minimize this value. Common choices:
+
+- **Mean Squared Error (MSE)** — for regression: $\mathcal{L} = \frac{1}{N}\sum_{i=1}^{N}(\hat{y}_i - y_i)^2$
+- **Cross-Entropy** — for classification: $\mathcal{L} = -\frac{1}{N}\sum_{i=1}^{N}\bigl[y_i \log \hat{y}_i + (1-y_i) \log(1-\hat{y}_i)\bigr]$
+
+The choice of loss function depends on the problem. Regression tasks almost always use MSE; classification tasks use cross-entropy.
+
+## Backpropagation and gradients
+
+Training requires knowing **how each parameter affects the loss**. This information is captured by the **gradient** — the partial derivative of the loss with respect to each parameter.
+
+The **backpropagation** algorithm [@rumelhart1986backprop] computes these gradients efficiently using the chain rule of calculus, working backward from the loss through each layer to the parameters:
+
+$$
+\frac{\partial \mathcal{L}}{\partial w_{ij}} = \frac{\partial \mathcal{L}}{\partial z_j} \cdot \frac{\partial z_j}{\partial w_{ij}}
+$$
+
+In Julia, automatic differentiation libraries such as **Zygote.jl** handle this for you. You write the forward computation; Zygote computes the gradients automatically.
+
+## Optimizers
+
+Once we have the gradients, we need a rule for updating the parameters. The simplest approach is **gradient descent**:
+
+$$
+\mathbf{w} \leftarrow \mathbf{w} - \eta \,\nabla_{\mathbf{w}} \mathcal{L}
+$$
+
+where $\eta$ is the **learning rate**. A small $\eta$ means slow but stable progress; a large $\eta$ learns faster but risks overshooting.
+
+In practice, more sophisticated optimizers are used:
+
+- **SGD with momentum** — accumulates a running average of past gradients to smooth updates.
+- **Adam** [@kingma2015adam] — adapts the learning rate individually for each parameter. It is the most widely used optimizer and a good default.
+- **RMSProp** — scales updates by a running average of squared gradients; often effective for noisy sequence problems.
+- **AdamW** — Adam with decoupled weight decay; often preferred in modern deep-learning training because regularization behaves more predictably.
+- **L-BFGS** — a quasi-Newton optimizer useful in some scientific ML settings (including some PINN workflows) for final fine-tuning after Adam.
+
+### Learning-rate schedules
+
+In practice, keeping a fixed learning rate for all epochs is rarely optimal. Common schedules are:
+
+- **Step decay**: reduce $\eta$ by a factor every N epochs.
+- **Cosine decay**: gradually lower $\eta$ with a cosine schedule.
+- **Warmup + decay**: start with a small $\eta$, increase for a few epochs, then decay.
+
+A good practical pattern is: start with Adam/AdamW at a moderate learning rate, then reduce the learning rate once validation loss plateaus.
+
+## Regularization
+
+Deep networks can **overfit**: they memorize the training data instead of learning general patterns. Regularization techniques reduce this risk:
+
+- **Dropout** [@srivastava2014dropout] — during training, randomly sets a fraction of neuron outputs to zero. At test time, all neurons are active but their outputs are scaled. This forces the network to not rely on any single neuron.
+- **Batch normalization** [@ioffe2015batchnorm] — normalizes the input to each layer across the current mini-batch. This stabilizes training and acts as a mild regularizer.
+- **Weight decay** — adds a penalty proportional to the squared weights to the loss, discouraging large parameter values.
+- **Early stopping** — monitors validation loss during training and stops when it begins to increase.
+
+## The training loop
+
+Putting it all together, training a neural network follows this loop:
+
+1. **Forward pass** — feed input through the network to get a prediction.
+2. **Compute loss** — compare prediction to true target.
+3. **Backward pass** — compute gradients of the loss with respect to all parameters.
+4. **Update parameters** — apply the optimizer rule.
+5. **Repeat** for many epochs (full passes through the training data).
+
+Each iteration over a subset (**mini-batch**) of the data is one **step**. One full pass through the entire dataset is one **epoch**. The code example in the previous chapter follows exactly this loop.
+
+## Minimum diagnostics checklist (for geoscience workflows)
+
+Before trusting any neural-network result, check the following:
+
+1. **Separate splits**: train, validation, and test sets must be separate in time/space where relevant.
+2. **Baseline comparison**: compare against a simple baseline (mean predictor, persistence model, linear regression).
+3. **Generalization gap**: if train loss is low but validation/test loss is high, you are overfitting.
+4. **Domain sanity check**: predictions should respect basic geoscientific constraints (ranges, trends, known physics).
+5. **Error by regime**: report errors by important regimes (e.g., depth interval, facies class, season, tectonic setting), not only one global metric.
+
+These checks are often more important than squeezing out a small gain in one metric.
+
+## Summary
+
+| Concept | Role |
+|---------|------|
+| Neuron | Weighted sum → activation |
+| Layer | Collection of neurons |
+| Network | Chain of layers |
+| Loss | Measures prediction error |
+| Gradient | Direction to improve parameters |
+| Backpropagation | Efficient gradient computation |
+| Optimizer | Parameter update rule |
+| Regularization | Prevents overfitting |

@@ -1,0 +1,151 @@
+---
+title: "Feedforward Neural Networks"
+---
+
+::: {.callout-tip}
+## Key references
+- **Universal approximation** — a feedforward network with a single hidden layer can approximate any continuous function to arbitrary accuracy, given enough neurons [@hornik1989universal; @cybenko1989approximation].
+- **Backpropagation** — the training algorithm that made multilayer networks practical [@rumelhart1986backprop].
+- **Deep learning review** — comprehensive overview of feedforward and deep architectures [@lecun2015deep].
+:::
+
+The **feedforward neural network** (FNN), also called a **multilayer perceptron** (MLP), is the most fundamental neural network architecture. Data flows in one direction — from input to output — with no loops or recurrence.
+
+## Architecture
+
+An FNN consists of:
+
+1. An **input layer** — one node per feature (not a computation layer, just the data entry point).
+2. One or more **hidden layers** — dense layers with activation functions.
+3. An **output layer** — produces the final prediction.
+
+Every neuron in one layer is connected to every neuron in the next layer, which is why these are called **fully connected** or **dense** layers.
+
+For an FNN with $L$ hidden layers, the computation at each layer $l$ is:
+
+$$
+\mathbf{h}^{(l)} = \sigma\!\bigl(W^{(l)}\,\mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}\bigr)
+$$
+
+where $\mathbf{h}^{(0)} = \mathbf{x}$ is the input and $\hat{\mathbf{y}} = \mathbf{h}^{(L+1)}$ is the output.
+
+## Universal approximation
+
+The **universal approximation theorem** [@hornik1989universal; @cybenko1989approximation] states that a feedforward network with a single hidden layer containing a sufficient number of neurons can approximate any continuous function on a compact set to arbitrary precision. This is a powerful existence result, but it does not tell you *how many* neurons you need or *how* to find the weights. In practice, deeper (more layers) but narrower networks tend to generalize better than a single massive hidden layer.
+
+## Code example: function approximation
+
+Let's use a feedforward network to approximate the function $f(x) = \sin(2\pi x)\, e^{-x^2}$ from noisy samples.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+
+# Generate training data
+n = 200
+x_data = Float32.(range(-2, 2, length = n))
+f_true(x) = sin(2π * x) * exp(-x^2)
+y_data = f_true.(x_data) .+ 0.05f0 .* randn(rng, Float32, n)
+
+X = reshape(x_data, 1, :)
+Y = reshape(y_data, 1, :)
+
+# Train/test split
+idx = randperm(rng, n)
+n_train = Int(round(0.8 * n))
+tr = idx[1:n_train]
+te = idx[n_train+1:end]
+
+X_train, Y_train = X[:, tr], Y[:, tr]
+X_test,  Y_test  = X[:, te], Y[:, te]
+```
+
+```{julia}
+# Build a 2-hidden-layer FNN
+model = Chain(
+    Dense(1 => 32, relu),
+    Dense(32 => 32, relu),
+    Dense(32 => 1)
+)
+
+ps, st = Lux.setup(rng, model)
+
+function mse_loss(model, ps, st, data)
+    x, y = data
+    ŷ, st_new = model(x, ps, st)
+    loss = mean((ŷ .- y) .^ 2)
+    return loss, st_new, ()
+end
+```
+
+```{julia}
+opt = Adam(0.005f0)
+tstate = Training.TrainState(model, ps, st, opt)
+
+for epoch in 1:1000
+    _, loss, _, tstate = Training.single_train_step!(
+        AutoZygote(), mse_loss, (X_train, Y_train), tstate
+    )
+    if epoch == 1 || epoch % 200 == 0
+        @printf "Epoch %4d  MSE = %.6f\n" epoch loss
+    end
+end
+
+# Holdout evaluation
+Y_test_pred, _ = model(X_test, tstate.parameters, tstate.states)
+test_mse = mean((Y_test_pred .- Y_test) .^ 2)
+@printf "Holdout test MSE = %.6f\n" test_mse
+```
+
+```{julia}
+# Plot the result
+x_fine = Float32.(range(-2, 2, length = 500))
+X_fine = reshape(x_fine, 1, :)
+Y_pred, _ = model(X_fine, tstate.parameters, tstate.states)
+
+fig = Figure(size = (600, 350))
+ax = Axis(fig[1, 1], xlabel = "x", ylabel = "f(x)",
+          title = "FNN function approximation")
+scatter!(ax, x_data, y_data, markersize = 3, color = (:gray, 0.4),
+         label = "Noisy data")
+lines!(ax, x_fine, f_true.(x_fine), color = :black, linewidth = 2,
+       label = "True function")
+lines!(ax, x_fine, vec(Y_pred), color = :steelblue, linewidth = 2,
+       linestyle = :dash, label = "FNN prediction")
+axislegend(ax, position = :lt)
+fig
+```
+
+Interpretation tip: use the holdout test MSE as the primary quality indicator. A smooth fit that looks good visually can still overfit noisy samples; a separate test set is your safeguard.
+
+## Effect of depth and width
+
+The universal approximation theorem guarantees that a *wide enough* single hidden layer can approximate any function. In practice:
+
+- **Wider** layers (more neurons) increase capacity but can overfit.
+- **Deeper** networks (more layers) learn hierarchical features and often generalize better with fewer total parameters.
+- **Very deep** networks are harder to train due to vanishing gradients — residual connections [@he2016resnet] and normalization help.
+
+A useful rule of thumb: start with 2–3 hidden layers of moderate width (32–128 neurons) and adjust based on performance.
+
+## When to use feedforward networks
+
+FNNs are the default starting point whenever:
+
+- The input is a **fixed-size feature vector** (e.g., geophysical measurements at a station).
+- There is **no spatial or temporal structure** that you want the architecture to exploit.
+- You need a **simple, fast, interpretable baseline** before trying more complex architectures.
+
+For data with spatial structure (images, grids), convolutional networks are usually better. For sequential data (time series), recurrent networks or transformers are preferred. The FNN remains the building block inside most of these architectures.
+
+## Geoscience applications
+
+Feedforward networks have been widely used in geoscience as flexible function approximators:
+
+- **Geophysical inversion** — FNNs serve as surrogate forward models, mapping model parameters to predicted data. Once trained, they replace expensive physics-based simulations and can be embedded inside iterative inversion schemes [@lopez2019emulator].
+- **Rock physics** — predicting physical properties (porosity, permeability, velocity) from well-log or laboratory measurements is a classic regression task well-suited to FNNs.
+- **Geochemical classification** — mapping geochemical assay vectors to rock types or alteration classes.
+- **Overview** — @bergen2019mlgeo and @reichstein2019deepgeo provide comprehensive reviews of machine learning applications across the geosciences, with many examples of FNN-based approaches for regression and classification in Earth science.
+
+The FNN is rarely the final architecture for production geoscience workflows, but it is almost always the first model you should try. If an FNN solves the problem, the extra complexity of deeper architectures is unnecessary.

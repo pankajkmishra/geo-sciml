@@ -10,6 +10,7 @@ engines: ["julia"]
 
 execute:
   freeze: auto
+  fig-format: png
 
 bibliography: references.bib
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
@@ -19,6 +20,7 @@ description: "Geoscientific machine learning with Julia: tutorials, methods, and
 
 book:
   title: "Geoscientific Machine Learning"
+  subtitle: "[https://geo-sciml.com](https://geo-sciml.com)"
   author: "Pankaj K Mishra"
   site-url: "https://geo-sciml.com/"
   output-file: "geo-sciml"
@@ -29,7 +31,7 @@ book:
   repo-actions: [edit, issue]
   sidebar:
     style: docked
-    collapse-level: 2
+    collapse-level: 1
   page-navigation: true
   chapters:
     - index.md
@@ -42,11 +44,23 @@ book:
 
     - part: "Neural Networks"
       chapters:
-        - chapters/04-neural-networks.qmd
+        - chapters/04a-nn-teaser.qmd
+        - chapters/04b-nn-basics.qmd
+        - chapters/04c-feedforward.qmd
+        - chapters/04d-cnn.qmd
+        - chapters/04e-rnn.qmd
+        - chapters/04f-transformers.qmd
+        - chapters/04g-autoencoders.qmd
+        - chapters/04h-gan.qmd
+        - chapters/04i-gnn.qmd
 
     - part: "Scientific Machine Learning"
       chapters:
-        - chapters/05-inverse-modeling.qmd
+        - chapters/05a-pinn.qmd
+        - chapters/05b-physics-ml-inversion.qmd
+        - chapters/05c-deeponet.qmd
+        - chapters/05d-pi-deeponet.qmd
+        - chapters/05e-fno.qmd
 
     - part: "Applications"
       chapters:
@@ -56,6 +70,7 @@ book:
 
 format:
   html:
+    include-in-header: _includes/citation-meta.html
     theme:
       light: [cosmo, styles.scss]
     open-graph: true
@@ -76,6 +91,7 @@ format:
       gutter-width: 2.5em
     
   pdf:
+    include-before-body: _includes/abstract.tex
     number-sections: true
     number-depth: 2
     toc: true
@@ -103,12 +119,16 @@ format:
     header-includes: |
       \usepackage{fancyhdr}
       \pagestyle{fancy}
+      \fancyfoot[C]{}
+      \fancypagestyle{plain}{%
+        \fancyhf{}
+        \renewcommand{\headrulewidth}{0pt}
+      }
       \setcounter{secnumdepth}{3}
       \renewcommand{\chaptermark}[1]{\markboth{\textit{#1}}{}}
       \renewcommand{\sectionmark}[1]{\markright{\textit{#1}}}
       \fancyhead[LE,RO]{\textit{\nouppercase{\rightmark}}}
       \fancyhead[LO,RE]{\textit{\nouppercase{\leftmark}}}
-      \usepackage{etoolbox}
       \AtBeginEnvironment{figure}{\centering}
       \AtBeginEnvironment{Highlighting}{\color[RGB]{30,30,30}}
       \usepackage{tcolorbox}

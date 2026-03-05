@@ -4,7 +4,7 @@ title: "Getting started with Julia"
 
 You are starting from scratch, and that is perfectly fine. No prior programming experience is assumed.
 
-In this chapter we will install Julia and VS Code, write our first lines of code, and build up to functions, loops, and custom types. By the end you will be comfortable running Julia interactively, saving scripts, and managing packages in reproducible environments. If you have used another language before (Python, R, MATLAB), you will notice how little setup Julia needs to get going.
+In this chapter we will install Julia [@bezanson2017julia] and VS Code, write our first lines of code, and build up to functions, loops, and custom types. By the end you will be comfortable running Julia interactively, saving scripts, and managing packages in reproducible environments. If you have used another language before (Python, R, MATLAB), you will notice how little setup Julia needs to get going.
 
 ## Install Julia and VS Code
 

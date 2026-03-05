@@ -13,27 +13,29 @@ h1.title,
 } 
 </style>
 
-Welcome to **Geoscientific Machine Learning**.
 
-If you’re reading this, you probably already have some familiarity with geoscience. You’re used to thinking in terms of physical processes, models, scales, and uncertainty. When it comes to computation, though, you may have mostly worked through existing tools: running models, adjusting parameters, or modifying scripts written by someone else. That’s a common place to be, and it works, until you want to change the model itself or test an idea that doesn’t fit into the existing workflow.
+Welcome to **Geoscientific Machine Learning**!
 
-You might also be here because you keep hearing about AI and machine learning and you’re not sure what to make of it. Is it actually useful for your research, or is it just hype? Will it help you work faster, or will it send you down a rabbit hole? Can it help you do things you thought were out of reach before, or is it mostly a waste of time?
+This book is for geoscience students, researchers, and practitioners who want to get started with scientific machine learning (SciML), where machine learning models are trained using domain knowledge about the problem, most often the physics and numerical structure behind it. It is also for machine learning practitioners who are building new methods and want to apply them to geoscientific problems, a domain with some of the most diverse and challenging datasets in science.
 
-Before you decide, it’s worth trying it in a way that respects how geoscience works. That’s what this book is about.
+This is a living book hosted at [www.geo-sciml.com](https://www.geo-sciml.com). The website contains the book source code, and whenever the text or code changes, a new version of the site is rendered and published. Code outputs such as figures, tables, and results are updated as well, and the downloadable PDF is regenerated so it matches the latest version. The full website source can also be downloaded and run locally, for example in VS Code.
 
-By **scientific machine learning**, we mean instead of training a model only on data and hoping it behaves, you guide the learning with what you already know: physical laws, conservation principles, symmetries, and numerical structure. The goal is not just to fit observations, but to produce models that behave sensibly when you change conditions or run them for longer times. By **geoscientific machine learning**, we mean applying scientific machine learning to geoscience problems. That means combining geoscience domain knowledge with learning methods so the models respect physics, scale relationships, and observational constraints. 
+Machine learning and AI are evolving rapidly, and it is difficult to estimate how geoscience research and applications will change over the coming years. For that reason, this book is written as a live project rather than a conventional one-time publication. The content will evolve over time, tracking current research questions while keeping a forward-looking view. At the same time, stable and citable checkpoints matter, so PDF snapshots of the book will be published on arXiv, with a permanent archive of the corresponding source code for each snapshot on Zenodo.
 
-If you don’t yet have a favorite programming language, or you’re still deciding what’s worth learning, here’s the important part: the exact language matters less than having *one*. You need a way to talk to computers clearly, so they can help you turn ideas into experiments and hypotheses into something you can test. 
+The programming language used throughout is Julia [@bezanson2017julia]. The first part of the book introduces the computational setup and teaches enough Julia to reproduce the results and continue learning with confidence. No prior programming experience is required. The book then covers the core ideas of machine learning and deep learning that underpin modern models, before moving into Scientific machine learning methods and geoscience-focused applications. The emphasis is on methods designed for systems governed by differential equations and physical structure, including physics-informed approaches and operator learning. The goal is to connect data-driven models with scientific reasoning in a way that is practical for real geoscientific problems.
 
-
-In this book we'll choose **Julia** [@bezanson2017julia]. If you spend time with it, you'll see why—especially once you start doing more demanding computation. We'll begin slowly and keep things practical, using Julia to express ideas you already know. Machine learning comes later where it connects naturally geoscience practices.
-
-If you’re new to programming, expect some friction at first (we'll try to minimise that). That’s normal. The payoff is that you gain more control over your models and more confidence in the results they produce.
+If you find this book useful, please consider citing it as:
 
 
+Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://geo-sciml.com
 
-::: {.callout-note}
-## This book is under construction
-Some sections are incomplete. If there’s something you’d like to see included, open an issue and let me know what you’re working on.
-:::
 
+```bibtex
+@book{mishra2026geosciml,
+  title={Geoscientific Machine Learning},
+  author={Pankaj K Mishra},
+  url={https://geo-sciml.com},
+  year={2026},
+  publisher={WWW}
+}
+```

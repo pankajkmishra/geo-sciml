@@ -1,0 +1,210 @@
+---
+title: "Physics-Informed Neural Networks"
+execute:
+  eval: false
+---
+
+::: {.callout-tip}
+## Key references
+- **Early neural-network PDE solvers** — using neural networks to solve ODEs and PDEs by embedding the equation in the loss function [@lagaris1998nn_ode].
+- **Physics-Informed Neural Networks (PINNs)** — the foundational framework that popularized training neural networks with PDE residuals as soft constraints [@raissi2019pinn].
+- **PINN review** — comprehensive review of physics-informed machine learning covering PINNs, operator learning, and hybrid methods [@karniadakis2021pinn_review].
+- **DeepXDE** — a widely used library for PINNs that formalized many practical training strategies [@lu2021deepxde].
+- **Gradient pathologies** — understanding and mitigating the training difficulties unique to PINNs [@wang2021pinnfailure].
+- **Neural ODEs** — treating the forward pass of a neural network as an ODE, connecting deep learning and differential equations [@chen2018neuralode].
+- **Universal differential equations** — embedding neural networks inside differential equations to learn unknown physics [@rackauckas2020universal].
+:::
+
+In the previous part of this book we treated neural networks as function approximators: given input–output pairs, the network learns to map one to the other. **Physics-informed neural networks** (PINNs) take a fundamentally different approach. Instead of (or in addition to) learning from data, the network is trained to satisfy a known physical law — typically a partial differential equation (PDE). The physics itself becomes part of the loss function.
+
+## The idea
+
+Suppose we want to solve the PDE:
+
+$$
+\mathcal{N}[u](\mathbf{x}, t) = 0, \qquad \mathbf{x} \in \Omega, \quad t \in [0, T]
+$$
+
+with boundary conditions $\mathcal{B}[u] = 0$ on $\partial\Omega$ and initial conditions $u(\mathbf{x}, 0) = u_0(\mathbf{x})$.
+
+A PINN approximates the solution $u(\mathbf{x}, t)$ with a neural network $u_\theta(\mathbf{x}, t)$, where $\theta$ denotes the trainable parameters. The network takes coordinates $(\mathbf{x}, t)$ as input and outputs the predicted solution value.
+
+The key insight is that because the network is differentiable, we can compute $\frac{\partial u_\theta}{\partial t}$, $\frac{\partial^2 u_\theta}{\partial x^2}$, etc. using automatic differentiation. We then define the **PDE residual**:
+
+$$
+r_\theta(\mathbf{x}, t) = \mathcal{N}[u_\theta](\mathbf{x}, t)
+$$
+
+and train the network to make this residual zero everywhere.
+
+## The PINN loss function
+
+The total loss combines three terms:
+
+$$
+\mathcal{L}(\theta) = \underbrace{\lambda_r \frac{1}{N_r}\sum_{i=1}^{N_r} |r_\theta(\mathbf{x}_i^r, t_i^r)|^2}_{\text{PDE residual}} + \underbrace{\lambda_b \frac{1}{N_b}\sum_{j=1}^{N_b} |\mathcal{B}[u_\theta](\mathbf{x}_j^b, t_j^b)|^2}_{\text{boundary conditions}} + \underbrace{\lambda_0 \frac{1}{N_0}\sum_{k=1}^{N_0} |u_\theta(\mathbf{x}_k^0, 0) - u_0(\mathbf{x}_k^0)|^2}_{\text{initial conditions}}
+$$
+
+where:
+
+- $\{(\mathbf{x}_i^r, t_i^r)\}$ are **collocation points** sampled inside the domain where the PDE must hold.
+- $\{(\mathbf{x}_j^b, t_j^b)\}$ are points on the boundary.
+- $\{(\mathbf{x}_k^0)\}$ are points at $t=0$.
+- $\lambda_r, \lambda_b, \lambda_0$ are weighting factors.
+
+If observational data is also available, a fourth **data loss** term can be added, making the PINN a hybrid physics-data model.
+
+## Code example: solving the 1D heat equation
+
+We solve the heat equation $\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}$ on $x \in [0, 1]$, $t \in [0, 1]$ with initial condition $u(x, 0) = \sin(\pi x)$ and boundary conditions $u(0, t) = u(1, t) = 0$. The exact solution is $u(x,t) = e^{-\alpha \pi^2 t} \sin(\pi x)$.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+α = 0.01f0   # thermal diffusivity
+
+# Exact solution for comparison
+u_exact(x, t) = exp(-α * π^2 * t) * sin(π * x)
+```
+
+```{julia}
+# Sample collocation points (interior), boundary points, and initial points
+n_interior = 1000
+n_bc = 200
+n_ic = 200
+
+# Interior points: random (x, t) in (0,1) × (0,1)
+x_int = rand(rng, Float32, 1, n_interior)
+t_int = rand(rng, Float32, 1, n_interior)
+
+# Boundary: x = 0 and x = 1
+t_bc = rand(rng, Float32, 1, n_bc)
+x_bc_0 = zeros(Float32, 1, n_bc)
+x_bc_1 = ones(Float32, 1, n_bc)
+
+# Initial condition: t = 0
+x_ic = rand(rng, Float32, 1, n_ic)
+u_ic = sin.(π .* x_ic)
+```
+
+```{julia}
+# Build the PINN: input (x, t) → output u
+model = Chain(
+    Dense(2 => 32, tanh),
+    Dense(32 => 32, tanh),
+    Dense(32 => 32, tanh),
+    Dense(32 => 1)
+)
+
+ps, st = Lux.setup(rng, model)
+```
+
+```{julia}
+# PINN loss: PDE residual + BC + IC (using automatic differentiation)
+function pinn_loss(model, ps, st, data)
+    x_i, t_i, x_b0, x_b1, t_b, x_ic_, u_ic_ = data
+    
+    # --- PDE residual: du/dt - α * d²u/dx² = 0 ---
+    function u_pred(xt)
+        input = reshape(xt, 2, 1)
+        out, _ = model(input, ps, st)
+        return out[1]
+    end
+
+    residuals = zeros(Float32, n_interior)
+    for i in 1:n_interior
+        xt = Float32[x_i[i], t_i[i]]
+        grad1 = Zygote.gradient(x -> u_pred(x), xt)[1]
+        du_dt = grad1[2]
+        d2u_dx2 = Zygote.gradient(x -> Zygote.gradient(y -> u_pred(y), x)[1][1], xt)[1][1]
+        residuals[i] = du_dt - α * d2u_dx2
+    end
+
+    residual = reshape(residuals, 1, :)
+    loss_pde = mean(residual .^ 2)
+    
+    # --- Boundary loss: u(0,t) = 0, u(1,t) = 0 ---
+    bc_input_0 = vcat(x_b0, t_b)
+    bc_input_1 = vcat(x_b1, t_b)
+    u_b0, _ = model(bc_input_0, ps, st)
+    u_b1, _ = model(bc_input_1, ps, st)
+    loss_bc = mean(u_b0 .^ 2) + mean(u_b1 .^ 2)
+    
+    # --- Initial condition loss: u(x, 0) = sin(πx) ---
+    ic_input = vcat(x_ic_, zeros(Float32, 1, size(x_ic_, 2)))
+    u_0, _ = model(ic_input, ps, st)
+    loss_ic = mean((u_0 .- u_ic_) .^ 2)
+    
+    total = loss_pde + 10.0f0 * loss_bc + 10.0f0 * loss_ic
+    return total, st, ()
+end
+```
+
+```{julia}
+# Train the PINN
+opt = Adam(0.001f0)
+tstate = Training.TrainState(model, ps, st, opt)
+
+data = (x_int, t_int, x_bc_0, x_bc_1, t_bc, x_ic, u_ic)
+
+for epoch in 1:500
+    _, loss, _, tstate = Training.single_train_step!(
+        AutoZygote(), pinn_loss, data, tstate
+    )
+    if epoch == 1 || epoch % 100 == 0
+        @printf "Epoch %4d  Loss = %.6f\n" epoch loss
+    end
+end
+```
+
+```{julia}
+# Compare PINN solution to exact solution
+nx, nt = 50, 50
+xs = Float32.(range(0, 1, length = nx))
+ts = Float32.(range(0, 1, length = nt))
+
+U_pinn = zeros(Float32, nx, nt)
+U_true = zeros(Float32, nx, nt)
+
+for (j, tj) in enumerate(ts)
+    input = vcat(reshape(xs, 1, :), fill(tj, 1, nx))
+    pred, _ = model(input, tstate.parameters, tstate.states)
+    U_pinn[:, j] = vec(pred)
+    U_true[:, j] = u_exact.(xs, tj)
+end
+
+fig = Figure(size = (700, 300))
+ax1 = Axis(fig[1, 1], title = "PINN solution", xlabel = "x", ylabel = "t")
+heatmap!(ax1, xs, ts, U_pinn, colormap = :viridis)
+ax2 = Axis(fig[1, 2], title = "Exact solution", xlabel = "x", ylabel = "t")
+heatmap!(ax2, xs, ts, U_true, colormap = :viridis)
+ax3 = Axis(fig[1, 3], title = "Absolute error", xlabel = "x", ylabel = "t")
+heatmap!(ax3, xs, ts, abs.(U_pinn .- U_true), colormap = :hot)
+fig
+```
+
+## PINN strengths and limitations
+
+**Strengths:**
+
+- **Mesh-free** — no need to build a computational mesh. The network is evaluated at arbitrary points.
+- **Inverse problems** — if some physical parameters are unknown, they can be made trainable alongside the network weights. The PINN then simultaneously solves the PDE and infers the unknown parameters.
+- **Data assimilation** — observational data can be incorporated by adding a data-fitting term to the loss, making PINNs natural for problems where sparse data and physics must both be honored.
+
+**Limitations:**
+
+- **Training difficulty** — PINNs can be hard to train, especially for stiff PDEs, multi-scale problems, or high-frequency solutions. Gradient pathologies and loss balancing are active research challenges [@wang2021pinnfailure].
+- **Computational cost** — computing second-order derivatives through automatic differentiation is expensive. For problems where a traditional numerical solver is efficient, PINNs may not be competitive.
+- **Generalization** — a trained PINN solves **one specific instance** of a PDE (one set of boundary/initial conditions). To solve the same PDE with different conditions, you must retrain. This is where **neural operators** (next chapter) offer an advantage.
+
+## Geoscience applications
+
+PINNs have gained significant traction in geoscience because many problems naturally combine sparse observational data with known physical laws:
+
+- **Seismic wave propagation** — @waheed2021pinnseismic developed PINNeik, a PINN that solves the eikonal equation for seismic travel-time computation with a mesh-free, differentiable formulation. @song2021pinnwavefield extended PINNs to solve the frequency-domain acoustic wave equation for anisotropic media.
+- **Seismic travel times** — @smith2020eikonet trained EikoNet, a deep neural network constrained by the eikonal equation, to predict seismic travel times in complex 3D velocity models.
+- **Seismic inversion** — @yang2021seismicinversion used deep learning for full-waveform inversion, embedding physical constraints to improve velocity model estimation from seismic data.
+- **Subsurface flow** — @zhu2021general_pinn_geoscience applied physics-constrained deep learning for high-dimensional surrogate modeling and uncertainty quantification in subsurface transport problems, demonstrating that PINNs can work without labeled data when the governing PDE is known.
+- **Geophysics overview** — @alkhalifah2021ml_geophysics provides a review of machine-learning methods for geophysics with emphasis on physics-informed approaches, covering seismic imaging, inversion, and interpretation.
+- **Weather and climate** — @kashinath2021physicsml presents case studies of physics-informed machine learning for weather and climate modeling, demonstrating how physical constraints improve forecast accuracy and physical consistency.
