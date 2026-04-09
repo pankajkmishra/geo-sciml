@@ -37,48 +37,68 @@ A CNN usually alternates convolutional and pooling layers, progressively reducin
 3. **Flatten** — reshape the 2D feature maps into a 1D vector.
 4. **Dense layers** — one or two fully connected layers for the final prediction.
 
-## Code example: edge detection on a synthetic signal
+## Code example: classifying simple seismic image patches
 
-We demonstrate a 1D convolution that learns to detect edges in a step-function signal — a simplified analogue of detecting layer boundaries in geophysical logs.
+We use a standard 2D CNN to classify tiny synthetic seismic-style images into three classes: layered horizons, a faulted horizon pattern, and a dome-like structure. This is easier to read than the previous texture example because the three patterns are visually distinct and the problem matches the usual CNN story: take an image as input, return one class label as output.
+
+The problem formulation is simple: each input is one $32 \times 32$ grayscale image patch, and the target is one of three structural classes. The network output is a vector of three class scores. After a softmax, those scores become class probabilities, and the largest probability gives the predicted class.
+
+This is still a toy problem. Real seismic interpretation is not this clean. But for a first CNN example, it is useful because we can clearly see what the network is trying to separate and we can directly check whether the predictions match the visible pattern in the image.
 
 ```{julia}
 using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
 
 rng = Xoshiro(42)
 
-# Generate synthetic 1D "well-log" signals with step changes
-function make_step_signal(rng, n=128)
-    signal = zeros(Float32, n)
-    n_steps = rand(rng, 2:5)
-    positions = sort(rand(rng, 1:n, n_steps))
-    val = randn(rng, Float32)
-    pos_idx = 1
-    for i in 1:n
-        if pos_idx <= n_steps && i >= positions[pos_idx]
-            val += randn(rng, Float32)
-            pos_idx += 1
-        end
-        signal[i] = val + 0.1f0 * randn(rng, Float32)
-    end
-    # Target: 1 where there's a step, 0 otherwise
-    target = zeros(Float32, n)
-    for p in positions
-        for j in max(1, p-2):min(n, p+2)
-            target[j] = 1.0f0
-        end
-    end
-    return signal, target
+class_names = ["Layered", "Faulted", "Dome"]
+
+function gaussian2d(x, y, μx, μy, σx, σy)
+    exp.(-0.5f0 .* (((x .- μx) ./ σx) .^ 2 .+ ((y .- μy) ./ σy) .^ 2))
 end
 
-# Create a small dataset
-n_samples = 100
-signals = zeros(Float32, 128, 1, n_samples)    # (length, channels, batch)
-targets = zeros(Float32, 128, 1, n_samples)
+# Generate a small synthetic seismic-style image patch.
+function make_seismic_patch(rng, n = 32)
+    class_id = rand(rng, 1:3)
+    x = Float32.(range(-1, 1, length = n))
+    y = Float32.(range(-1, 1, length = n))
+    xx = repeat(reshape(x, n, 1), 1, n)
+    yy = repeat(reshape(y, 1, n), n, 1)
+
+    image = zeros(Float32, n, n)
+
+    if class_id == 1
+        # Layered reflectors.
+        image .= 0.50f0 .+ 0.22f0 .* sin.(Float32(7.0) .* Float32(pi) .* (yy .+ 0.04f0 .* sin.(Float32(2.0) .* Float32(pi) .* xx)))
+        image .+= 0.015f0 .* randn(rng, Float32, n, n)
+    elseif class_id == 2
+        # Faulted reflectors with a visible offset.
+        shifted_yy = yy .+ 0.22f0 .* (xx .> 0.08f0)
+        image .= 0.50f0 .+ 0.22f0 .* sin.(Float32(7.0) .* Float32(pi) .* shifted_yy)
+        image .-= 0.12f0 .* gaussian2d(xx, yy, 0.08f0, 0.0f0, 0.03f0, 0.85f0)
+        image .+= 0.015f0 .* randn(rng, Float32, n, n)
+    else
+        # Dome-like reflector geometry.
+        dome = yy .+ 0.55f0 .* exp.(-((xx ./ 0.42f0) .^ 2))
+        image .= 0.50f0 .+ 0.22f0 .* sin.(Float32(7.0) .* Float32(pi) .* dome)
+        image .+= 0.015f0 .* randn(rng, Float32, n, n)
+    end
+
+    image = Float32.(clamp.(image, 0.03f0, 0.98f0))
+    patch = reshape(image, n, n, 1)
+    y = zeros(Float32, 3)
+    y[class_id] = 1.0f0
+    return patch, y, class_id
+end
+
+# Create a labelled image dataset
+n_samples = 900
+patches = zeros(Float32, 32, 32, 1, n_samples)    # (height, width, channels, batch)
+labels = zeros(Float32, 3, n_samples)
 
 for i in 1:n_samples
-    s, t = make_step_signal(rng)
-    signals[:, 1, i] .= s
-    targets[:, 1, i] .= t
+    x, y, _ = make_seismic_patch(rng)
+    patches[:, :, :, i] .= x
+    labels[:, i] .= y
 end
 
 # Train/test split
@@ -87,68 +107,135 @@ n_train = Int(round(0.8 * n_samples))
 tr = idx[1:n_train]
 te = idx[n_train+1:end]
 
-X_train, Y_train = signals[:, :, tr], targets[:, :, tr]
-X_test,  Y_test  = signals[:, :, te], targets[:, :, te]
+X_train, Y_train = patches[:, :, :, tr], labels[:, tr]
+X_test,  Y_test  = patches[:, :, :, te], labels[:, te]
 ```
 
+The input tensor has shape `(height, width, channels, batch)`, and the label for each patch is a one-hot vector with three entries. So this is just standard three-class image classification with geoscience-flavored patterns.
+
 ```{julia}
-# Build a small 1D CNN
+# Build a small 2D CNN classifier
 model = Chain(
-    Conv((7,), 1 => 8, relu; pad = 3),
-    Conv((7,), 8 => 8, relu; pad = 3),
-    Conv((7,), 8 => 1, sigmoid; pad = 3)
+    Conv((5, 5), 1 => 8, relu; pad = SamePad()),
+    MaxPool((2, 2)),
+    Conv((3, 3), 8 => 16, relu; pad = SamePad()),
+    MaxPool((2, 2)),
+    WrappedFunction(x -> reshape(x, :, size(x, 4))),
+    Dense(16 * 8 * 8 => 24, relu),
+    Dense(24 => 3)
 )
 
 ps, st = Lux.setup(rng, model)
 
-function bce_loss(model, ps, st, data)
+function softmax_cols(x)
+    x_shift = x .- maximum(x, dims = 1)
+    ex = exp.(x_shift)
+    ex ./ sum(ex, dims = 1)
+end
+
+function cross_entropy_loss(model, ps, st, data)
     x, y = data
-    ŷ, st_new = model(x, ps, st)
+    logits, st_new = model(x, ps, st)
+    ŷ = softmax_cols(logits)
     ε = 1.0f-7
-    loss = -mean(y .* log.(ŷ .+ ε) .+ (1 .- y) .* log.(1 .- ŷ .+ ε))
+    loss = -mean(sum(y .* log.(ŷ .+ ε), dims = 1))
     return loss, st_new, ()
+end
+
+function predicted_classes(probabilities)
+    [findmax(probabilities[:, i])[2] for i in axes(probabilities, 2)]
+end
+
+function true_classes(labels)
+    [findmax(labels[:, i])[2] for i in axes(labels, 2)]
 end
 ```
 
 ```{julia}
-opt = Adam(0.001f0)
-tstate = Training.TrainState(model, ps, st, opt)
+function train_model(model, ps, st, data; epochs = 240, lr = 0.0015f0)
+    tstate = Training.TrainState(model, ps, st, Adam(lr))
+    for epoch in 1:epochs
+        _, loss, _, tstate = Training.single_train_step!(
+            AutoZygote(), cross_entropy_loss, data, tstate
+        )
+        if epoch == 1 || epoch % 60 == 0
+            @printf "Epoch %3d  cross-entropy = %.4f\n" epoch loss
+        end
+    end
+    return tstate
+end
 
-for epoch in 1:200
-    _, loss, _, tstate = Training.single_train_step!(
-        AutoZygote(), bce_loss, (X_train, Y_train), tstate
-    )
-    if epoch == 1 || epoch % 50 == 0
-        @printf "Epoch %3d  Loss = %.4f\n" epoch loss
+tstate = train_model(model, ps, st, (X_train, Y_train))
+
+# Holdout evaluation
+test_logits, _ = model(X_test, tstate.parameters, tstate.states)
+test_prob = softmax_cols(test_logits)
+test_loss = -mean(sum(Y_test .* log.(test_prob .+ 1.0f-7), dims = 1))
+test_acc = mean(predicted_classes(test_prob) .== true_classes(Y_test))
+@printf "Holdout cross-entropy: %.4f  Accuracy: %.3f\n" test_loss test_acc
+```
+
+The output above reports two things. The cross-entropy tells us how confident the network is on the correct class, while the accuracy tells us how often it predicts the right class on unseen patches. For a teaching example like this one, we want both numbers to show that the CNN has learned the visible image pattern instead of just memorizing the training set.
+
+```{julia}
+confusion = zeros(Int, 3, 3)
+for (true_class, pred_class) in zip(true_classes(Y_test), predicted_classes(test_prob))
+    confusion[true_class, pred_class] += 1
+end
+
+for i in 1:3
+    class_acc = confusion[i, i] / sum(confusion[i, :])
+    @printf "%s accuracy: %.3f\n" class_names[i] class_acc
+end
+```
+
+Those per-class accuracies are useful because a single overall accuracy can hide one weak class. If one seismic pattern is consistently confused with another, it will show up here even when the mean score still looks good.
+
+```{julia}
+#| fig-width: 5.6
+#| fig-height: 7.0
+#| out-width: 82%
+#| fig-align: center
+# Visualize one image patch from each class
+function sample_with_label(seed, wanted_label)
+    rng_local = Xoshiro(seed)
+    while true
+        x, y, class_id = make_seismic_patch(rng_local)
+        class_id == wanted_label && return x, y, class_id
     end
 end
 
-# Holdout evaluation
-test_pred, _ = model(X_test, tstate.parameters, tstate.states)
-ε = 1.0f-7
-test_bce = -mean(Y_test .* log.(test_pred .+ ε) .+ (1 .- Y_test) .* log.(1 .- test_pred .+ ε))
-test_acc = mean((test_pred .> 0.5f0) .== (Y_test .> 0.5f0))
-@printf "Holdout BCE: %.4f  Holdout pixel accuracy: %.3f\n" test_bce test_acc
-```
+patch_layered, _, _ = sample_with_label(99, 1)
+patch_faulted, _, _ = sample_with_label(199, 2)
+patch_dome, _, _ = sample_with_label(299, 3)
 
-```{julia}
-# Visualize one example
-test_sig, test_tgt = make_step_signal(Xoshiro(99))
-x_in = reshape(test_sig, 128, 1, 1)
-pred, _ = model(x_in, tstate.parameters, tstate.states)
+prob_layered, _ = model(reshape(patch_layered, 32, 32, 1, 1), tstate.parameters, tstate.states)
+prob_faulted, _ = model(reshape(patch_faulted, 32, 32, 1, 1), tstate.parameters, tstate.states)
+prob_dome, _ = model(reshape(patch_dome, 32, 32, 1, 1), tstate.parameters, tstate.states)
 
-fig = Figure(size = (700, 350))
-ax1 = Axis(fig[1, 1], title = "Signal", ylabel = "Amplitude")
-lines!(ax1, test_sig, color = :steelblue)
+prob_layered = softmax_cols(prob_layered)
+prob_faulted = softmax_cols(prob_faulted)
+prob_dome = softmax_cols(prob_dome)
 
-ax2 = Axis(fig[2, 1], title = "Edge detection", xlabel = "Sample",
-           ylabel = "Probability")
-lines!(ax2, test_tgt, color = :black, label = "True edges", linewidth = 2)
-lines!(ax2, vec(pred), color = :coral, label = "CNN prediction",
-       linewidth = 2, linestyle = :dash)
-axislegend(ax2, position = :rt)
+fig = Figure(size = (640, 760))
+
+ax1 = Axis(fig[1, 1], title = "Layered patch  predicted: $(class_names[findmax(prob_layered[:, 1])[2]])")
+image!(ax1, permutedims(dropdims(patch_layered, dims = 3), (2, 1)))
+hidedecorations!(ax1)
+
+ax2 = Axis(fig[2, 1], title = "Faulted patch  predicted: $(class_names[findmax(prob_faulted[:, 1])[2]])")
+image!(ax2, permutedims(dropdims(patch_faulted, dims = 3), (2, 1)))
+hidedecorations!(ax2)
+
+ax3 = Axis(fig[3, 1], title = "Dome-like patch  predicted: $(class_names[findmax(prob_dome[:, 1])[2]])")
+image!(ax3, permutedims(dropdims(patch_dome, dims = 3), (2, 1)))
+hidedecorations!(ax3)
+
+Colorbar(fig[1:3, 2], limits = (0, 1), colormap = :grays)
 fig
 ```
+
+In the plot, each panel is one input image and the title shows the predicted class. That gives a direct visual check that the network output matches the pattern a human reader would also identify.
 
 ## Key CNN architectures
 
@@ -163,8 +250,8 @@ CNNs are the dominant architecture for geoscience tasks involving gridded spatia
 
 - **Seismic fault detection** — @wu2019faultseg trained a 3D CNN (FaultSeg3D) on synthetic seismic volumes to segment faults in 3D, demonstrating that CNNs can detect complex fault geometries directly from seismic data.
 - **Earthquake detection** — @perol2018convquake developed ConvQuake, a CNN that detects and locates earthquakes directly from raw seismic waveforms, outperforming traditional detection methods in noisy environments.
-- **Seismic facies classification** — CNNs have been applied to classify seismic facies from 2D/3D seismic data, mapping geological features across large volumes [@yuan2020seismicfacies].
+- **Seismic waveform classification and first-break picking** — @yuan2020seismicfacies used a CNN for waveform classification and first-break picking, showing how convolutional models can detect local seismic patterns directly from traces.
 - **Remote sensing** — land-use classification, mineral mapping, and change detection from satellite and airborne imagery are natural CNN applications, as the data is inherently image-like.
-- **Well-log interpretation** — 1D CNNs can classify lithology or detect formation boundaries from wireline log curves, as demonstrated in the code example above.
+- **Seismic image interpretation** — 2D CNNs can classify local image patterns such as layered structure, faults, or dome-like geometry from small patches, as demonstrated in the code example above.
 
 The key insight is: **whenever your geoscience data lives on a regular grid, a CNN is likely a good starting point**. The spatial weight sharing built into convolutions matches the physics of spatially correlated earth properties.

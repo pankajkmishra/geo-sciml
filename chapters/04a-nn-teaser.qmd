@@ -103,16 +103,20 @@ Feed the training data through the network 500 times (epochs), adjusting the par
 
 ```{julia}
 opt = Adam(0.01f0)
-tstate = Training.TrainState(model, ps, st, opt)
-
-for epoch in 1:500
-    _, loss, _, tstate = Training.single_train_step!(
-        AutoZygote(), mse_loss, (X_train, Y_train), tstate
-    )
-    if epoch == 1 || epoch % 100 == 0
-        @printf "Epoch %4d  MSE = %.6f\n" epoch loss
+function train_model(model, ps, st, data; epochs = 500, lr = 0.01f0)
+    tstate = Training.TrainState(model, ps, st, Adam(lr))
+    for epoch in 1:epochs
+        _, loss, _, tstate = Training.single_train_step!(
+            AutoZygote(), mse_loss, data, tstate
+        )
+        if epoch == 1 || epoch % 100 == 0
+            @printf "Epoch %4d  MSE = %.6f\n" epoch loss
+        end
     end
+    return tstate
 end
+
+tstate = train_model(model, ps, st, (X_train, Y_train))
 
 # Evaluate on test data
 Y_pred_test, _ = model(X_test, tstate.parameters, tstate.states)
@@ -164,3 +168,21 @@ In about 30 lines of code you:
 4. **Used it** — fed in new inputs and got predictions back.
 
 You don't yet know *why* this works. The next chapters will explain every part: what a neuron is, what the loss function does, how gradients flow backward through the network, and why the optimizer matters. But the overall workflow — data → model → train → predict — stays exactly the same for every neural network in this book.
+
+This chapter deletes `sauna_log.txt` in a final hidden cleanup step so the temporary example file does not linger in the project directory after rendering. If you stop midway through the workflow or run only selected code blocks, remove it manually:
+
+```bash
+rm sauna_log.txt
+```
+
+On PowerShell:
+
+```powershell
+Remove-Item sauna_log.txt
+```
+
+```{julia}
+#| echo: false
+#| output: false
+rm("sauna_log.txt"; force = true)
+```

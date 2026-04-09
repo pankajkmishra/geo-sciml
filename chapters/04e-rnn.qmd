@@ -20,6 +20,8 @@ $$
 \mathbf{h}_t = \tanh\!\bigl(W_h\, \mathbf{h}_{t-1} + W_x\, \mathbf{x}_t + \mathbf{b}\bigr)
 $$
 
+Here the subscript $t$ indexes time, while the subscripts on $W_h$ and $W_x$ identify the role of each matrix: hidden-to-hidden and input-to-hidden, respectively. This is the same convention introduced earlier in the part: superscripts are reserved for layer depth, and subscripts mark time or semantic roles.
+
 The hidden state acts as the network's *memory*. The output at each step can be read from $\mathbf{h}_t$ directly or passed through an additional dense layer.
 
 **Problem**: In practice, simple RNNs struggle to learn long-range dependencies because gradients either vanish (shrink to zero) or explode (grow unboundedly) when propagated backward through many time steps.
@@ -31,6 +33,8 @@ The **LSTM** [@hochreiter1997lstm] solves the vanishing-gradient problem by intr
 - **Forget gate** $\mathbf{f}_t$ — decides what information to discard from the cell state.
 - **Input gate** $\mathbf{i}_t$ — decides what new information to store.
 - **Output gate** $\mathbf{o}_t$ — decides what part of the cell state to expose.
+
+As before, the subscript $t$ denotes the time step. The different letter subscripts on the weight matrices indicate the gate they belong to.
 
 $$
 \begin{aligned}
@@ -74,15 +78,20 @@ t = Float32.(0:0.05:10)
 signal = 0.3f0 .* t .+ sin.(2π .* 0.5f0 .* t) .+ 0.3f0 .* sin.(2π .* 1.3f0 .* t) .+
          0.15f0 .* randn(rng, Float32, length(t))
 
+# Standardize before training so the recurrent model does not spend capacity on scale alone
+μ_signal = mean(signal)
+σ_signal = std(signal)
+signal_scaled = (signal .- μ_signal) ./ σ_signal
+
 # Create input/output pairs using a sliding window
 window = 20
-n_pairs = length(signal) - window
+n_pairs = length(signal_scaled) - window
 X_seq = zeros(Float32, 1, window, n_pairs)  # (features, time_steps, batch)
 Y_seq = zeros(Float32, 1, n_pairs)          # (features, batch)
 
 for i in 1:n_pairs
-    X_seq[1, :, i] = signal[i:i+window-1]
-    Y_seq[1, i]    = signal[i+window]
+    X_seq[1, :, i] = signal_scaled[i:i+window-1]
+    Y_seq[1, i]    = signal_scaled[i+window]
 end
 
 # Train/test split (chronological split to respect time ordering)
@@ -94,9 +103,8 @@ X_test,  Y_test  = X_seq[:, :, n_train+1:end], Y_seq[:, n_train+1:end]
 ```{julia}
 # Build an LSTM model that reads the sequence, then maps the final hidden state to a prediction
 model = Chain(
-    Recurrence(LSTMCell(1 => 16)),
-    WrappedFunction(x -> x[:, end:end, :]),  # take last time step
-    Dense(16 => 1)
+    Recurrence(LSTMCell(1 => 32)),
+    Dense(32 => 1)
 )
 
 ps, st = Lux.setup(rng, model)
@@ -104,36 +112,37 @@ ps, st = Lux.setup(rng, model)
 function mse_loss(model, ps, st, data)
     x, y = data
     ŷ, st_new = model(x, ps, st)
-    ŷ = dropdims(ŷ, dims = 2)
     loss = mean((ŷ .- y) .^ 2)
     return loss, st_new, ()
 end
 ```
 
 ```{julia}
-opt = Adam(0.005f0)
-tstate = Training.TrainState(model, ps, st, opt)
-
-for epoch in 1:300
-    _, loss, _, tstate = Training.single_train_step!(
-        AutoZygote(), mse_loss, (X_train, Y_train), tstate
-    )
-    if epoch == 1 || epoch % 60 == 0
-        @printf "Epoch %3d  MSE = %.6f\n" epoch loss
+function train_model(model, ps, st, data; epochs = 600, lr = 0.003f0)
+    tstate = Training.TrainState(model, ps, st, Adam(lr))
+    for epoch in 1:epochs
+        _, loss, _, tstate = Training.single_train_step!(
+            AutoZygote(), mse_loss, data, tstate
+        )
+        if epoch == 1 || epoch % 120 == 0
+            @printf "Epoch %3d  MSE = %.6f\n" epoch loss
+        end
     end
+    return tstate
 end
+
+tstate = train_model(model, ps, st, (X_train, Y_train))
 
 # Holdout evaluation
 Y_test_pred, _ = model(X_test, tstate.parameters, tstate.states)
-Y_test_pred = dropdims(Y_test_pred, dims = 2)
-test_mse = mean((Y_test_pred .- Y_test) .^ 2)
+test_mse = mean(((σ_signal .* Y_test_pred .+ μ_signal) .- (σ_signal .* Y_test .+ μ_signal)) .^ 2)
 @printf "Holdout test MSE = %.6f\n" test_mse
 ```
 
 ```{julia}
 # Predict and plot
 Y_pred, _ = model(X_seq, tstate.parameters, tstate.states)
-Y_pred = dropdims(Y_pred, dims = 2)
+Y_pred = σ_signal .* Y_pred .+ μ_signal
 
 fig = Figure(size = (700, 350))
 ax = Axis(fig[1, 1], xlabel = "Time step", ylabel = "Value",
@@ -160,7 +169,7 @@ For very long sequences (thousands of steps), **transformers** (next chapter) of
 
 Recurrent networks have been applied to a wide range of sequential geoscience problems:
 
-- **Seismic phase picking** — @zhu2019phasenet used a combination of recurrent and convolutional layers (PhaseNet) to detect P- and S-wave arrivals in continuous seismic data, achieving state-of-the-art accuracy across diverse seismic networks.
+- **Sequence modeling in seismology** — recurrent and hybrid sequence models are widely used for waveform analysis and event interpretation. @zhu2019phasenet is a closely related deep-learning benchmark for seismic arrival picking, though PhaseNet itself is primarily convolutional rather than recurrent.
 - **Climate and weather forecasting** — @ham2019enso used a CNN-LSTM hybrid to forecast the El Niño–Southern Oscillation (ENSO) up to 18 months ahead, significantly outperforming physics-based dynamical models.
 - **Precipitation nowcasting** — @shi2015convlstm introduced the ConvLSTM, combining convolutional and LSTM operations to predict radar echo sequences, a spatiotemporal forecasting task.
 - **Machine learning in geoscience overview** — @dramsch2020rnnseismic provides a comprehensive review of 70 years of machine learning in the geosciences, covering many recurrent-network applications in seismology, well-log analysis, and geophysical signal processing.

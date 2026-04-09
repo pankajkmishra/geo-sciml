@@ -15,16 +15,16 @@ The **transformer** is the architecture behind large language models and, increa
 
 The core idea: for each element in the input sequence, compute how much attention it should pay to every other element, then produce an output that is a weighted combination of the values.
 
-Given an input sequence $\mathbf{X} \in \mathbb{R}^{n \times d}$ (n tokens, d features), three linear projections produce:
+Given an input sequence $\mathbf{X} \in \mathbb{R}^{n \times d}$ ($n$ tokens, $d$ features), three linear projections produce:
 
 $$
-Q = XW_Q, \quad K = XW_K, \quad V = XW_V
+\mathbf{Q} = \mathbf{X}W_Q, \quad \mathbf{K} = \mathbf{X}W_K, \quad \mathbf{V} = \mathbf{X}W_V
 $$
 
-where $Q$ (queries), $K$ (keys), and $V$ (values) are matrices. The attention output is:
+where $\mathbf{Q}$ (queries), $\mathbf{K}$ (keys), and $\mathbf{V}$ (values) are matrices. The attention output is:
 
 $$
-\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
+\mathrm{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathrm{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right) \mathbf{V}
 $$
 
 The softmax row gives the **attention weights** — how much each position attends to every other position. The $\sqrt{d_k}$ scaling prevents the dot products from becoming too large.
@@ -34,7 +34,7 @@ The softmax row gives the **attention weights** — how much each position atten
 Instead of computing a single attention, the transformer uses **multi-head attention**: it runs $h$ parallel attention functions with different learned projections, then concatenates and projects the results:
 
 $$
-\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\, W_O
+\mathrm{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathrm{Concat}(\mathrm{head}_1, \ldots, \mathrm{head}_h)\, W_O
 $$
 
 Each head can learn to focus on different types of relationships (e.g., one head might attend to nearby positions, another to distant ones).
@@ -48,8 +48,8 @@ A single transformer block consists of:
 
 $$
 \begin{aligned}
-\mathbf{z} &= \text{LayerNorm}\!\bigl(\mathbf{x} + \text{MultiHeadAttn}(\mathbf{x})\bigr) \\
-\mathbf{y} &= \text{LayerNorm}\!\bigl(\mathbf{z} + \text{FFN}(\mathbf{z})\bigr)
+\mathbf{z} &= \mathrm{LayerNorm}\!\bigl(\mathbf{x} + \mathrm{MultiHeadAttn}(\mathbf{x})\bigr) \\
+\mathbf{y} &= \mathrm{LayerNorm}\!\bigl(\mathbf{z} + \mathrm{FFN}(\mathbf{z})\bigr)
 \end{aligned}
 $$
 
@@ -77,24 +77,24 @@ using LinearAlgebra, Random, CairoMakie
 
 rng = Xoshiro(42)
 
-# Sequence of 6 tokens, each with 4 features
+#-----sequence setup------
 seq_len, d_model = 6, 4
 X = randn(rng, Float32, seq_len, d_model)
 
-# Learned projections (in practice, these are Dense layers)
-d_k = d_model
-W_Q = randn(rng, Float32, d_model, d_k) .* 0.5f0
-W_K = randn(rng, Float32, d_model, d_k) .* 0.5f0
-W_V = randn(rng, Float32, d_model, d_k) .* 0.5f0
+#-----learned projections------
+dₖ = d_model
+W_Q = randn(rng, Float32, d_model, dₖ) .* 0.5f0
+W_K = randn(rng, Float32, d_model, dₖ) .* 0.5f0
+W_V = randn(rng, Float32, d_model, dₖ) .* 0.5f0
 
 Q = X * W_Q
 K = X * W_K
 V = X * W_V
 
-# Compute attention weights
-scores = Q * K' ./ sqrt(Float32(d_k))
+#-----attention weights------
+scores = Q * K' ./ sqrt(Float32(dₖ))
 
-# Softmax over each row
+#-----row-wise softmax------
 function row_softmax(S)
     exp_S = exp.(S .- maximum(S, dims = 2))
     return exp_S ./ sum(exp_S, dims = 2)
@@ -102,7 +102,7 @@ end
 
 attn_weights = row_softmax(scores)
 
-# Output: weighted combination of values
+#-----weighted output------
 output = attn_weights * V
 
 println("Attention weights (each row sums to 1):")
@@ -148,8 +148,7 @@ Transformers scale better to long sequences and large datasets, which explains t
 Transformers are rapidly entering geoscience, especially for tasks where long-range dependencies and large-scale data matter:
 
 - **Earthquake detection** — @mousavi2020earthquake introduced the Earthquake Transformer (EQTransformer), which uses attention mechanisms to simultaneously detect earthquakes and pick seismic phases from continuous waveform data, achieving superior performance over CNN and RNN baselines.
-- **Weather forecasting** — @pathak2022fourcastnet developed FourCastNet, a vision-transformer-based model for global weather forecasting that runs orders of magnitude faster than traditional numerical weather models while producing competitive forecasts. @bi2023pangu (Pangu-Weather) used 3D transformers for medium-range forecasting published in Nature.
-- **Graph-based weather prediction** — @lam2023graphcast (GraphCast) combined transformer-style attention with graph neural networks for global weather forecasting, achieving state-of-the-art accuracy at 0.25° resolution.
+- **Weather forecasting** — @bi2023pangu (Pangu-Weather) is a prominent example of the recent shift toward attention-heavy learned weather models for medium-range forecasting. By contrast, FourCastNet [@pathak2022fourcastnet] is an important fast weather model built on Fourier neural operators rather than a transformer, so it fits more naturally with the operator-learning material later in the book.
 - **Earth observation** — Vision transformers are being applied to satellite imagery for land-cover classification, change detection, and environmental monitoring, following the success of ViT [@dosovitskiy2021vit] in computer vision.
 
 The transformer is increasingly the architecture of choice for problems involving long sequences, multimodal data, or large-scale pre-training in geoscience.

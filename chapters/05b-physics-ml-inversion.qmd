@@ -50,8 +50,20 @@ A physics-based ML inversion parameterizes the **model** $m_\theta(\mathbf{x})$ 
 The total loss is:
 
 $$
-\mathcal{L}(\theta) = \underbrace{\frac{1}{N_d}\sum_{i=1}^{N_d}\bigl(d_i^{\text{pred}}(\theta) - d_i^{\text{obs}}\bigr)^2}_{\text{data misfit}} + \underbrace{\lambda_r \frac{1}{N_c}\sum_{j=1}^{N_c}\bigl|\mathcal{N}[u; m_\theta](\mathbf{x}_j)\bigr|^2}_{\text{PDE residual}}
+\mathcal{L}(\theta) = \mathcal{L}_{\mathrm{data}}(\theta) + \lambda_r \mathcal{L}_r(\theta)
 $$
+
+where
+
+$$
+\mathcal{L}_{\mathrm{data}}(\theta) = \frac{1}{N_d}\sum_{i=1}^{N_d}\bigl(d_i^{\mathrm{pred}}(\theta) - d_i^{\mathrm{obs}}\bigr)^2
+$$
+
+$$
+\mathcal{L}_r(\theta) = \frac{1}{N_c}\sum_{j=1}^{N_c}\bigl|\mathcal{N}[u; m_\theta](\mathbf{x}_j)\bigr|^2
+$$
+
+In this chapter I use $d^{\mathrm{obs}}$ and $d^{\mathrm{pred}}$ instead of $y$ and $\hat{y}$ because the distinction between measured and predicted data is part of the geophysical setup, not just generic regression notation.
 
 ## Implicit neural representations (INRs)
 
@@ -148,8 +160,7 @@ fig
 ```
 
 ```{julia}
-# INR for the diffusion coefficient κ(x)
-# Fourier feature encoding + MLP
+#-----κ representation------
 n_features = 32
 B_matrix = randn(rng, Float32, n_features, 1) .* 4.0f0  # frequency scale
 
@@ -158,14 +169,14 @@ function fourier_encode(x, B)
     return vcat(sin.(2π .* projected), cos.(2π .* projected))  # (2*n_features, n_points)
 end
 
-# κ-network: Fourier features → MLP → positive κ
+#-----κ-network------
 κ_model = Chain(
     Dense(2 * n_features => 64, tanh),
     Dense(64 => 64, tanh),
     Dense(64 => 1)
 )
 
-# u-network: also an INR for the solution field
+#-----u-network------
 u_model = Chain(
     Dense(2 * n_features => 64, tanh),
     Dense(64 => 64, tanh),
@@ -177,8 +188,11 @@ ps_u, st_u = Lux.setup(rng, u_model)
 ```
 
 ```{julia}
-# Combined loss: data misfit + PDE residual
+#-----combined loss------
 function inversion_loss(ps_κ, ps_u, st_κ, st_u)
+    λᵣ = 1.0f0
+    λᵦ = 10.0f0
+
     # Evaluate κ and u at collocation points
     n_colloc = 100
     x_c = Float32.(range(0.01, 0.99, length = n_colloc))
@@ -222,7 +236,7 @@ function inversion_loss(ps_κ, ps_u, st_κ, st_u)
     u_bc, _ = u_model(x_bc_enc, ps_u, st_u)
     loss_bc = mean(u_bc .^ 2)
     
-    total = loss_data + 1.0f0 * loss_pde + 10.0f0 * loss_bc
+    total = loss_data + λᵣ * loss_pde + λᵦ * loss_bc
     return total
 end
 ```

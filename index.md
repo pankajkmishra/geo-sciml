@@ -24,7 +24,7 @@ Machine learning and AI are evolving rapidly, and it is difficult to estimate ho
 
 The programming language used throughout is Julia [@bezanson2017julia]. The first part of the book introduces the computational setup and teaches enough Julia to reproduce the results and continue learning with confidence. No prior programming experience is required. The book then covers the core ideas of machine learning and deep learning that underpin modern models, before moving into Scientific machine learning methods and geoscience-focused applications. The emphasis is on methods designed for systems governed by differential equations and physical structure, including physics-informed approaches and operator learning. The goal is to connect data-driven models with scientific reasoning in a way that is practical for real geoscientific problems.
 
-If you find this book useful, please consider citing it as:
+If you find this book useful, please consider citing the current web edition as:
 
 
 Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://geo-sciml.com
@@ -36,6 +36,6 @@ Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://ge
   author={Pankaj K Mishra},
   url={https://geo-sciml.com},
   year={2026},
-  publisher={WWW}
+  note={Web edition}
 }
 ```

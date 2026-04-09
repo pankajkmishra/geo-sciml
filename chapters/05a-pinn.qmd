@@ -39,10 +39,24 @@ and train the network to make this residual zero everywhere.
 
 ## The PINN loss function
 
-The total loss combines three terms:
+The total loss combines three named components:
 
 $$
-\mathcal{L}(\theta) = \underbrace{\lambda_r \frac{1}{N_r}\sum_{i=1}^{N_r} |r_\theta(\mathbf{x}_i^r, t_i^r)|^2}_{\text{PDE residual}} + \underbrace{\lambda_b \frac{1}{N_b}\sum_{j=1}^{N_b} |\mathcal{B}[u_\theta](\mathbf{x}_j^b, t_j^b)|^2}_{\text{boundary conditions}} + \underbrace{\lambda_0 \frac{1}{N_0}\sum_{k=1}^{N_0} |u_\theta(\mathbf{x}_k^0, 0) - u_0(\mathbf{x}_k^0)|^2}_{\text{initial conditions}}
+\mathcal{L}(\theta) = \lambda_r \mathcal{L}_r(\theta) + \lambda_b \mathcal{L}_{\mathrm{bc}}(\theta) + \lambda_0 \mathcal{L}_0(\theta)
+$$
+
+with
+
+$$
+\mathcal{L}_r(\theta) = \frac{1}{N_r}\sum_{i=1}^{N_r} |r_\theta(\mathbf{x}_i^r, t_i^r)|^2
+$$
+
+$$
+\mathcal{L}_{\mathrm{bc}}(\theta) = \frac{1}{N_b}\sum_{j=1}^{N_b} |\mathcal{B}[u_\theta](\mathbf{x}_j^b, t_j^b)|^2
+$$
+
+$$
+\mathcal{L}_0(\theta) = \frac{1}{N_0}\sum_{k=1}^{N_0} |u_\theta(\mathbf{x}_k^0, 0) - u_0(\mathbf{x}_k^0)|^2
 $$
 
 where:
@@ -52,7 +66,7 @@ where:
 - $\{(\mathbf{x}_k^0)\}$ are points at $t=0$.
 - $\lambda_r, \lambda_b, \lambda_0$ are weighting factors.
 
-If observational data is also available, a fourth **data loss** term can be added, making the PINN a hybrid physics-data model.
+If observational data is also available, a fourth term $\mathcal{L}_{\mathrm{data}}$ can be added, making the PINN a hybrid physics-data model.
 
 ## Code example: solving the 1D heat equation
 
@@ -101,11 +115,14 @@ ps, st = Lux.setup(rng, model)
 ```
 
 ```{julia}
-# PINN loss: PDE residual + BC + IC (using automatic differentiation)
+#-----PINN loss------
 function pinn_loss(model, ps, st, data)
     x_i, t_i, x_b0, x_b1, t_b, x_ic_, u_ic_ = data
+    λᵣ = 1.0f0
+    λᵦ = 10.0f0
+    λ₀ = 10.0f0
     
-    # --- PDE residual: du/dt - α * d²u/dx² = 0 ---
+    #-----PDE residual------
     function u_pred(xt)
         input = reshape(xt, 2, 1)
         out, _ = model(input, ps, st)
@@ -124,19 +141,19 @@ function pinn_loss(model, ps, st, data)
     residual = reshape(residuals, 1, :)
     loss_pde = mean(residual .^ 2)
     
-    # --- Boundary loss: u(0,t) = 0, u(1,t) = 0 ---
+    #-----boundary loss------
     bc_input_0 = vcat(x_b0, t_b)
     bc_input_1 = vcat(x_b1, t_b)
     u_b0, _ = model(bc_input_0, ps, st)
     u_b1, _ = model(bc_input_1, ps, st)
     loss_bc = mean(u_b0 .^ 2) + mean(u_b1 .^ 2)
     
-    # --- Initial condition loss: u(x, 0) = sin(πx) ---
+    #-----initial-condition loss------
     ic_input = vcat(x_ic_, zeros(Float32, 1, size(x_ic_, 2)))
     u_0, _ = model(ic_input, ps, st)
     loss_ic = mean((u_0 .- u_ic_) .^ 2)
     
-    total = loss_pde + 10.0f0 * loss_bc + 10.0f0 * loss_ic
+    total = λᵣ * loss_pde + λᵦ * loss_bc + λ₀ * loss_ic
     return total, st, ()
 end
 ```

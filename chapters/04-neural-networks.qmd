@@ -2,156 +2,63 @@
 title: "Neural Networks"
 ---
 
-At this point you know how to handle data files, manipulate tables, and create plots.
+At this point you know how to read files, work with arrays and tables, and make figures. That is enough to start asking a more interesting question: can we build a model that learns a pattern directly from data instead of us writing the rule by hand?
 
-In this chapter we will build **neural networks** that learn patterns directly from data. We start with a hands-on example (generate data, train, evaluate) before unpacking the theory. The framework is **Lux.jl**, a modern Julia library that keeps model parameters and state explicit.
+That is the role of a **neural network**. A neural network is just a layered function with many adjustable parameters. During training, those parameters are nudged until the network maps inputs to outputs in a useful way. The idea is simple. What makes neural networks powerful is that with enough data, enough nonlinearity, and a sensible training setup, they can approximate very complicated relationships.
 
-## Sauna Satisfaction Predictor
+For geoscience, this matters because many problems involve patterns that are real but hard to write down explicitly: seismic facies, weather evolution, surrogate models for PDE solvers, or relationships between sparse observations and hidden structure in the subsurface. Neural networks are not magic shortcuts around physics, but they are flexible function approximators that become extremely useful when combined with scientific knowledge.
 
-Let's skip the theory and train a neural network end to end. In an alternate universe, the Geological Survey of Finland maintains sauna visitor logs. For each visit, three inputs are recorded:
+## The basic picture
 
-- **Sauna temperature** (°C)
-- **Outside temperature** (°C)  
-- **Minutes since last coffee**
-
-After the session, the visitor assigns a **Satisfaction Score** between 0 and 1. We will train a small neural network to predict this score from the three inputs.
-
-```{julia}
-using Lux, Random, Optimisers, Zygote, Statistics, Printf
-```
-
-```{julia}
-#| echo: false
-#| output: false
-# --- Generate synthetic sauna visitor log and write to file ---
-rng = Xoshiro(42)
-n = 200
-
-sauna_temp   = 60.0f0 .+ 40.0f0 .* rand(rng, Float32, n)
-outside_temp = -30.0f0 .+ 40.0f0 .* rand(rng, Float32, n)
-coffee_min   = 5.0f0 .+ 115.0f0 .* rand(rng, Float32, n)
-
-sweet_spot = exp.(-(((sauna_temp .- 80.0f0) ./ 10.0f0) .^ 2))
-contrast   = 0.3f0 .* (1.0f0 .- (outside_temp .+ 30.0f0) ./ 40.0f0)
-coffee_pen = -0.2f0 .* clamp.((coffee_min .- 60.0f0) ./ 60.0f0, 0.0f0, 1.0f0)
-noise      = 0.08f0 .* randn(rng, Float32, n)
-
-raw_score = sweet_spot .+ contrast .+ coffee_pen .+ noise
-score = clamp.(raw_score, 0.0f0, 1.0f0)
-
-open("sauna_log.txt", "w") do f
-    write(f, "sauna_temp,outside_temp,coffee_min,score\n")
-    for i in 1:n
-        @printf(f, "%.1f,%.1f,%.1f,%.4f\n",
-            sauna_temp[i], outside_temp[i], coffee_min[i], score[i])
-    end
-end
-```
-
-First, read the data and normalize inputs to zero mean and unit variance:
-
-```{julia}
-lines = readlines("sauna_log.txt")
-data = reduce(hcat, [parse.(Float32, split(l, ",")) for l in lines[2:end]])
-
-X_raw = data[1:3, :]
-Y     = data[4:4, :]
-
-# Normalize inputs
-mu  = mean(X_raw, dims = 2)
-sig = std(X_raw, dims = 2)
-X   = (X_raw .- mu) ./ sig
-
-# Split into train and test
-rng = Xoshiro(123)
-n_train = Int(round(0.8 * size(X, 2)))
-idx = randperm(rng, size(X, 2))
-
-X_train = X[:, idx[1:n_train]]
-Y_train = Y[:, idx[1:n_train]]
-X_test  = X[:, idx[n_train+1:end]]
-Y_test  = Y[:, idx[n_train+1:end]]
-
-@printf "Train: %d  Test: %d\n" size(X_train, 2) size(X_test, 2)
-```
-
-Build a simple neural network with one hidden layer (8 neurons with tanh activation):
-
-```{julia}
-model = Chain(
-    Dense(3 => 8, tanh),
-    Dense(8 => 1)
-)
-
-# Initialize parameters and state
-ps, st = Lux.setup(rng, model)
-
-# Define loss function (mean squared error)
-function mse_loss(model, ps, st, data)
-    x, y_true = data
-    y_pred, st_new = model(x, ps, st)
-    loss = mean((y_pred .- y_true) .^ 2)
-    return loss, st_new, ()
-end
-```
-
-Train the network using the Adam optimizer:
-
-```{julia}
-opt = Adam(0.01f0)
-tstate = Training.TrainState(model, ps, st, opt)
-
-for epoch in 1:500
-    _, loss, _, tstate = Training.single_train_step!(
-        AutoZygote(), mse_loss, (X_train, Y_train), tstate
-    )
-    if epoch == 1 || epoch % 100 == 0
-        @printf "Epoch %4d  MSE = %.6f\n" epoch loss
-    end
-end
-
-# Evaluate on test data
-Y_pred_test, _ = model(X_test, tstate.parameters, tstate.states)
-test_mse = mean((Y_pred_test .- Y_test) .^ 2)
-test_mae = mean(abs.(Y_pred_test .- Y_test))
-
-@printf "Test MSE: %.6f  Test MAE: %.4f\n" test_mse test_mae
-```
-
-Finally, make predictions for specific scenarios:
-
-```{julia}
-scenarios = [
-    (sauna=80, outside=-20, coffee=10, label="Perfect: 80°C, -20°C, fresh coffee"),
-    (sauna=65, outside=5,   coffee=100, label="Poor: lukewarm, mild, stale coffee"),
-    (sauna=95, outside=-25, coffee=30, label="Extreme: 95°C, deep winter"),
-]
-
-function predict_score(s, model, ps, st, mu, sig)
-    x = Float32.([(s.sauna - mu[1]) / sig[1],
-                  (s.outside - mu[2]) / sig[2], 
-                  (s.coffee - mu[3]) / sig[3]])
-    pred, _ = model(reshape(x, 3, 1), ps, st)
-    return pred[1]
-end
-
-for s in scenarios
-    sc = predict_score(s, model, tstate.parameters, tstate.states, mu, sig)
-    @printf "%-35s %.2f\n" s.label sc
-end
-```
-
-## What is a neural network?
-
-A **neuron** multiplies inputs by weights, adds bias, and applies non-linear activation:
+At the smallest scale, a neuron takes an input vector $\mathbf{x}$, forms a weighted sum, adds a bias, and applies a nonlinear activation:
 
 $$
 z = \sigma\!\bigl(\mathbf{w}^\top \mathbf{x} + b\bigr)
 $$
 
-Stack neurons to get a **layer**; chain layers to get a **network**. Learning happens through four repeated steps: forward pass, compute loss, backward pass (gradients), and parameter update.
+One neuron is not very interesting. A layer of neurons can learn several features at once, and a stack of layers can build increasingly abstract representations. In practice, training a network always comes back to the same loop:
 
-::: {.callout-warning}
-## Work in progress
-The next chapters will cover scientific machine learning in detail, combining domain knowledge with data-driven approaches for geoscientific problems.
-:::
+1. Make a prediction from the input.
+2. Compare that prediction with the target.
+3. Measure the mismatch with a loss function.
+4. Adjust the parameters to reduce the loss.
+
+That is the whole game. The rest of this part is about understanding what each of those steps really means.
+
+## How this part is organized
+
+The next chapter gives you a first end-to-end example before any serious theory. That is intentional. It is easier to understand the moving parts once you have seen the whole workflow in action.
+
+After that, we slow down and unpack the pieces one by one:
+
+- [Your First Neural Network](04a-nn-teaser.qmd) shows the full workflow: data, model, training, and prediction.
+- [Building Blocks of Neural Networks](04b-nn-basics.qmd) explains neurons, layers, losses, gradients, and optimizers.
+- The remaining chapters first cover major architecture families used throughout modern machine learning: multilayer perceptrons, convolutional networks, recurrent networks, transformers, and graph neural networks. The last group of chapters then shifts to generative modeling: autoencoders, GANs, diffusion models, and flow matching.
+
+The goal is not to turn you into a deep-learning theorist. The goal is to make the models legible enough that when they reappear later in scientific machine learning, they feel like tools you understand rather than black boxes.
+
+## Notation used in this part
+
+To keep the mathematics readable, this part uses a few conventions consistently:
+
+- Bold symbols such as $\mathbf{x}$ and $\mathbf{h}$ denote vectors.
+- Superscripts in parentheses, such as $\mathbf{h}^{(l)}$, index layers or network depth.
+- Subscripts, such as $\mathbf{h}_t$, usually index time steps, samples, or nodes.
+- $\mathcal{L}$ denotes a loss function, while subscripts such as $\mathcal{L}_{\mathrm{data}}$ or $\mathcal{L}_{\mathrm{bc}}$ identify particular pieces of that loss.
+
+These are not universal rules across all textbooks, but they will keep the notation in this book steady from chapter to chapter.
+
+## What to watch for
+
+When you first learn neural networks, it is tempting to focus on architecture names and package syntax. Those matter, but the deeper questions are simpler:
+
+- What is the input, and what is the output?
+- What exactly is being learned?
+- What loss is being minimized?
+- What assumptions are hidden in the data split, the architecture, and the training loop?
+
+If you keep asking those questions, most neural-network papers become much easier to read.
+
+## Summary
+
+Neural networks are flexible parameterized functions trained from data. In geoscience they become especially useful when they are paired with domain structure, physical constraints, and careful evaluation. The next chapter starts with a concrete example so you can see the workflow before we dissect the machinery.

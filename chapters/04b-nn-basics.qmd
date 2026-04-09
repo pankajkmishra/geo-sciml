@@ -17,6 +17,23 @@ The modern understanding of neural networks rests on a small number of milestone
 
 In the previous chapter you trained a neural network without knowing what was going on inside. Now we unpack every piece.
 
+A **feedforward neural network** is the simplest network topology: information moves from the input layer to the output layer with no recurrence, feedback loop, or hidden state. When this feedforward architecture is built by stacking several dense layers, it is usually called a **multilayer perceptron** (MLP). Later chapters will revisit that architecture in more detail, but this is the basic meaning of "feedforward" throughout the book.
+
+## Notation used in this part
+
+Before we get into the details, it helps to keep a small notation guide in mind. We will use the same conventions throughout the neural-network chapters:
+
+| Symbol | Meaning | Convention |
+|---|---|---|
+| $\mathbf{x}$, $\mathbf{h}$, $\hat{\mathbf{y}}$ | Vectors | Bold lowercase symbols denote vectors. |
+| $W^{(l)}$, $\mathbf{b}^{(l)}$ | Weights and bias at layer $l$ | Superscripts in parentheses index layer depth. |
+| $\mathbf{h}_t$ | Hidden state at time step $t$ | Subscripts usually index time, samples, or nodes. |
+| $\mathbf{h}_i^{(k)}$ | Node $i$ representation at GNN layer $k$ | Subscript for node, superscript for layer. |
+| $\mathcal{L}$ | Total loss | Use subscripts such as $\mathcal{L}_{\mathrm{data}}$ or $\mathcal{L}_{\mathrm{bc}}$ for components. |
+| $\hat{y}$ | Generic prediction | In inversion chapters we may switch to symbols such as $d^{\mathrm{pred}}$ and $d^{\mathrm{obs}}$ when the data meaning matters. |
+
+These choices are not the only valid ones, but keeping them fixed makes the later chapters easier to read.
+
 ## The artificial neuron
 
 A biological neuron receives signals, integrates them, and fires if the total exceeds a threshold. An artificial neuron follows the same idea in simplified form. Given an input vector $\mathbf{x} \in \mathbb{R}^n$, a neuron computes:
@@ -29,7 +46,9 @@ where:
 
 - $\mathbf{w} \in \mathbb{R}^n$ is the **weight vector** — one weight per input.
 - $b \in \mathbb{R}$ is the **bias** — a constant shift.
-- $\sigma$ is the **activation function** — a non-linear function applied to the weighted sum.
+- $\sigma$ is a **generic activation function** — a non-linear function applied to the weighted sum.
+
+When we mean a specific activation, we will write it explicitly, for example $\tanh(\cdot)$ or $\mathrm{ReLU}(\cdot)$.
 
 The weights and bias are the *learnable parameters*. Training a neural network means finding values of $\mathbf{w}$ and $b$ (across all neurons) that make the network's output match the desired target.
 
@@ -63,10 +82,10 @@ fig
 A **layer** is a collection of neurons that operate in parallel on the same input. In a **dense** (fully connected) layer, every neuron receives every input:
 
 $$
-\mathbf{z} = \sigma\!\bigl(W\,\mathbf{x} + \mathbf{b}\bigr)
+\mathbf{h}^{(l)} = \sigma\!\bigl(W^{(l)}\,\mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}\bigr)
 $$
 
-where $W \in \mathbb{R}^{m \times n}$ is the weight matrix ($m$ neurons, $n$ inputs) and $\mathbf{b} \in \mathbb{R}^m$ is the bias vector.
+where $W^{(l)} \in \mathbb{R}^{m \times n}$ is the weight matrix for layer $l$ ($m$ neurons, $n$ incoming features) and $\mathbf{b}^{(l)} \in \mathbb{R}^m$ is the corresponding bias vector.
 
 In Lux.jl, creating a dense layer with 3 inputs and 8 outputs using the `tanh` activation looks like:
 
@@ -101,6 +120,8 @@ The **loss function** (or cost function) measures how far the network's predicti
 
 - **Mean Squared Error (MSE)** — for regression: $\mathcal{L} = \frac{1}{N}\sum_{i=1}^{N}(\hat{y}_i - y_i)^2$
 - **Cross-Entropy** — for classification: $\mathcal{L} = -\frac{1}{N}\sum_{i=1}^{N}\bigl[y_i \log \hat{y}_i + (1-y_i) \log(1-\hat{y}_i)\bigr]$
+
+In the chapters ahead, when the loss has several pieces, we will write them as named components such as $\mathcal{L}_{\mathrm{data}}$, $\mathcal{L}_{\mathrm{pde}}$, or $\mathcal{L}_{\mathrm{bc}}$ rather than leaving them unnamed inside one long equation.
 
 The choice of loss function depends on the problem. Regression tasks almost always use MSE; classification tasks use cross-entropy.
 

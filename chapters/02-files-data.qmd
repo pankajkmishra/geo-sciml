@@ -318,11 +318,14 @@ Julia has everything you need for this built into the standard library, no extra
 ### Listing files in a directory
 
 ```{julia}
+#| eval: false
 # readdir returns the names of everything in a folder
 for name in readdir(".")
     println(name)
 end
 ```
+
+This is one of those examples that is more useful when you run it in your own project than when I freeze the output here, because the exact listing depends on whatever happens to be in the working directory at render time.
 
 By default `readdir` gives you the names without the full path. Pass `join = true` to get complete paths:
 

@@ -23,7 +23,7 @@ $$
 \mathcal{N}[u; a] = 0 \quad \implies \quad u = \mathcal{G}(a)
 $$
 
-where $\mathcal{G}$ is the **solution operator**. A traditional solver computes $\mathcal{G}(a)$ one $a$ at a time. DeepONet learns $\mathcal{G}_\theta \approx \mathcal{G}$ from data — pairs $\{(a_i, u_i)\}_{i=1}^{N}$ — so that inference on new inputs is a single forward pass.
+where $a \in \mathcal{A}$ is an input function, $u \in \mathcal{U}$ is the corresponding output function, and $\mathcal{G}: \mathcal{A} \to \mathcal{U}$ is the **solution operator**. Writing $\mathcal{G}(a)(y)$ means: first apply the operator to the whole input function $a$, then evaluate the resulting output function at the query location $y$. A traditional solver computes $\mathcal{G}(a)$ one $a$ at a time. DeepONet learns $\mathcal{G}_\theta \approx \mathcal{G}$ from data — pairs $\{(a_i, u_i)\}_{i=1}^{N}$ — so that inference on new inputs is a single forward pass.
 
 ## The universal approximation theorem for operators
 
@@ -68,7 +68,7 @@ $$
 
 - **Trunk network** — takes the query location $y$ (where we want to evaluate the output) and produces $p$ basis functions $\{\tau_1, \ldots, \tau_p\}$.
 
-The final output is the inner product of the branch and trunk outputs. This is elegant: the branch encodes *what* the input function looks like, while the trunk learns *where* to produce the output.
+The final output is the inner product of the branch and trunk outputs. This is elegant: the branch encodes *what* the input function looks like, while the trunk learns *where* to produce the output. In other words, the branch depends on the input function $a$, while the trunk depends on the query location $y$.
 
 ## Variants
 

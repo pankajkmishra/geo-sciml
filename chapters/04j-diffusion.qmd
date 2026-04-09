@@ -1,0 +1,180 @@
+---
+title: "Diffusion Models"
+---
+
+::: {.callout-tip}
+## Key references
+- **Thermodynamic diffusion models** — the early formulation that introduced gradual noising and learned reversal as a generative strategy [@sohl2015diffusion].
+- **DDPM** — the paper that made diffusion models practical and widely adopted by training a network to predict injected noise [@ho2020ddpm].
+- **Score-based diffusion** — the stochastic-differential-equation view that connects diffusion models, score matching, and continuous-time sampling [@song2021sde].
+:::
+
+A **diffusion model** learns to generate data by reversing a gradual corruption process. We begin with a clean sample $\mathbf{x}_0$, add small amounts of Gaussian noise over many steps until the sample becomes almost pure noise, and then train a neural network to undo that corruption one step at a time.
+
+Conceptually, diffusion models are attractive because they replace one hard generative jump with many easy denoising subproblems. Instead of asking a network to directly map random noise to a realistic geological or physical sample, we ask it a sequence of simpler questions: "given a slightly corrupted sample, what noise was added?" or equivalently "how should this point move to become a little cleaner?"
+
+## The forward noising process
+
+In a discrete diffusion model, the forward process defines a Markov chain:
+
+$$
+q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\; \beta_t I\right)
+$$
+
+where $\beta_t$ is a small variance schedule. Repeating this many times produces progressively noisier states $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_T$.
+
+An especially useful closed-form expression is:
+
+$$
+\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1-\bar{\alpha}_t}\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(0, I)
+$$
+
+with $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}_t = \prod_{s=1}^t \alpha_s$. This says that every noisy sample is just a weighted combination of the clean sample and Gaussian noise.
+
+## The learned reverse process
+
+The reverse process is parameterized by a neural network, often written as $\epsilon_\theta(\mathbf{x}_t, t)$, that predicts the noise contained in a noisy sample. Training minimizes a simple mean-squared error:
+
+$$
+\mathcal{L}(\theta) = \mathbb{E}_{\mathbf{x}_0,\, t,\, \boldsymbol{\epsilon}}\left[\left\|\boldsymbol{\epsilon} - \epsilon_\theta(\mathbf{x}_t, t)\right\|_2^2\right]
+$$
+
+This objective is one of the main reasons diffusion models are stable: they reduce generative modeling to supervised regression on synthetic noise-corruption pairs.
+
+At sampling time, we start from Gaussian noise and repeatedly apply the learned denoising update from $t=T$ back to $t=1$. Each reverse step is small, but together they transform noise into a sample drawn from the learned distribution.
+
+## Code example: learning a 1D porosity prior with a diffusion model
+
+We use a tiny diffusion model to learn a bimodal 1D porosity distribution representing two simplified rock populations. The point of the example is not image generation; it is to show the core workflow on a distribution that is easy to visualize. The network input is a noisy porosity value together with the diffusion time step, and the output is the predicted injected noise.
+
+```{julia}
+using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+
+rng = Xoshiro(42)
+
+function sample_porosity(rng, n)
+    values = zeros(Float32, n)
+    for i in 1:n
+        if rand(rng) < 0.55f0
+            values[i] = clamp(0.27f0 + 0.025f0 * randn(rng, Float32), 0.16f0, 0.36f0)
+        else
+            values[i] = clamp(0.09f0 + 0.015f0 * randn(rng, Float32), 0.03f0, 0.14f0)
+        end
+    end
+    return reshape(values, 1, :)
+end
+
+n_data = 768
+x0_data = sample_porosity(rng, n_data)
+μ_data = mean(x0_data)
+σ_data = std(x0_data)
+x0_scaled = (x0_data .- μ_data) ./ σ_data
+
+n_steps = 40
+β = Float32.(range(1.0f-4, 0.03f0, length = n_steps))
+α = 1.0f0 .- β
+ᾱ = accumulate(*, α)
+```
+
+```{julia}
+# Tiny MLP: noisy porosity and normalized time step -> predicted noise
+denoiser = Chain(
+    Dense(2 => 32, relu),
+    Dense(32 => 32, relu),
+    Dense(32 => 1)
+)
+
+ps, st = Lux.setup(rng, denoiser)
+opt_state = Optimisers.setup(Adam(0.005f0), ps)
+
+function diffusion_loss(ps, x0_batch, t_idx, ε)
+    ᾱ_t = reshape(ᾱ[t_idx], 1, :)
+    x_t = sqrt.(ᾱ_t) .* x0_batch .+ sqrt.(1 .- ᾱ_t) .* ε
+    t_feature = reshape(Float32.(t_idx ./ n_steps), 1, :)
+    inputs = vcat(x_t, t_feature)
+    ε̂, _ = denoiser(inputs, ps, st)
+    return mean((ε̂ .- ε) .^ 2)
+end
+```
+
+```{julia}
+batch_size = 128
+
+for epoch in 1:400
+    idx = rand(rng, 1:size(x0_scaled, 2), batch_size)
+    x0_batch = x0_scaled[:, idx]
+    t_idx = rand(rng, 1:n_steps, batch_size)
+    ε = randn(rng, Float32, 1, batch_size)
+
+    loss, grads = Zygote.withgradient(ps) do p
+        diffusion_loss(p, x0_batch, t_idx, ε)
+    end
+
+    opt_state, ps = Optimisers.update(opt_state, ps, grads[1])
+
+    if epoch == 1 || epoch % 100 == 0
+        @printf "Epoch %3d  diffusion loss = %.6f\n" epoch loss
+    end
+end
+```
+
+```{julia}
+# Reverse sampling from Gaussian noise
+function predict_noise(x, step, ps)
+    t_feature = fill(Float32(step / n_steps), 1, size(x, 2))
+    inputs = vcat(x, t_feature)
+    ε̂, _ = denoiser(inputs, ps, st)
+    return ε̂
+end
+
+n_samples = 600
+x = randn(rng, Float32, 1, n_samples)
+
+for step in n_steps:-1:1
+    ε̂ = predict_noise(x, step, ps)
+    α_t = α[step]
+    β_t = β[step]
+    ᾱ_t = ᾱ[step]
+    z = step > 1 ? randn(rng, Float32, size(x)) : zeros(Float32, size(x))
+    x = (x .- (β_t / sqrt(1.0f0 - ᾱ_t)) .* ε̂) ./ sqrt(α_t)
+    if step > 1
+        x .+= sqrt(β_t) .* z
+    end
+end
+
+generated_porosity = clamp.(x .* σ_data .+ μ_data, 0.0f0, 0.4f0)
+
+fig = Figure(size = (620, 320))
+ax1 = Axis(fig[1, 1], title = "Training data",
+           xlabel = "Porosity", ylabel = "Count")
+hist!(ax1, vec(x0_data), bins = 35, color = (:black, 0.55))
+
+ax2 = Axis(fig[1, 2], title = "Diffusion samples",
+           xlabel = "Porosity", ylabel = "Count")
+hist!(ax2, vec(generated_porosity), bins = 35, color = (:royalblue, 0.6))
+
+Label(fig[0, :], "Diffusion model: learned 1D porosity prior", fontsize = 16)
+fig
+```
+
+The generated histogram should reproduce the two main porosity modes, even if it is imperfect. That is enough to make the core point: diffusion models learn a distribution by repeatedly solving small denoising problems rather than a single direct generation problem.
+
+## When to use diffusion models
+
+Diffusion models are especially attractive when:
+
+- You care about **sample quality and distributional realism** more than single-shot speed.
+- The target distribution is **multimodal**, so a single deterministic prediction would be misleading.
+- You want a **learned prior** that can later be conditioned on observations in an inverse problem.
+- Training stability matters more than the fastest possible sampling.
+
+Their main drawback is sampling cost: a diffusion model typically needs many denoising steps to generate one sample. That is often acceptable for offline uncertainty quantification, but it can be limiting inside large inverse loops unless acceleration tricks are used.
+
+## Geoscience applications
+
+- **Seismic interpolation and denoising** — diffusion models are well matched to reconstructing missing or corrupted wavefield content because they learn realistic structure rather than only pointwise averages.
+- **Learned priors for inverse problems** — diffusion sampling can generate ensembles of geologically plausible subsurface models that are later conditioned on travel-time, waveform, or reservoir observations.
+- **Geomodel and facies generation** — diffusion models can represent multimodal geological uncertainty for channels, facies maps, and permeability fields without collapsing to a single realization.
+- **Remote sensing and Earth observation** — cloud removal, gap filling, downscaling, and super-resolution are natural conditional-generation tasks for diffusion models on spatial fields.
+- **Uncertainty-aware surrogate workflows** — because diffusion models generate ensembles rather than point estimates, they are attractive wherever geoscience decisions need uncertainty bands rather than one best model.
+- **Overview** — these applications fit the broader shift toward probabilistic, data-driven geoscience modeling reviewed in @bergen2019mlgeo and @dramsch2020rnnseismic.

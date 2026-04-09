@@ -687,6 +687,9 @@ Here is what the most common `Pkg` functions actually do:
 `Pkg.instantiate()`
 : **Recreate an environment from existing files.** If a `Manifest.toml` is present, it downloads the *exact* versions listed there. If only a `Project.toml` exists (no manifest), it resolves fresh versions and creates the manifest. This is the command you run after cloning someone else's repository.
 
+`Pkg.precompile()`
+: **Precompile installed packages ahead of time.** Julia turns package code into cached compiled form so the first real run is smoother. This is useful right after `Pkg.add()`, `Pkg.instantiate()`, or `Pkg.update()`, especially if you just changed environments, pulled a fresh repository, or want to avoid a long compile pause when you start working.
+
 `Pkg.resolve()`
 : **Re-resolve versions without adding or removing anything.** Useful after you edit `Project.toml` by hand (for example, adding a `[compat]` entry). It updates `Manifest.toml` to match the current `Project.toml` without downloading new packages.
 
@@ -716,6 +719,7 @@ Here is what the most common `Pkg` functions actually do:
 | Add a package | `add CSV` | `Pkg.add("CSV")` |
 | Remove a package | `rm CSV` | `Pkg.rm("CSV")` |
 | Recreate from lock file | `instantiate` | `Pkg.instantiate()` |
+| Precompile installed packages | `precompile` | `Pkg.precompile()` |
 | Re-resolve after hand edits | `resolve` | `Pkg.resolve()` |
 | See what is installed | `status` | `Pkg.status()` |
 | Update all packages | `update` | `Pkg.update()` |

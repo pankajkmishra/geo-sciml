@@ -45,7 +45,7 @@ An FNO consists of three stages:
 A point-wise linear layer that maps the input from its native dimension to a higher-dimensional representation:
 
 $$
-v_0(x) = P\, a(x) + q
+v^{(0)}(x) = P\, a(x) + \mathbf{q}
 $$
 
 where $P \in \mathbb{R}^{d_v \times d_a}$ and $a(x)$ is the input function at location $x$.
@@ -55,24 +55,24 @@ where $P \in \mathbb{R}^{d_v \times d_a}$ and $a(x)$ is the input function at lo
 Each Fourier layer applies:
 
 $$
-v_{l+1}(x) = \sigma\!\Bigl(\underbrace{W_l\, v_l(x)}_{\text{local linear}} + \underbrace{\mathcal{F}^{-1}\!\bigl[R_l \cdot \mathcal{F}[v_l]\bigr](x)}_{\text{spectral convolution}}\Bigr)
+v^{(l+1)}(x) = \sigma\!\Bigl(\underbrace{W^{(l)}\, v^{(l)}(x)}_{\text{local linear}} + \underbrace{\mathcal{F}^{-1}\!\bigl[R^{(l)} \cdot \mathcal{F}[v^{(l)}]\bigr](x)}_{\text{spectral convolution}}\Bigr)
 $$
 
-The spectral convolution keeps only the lowest $k_{\max}$ Fourier modes and sets the rest to zero. The learned weight tensor $R_l \in \mathbb{C}^{d_v \times d_v \times k_{\max}}$ acts as a frequency-dependent linear transformation.
+The spectral convolution keeps only the lowest $k_{\max}$ Fourier modes and sets the rest to zero. The learned weight tensor $R^{(l)} \in \mathbb{C}^{d_v \times d_v \times k_{\max}}$ acts as a frequency-dependent linear transformation. Here the superscript $(l)$ plays the same role as elsewhere in the book: it indexes layer depth.
 
 ```
-Input v_l(x)
+Input v^(l)(x)
     │
     ├──────────────────────────────────┐
     │                                  │
     ▼                                  ▼
-  FFT                           Local linear W_l
+    FFT                        Local linear W^(l)
     │
     ▼
   Truncate to k_max modes
     │
     ▼
-  Multiply by R_l
+    Multiply by R^(l)
     │
     ▼
   Inverse FFT
@@ -83,7 +83,7 @@ Input v_l(x)
          Activation σ
                │
                ▼
-          Output v_{l+1}(x)
+         Output v^(l+1)(x)
 ```
 
 ### 3. Projection layer
@@ -91,7 +91,7 @@ Input v_l(x)
 A point-wise linear layer that maps back to the output dimension:
 
 $$
-u(x) = Q\, v_L(x) + r
+u(x) = Q\, v^{(L)}(x) + r
 $$
 
 ### Why this works

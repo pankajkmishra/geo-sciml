@@ -1,8 +1,88 @@
 ---
-title: "Inverse Modelling"
+title: "Inverse Modeling"
 ---
 
-::: {.callout-note}
-## Work in progress
-This chapter is under development.
-:::
+Up to this point, the book has focused on neural networks as flexible function approximators. In many geoscience problems, though, the real task is not just to predict an output from an input. The real task is to recover something hidden: a velocity model from seismic data, a conductivity field from electromagnetic measurements, or a forcing term from sparse observations.
+
+That is an **inverse problem**. We observe consequences and work backward to infer the cause.
+
+Inverse problems are central to geoscience because the Earth is mostly inaccessible. We rarely observe the subsurface, the mantle, or the full atmospheric state directly. Instead, we measure indirect signals and try to reconstruct the underlying system. This is difficult for two reasons: the governing physics is often expensive to solve, and the inverse map is usually unstable, non-unique, or both.
+
+Scientific machine learning becomes useful exactly here. It gives us ways to combine flexible neural representations with known physical structure, so that learning is guided by more than data alone.
+
+## Forward problems versus inverse problems
+
+A **forward problem** starts with a model and predicts observations. For example, if you know the seismic velocity model, you can simulate travel times or waveforms.
+
+An **inverse problem** goes the other way. You start with observations and try to infer the model that could have produced them.
+
+In compact notation:
+
+$$
+	ext{forward:} \quad m \longmapsto d
+$$
+
+$$
+	ext{inverse:} \quad d \longmapsto m
+$$
+
+where $m$ denotes the unknown model parameters and $d$ denotes the observed data.
+
+The forward map is usually the easier direction. The inverse map is harder because several different models may explain the same data, and small errors in the data can produce large changes in the recovered model. That is why inverse problems need regularization, prior knowledge, or physical constraints.
+
+## Why scientific machine learning helps
+
+Classical inversion already uses physics. That part is not new. What SciML changes is the representation and the optimization strategy.
+
+Instead of representing the unknown model on a fixed mesh with many independent cells, we can represent it with a neural network. Instead of training only against labeled pairs, we can also penalize PDE residuals, boundary conditions, and other scientific structure. Instead of learning a single solution, we can sometimes learn an entire operator that maps one function to another.
+
+This leads to three recurring ideas in the chapters that follow:
+
+- **Physics-informed training**: the governing equation becomes part of the loss.
+- **Implicit neural representations**: the unknown field is represented as a continuous neural function.
+- **Operator learning**: the model learns a mapping between whole functions, not just between finite-dimensional vectors.
+
+These are different tools, not competing slogans. The right one depends on whether you want to solve one PDE instance, recover unknown parameters, or accelerate many repeated forward solves.
+
+## The common template
+
+Despite the variety of methods, most scientific machine-learning problems in this part fit the same high-level template:
+
+1. Represent an unknown field, state, or operator with trainable parameters $\theta$.
+2. Use observations, physical constraints, or both to define a loss $\mathcal{L}(\theta)$.
+3. Optimize the parameters so the model matches the data while respecting the governing structure.
+
+Written abstractly,
+
+$$
+	heta^\star = \arg\min_{\theta} \mathcal{L}(\theta)
+$$
+
+The details change from chapter to chapter, but the pattern stays recognizable.
+
+## What this part covers
+
+The next five chapters develop the main SciML ideas used throughout current geoscience work:
+
+- [Physics-Informed Neural Networks](05a-pinn.qmd) shows how to solve a PDE by training a network to satisfy the governing equation.
+- [Physics-Based ML for Inversion](05b-physics-ml-inversion.qmd) focuses on recovering unknown physical-property fields from data while keeping the physics in the loop.
+- [DeepONet](05c-deeponet.qmd) introduces operator learning through a branch-trunk architecture.
+- [Physics-Informed DeepONet](05d-pi-deeponet.qmd) combines operator learning with PDE constraints.
+- [Fourier Neural Operator](05e-fno.qmd) moves operator learning into Fourier space for fast surrogate modeling on regular grids.
+
+Together, these chapters cover the main conceptual shift from standard machine learning to scientific machine learning: we are no longer learning only from examples. We are learning in a setting where equations, geometry, conservation laws, and physical plausibility all matter.
+
+## What to keep in mind
+
+It is easy to get distracted by new acronyms in this area. A better filter is to keep asking four practical questions:
+
+- What object is being learned: a solution, a material property, or an operator?
+- Where does the supervision come from: data, physics, or both?
+- What assumptions are built into the parameterization?
+- How will the result be checked against scientific reality, not just training loss?
+
+Those questions will keep the chapter sequence grounded, and they matter much more than whether a method has a fashionable name.
+
+## Summary
+
+Inverse problems sit at the center of geoscience because we infer hidden structure from indirect observations. Scientific machine learning does not replace the underlying physics. It gives us new ways to represent unknowns, impose constraints, and make repeated forward and inverse calculations practical. The next chapter starts with the most direct example: PINNs.

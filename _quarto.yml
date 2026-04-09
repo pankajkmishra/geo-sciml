@@ -31,7 +31,7 @@ book:
   repo-actions: [edit, issue]
   sidebar:
     style: docked
-    collapse-level: 1
+    collapse-level: 2
   page-navigation: true
   chapters:
     - index.md
@@ -44,18 +44,22 @@ book:
 
     - part: "Neural Networks"
       chapters:
+        - chapters/04-neural-networks.qmd
         - chapters/04a-nn-teaser.qmd
         - chapters/04b-nn-basics.qmd
-        - chapters/04c-feedforward.qmd
+        - chapters/04c-mlp.qmd
         - chapters/04d-cnn.qmd
         - chapters/04e-rnn.qmd
         - chapters/04f-transformers.qmd
-        - chapters/04g-autoencoders.qmd
-        - chapters/04h-gan.qmd
-        - chapters/04i-gnn.qmd
+        - chapters/04g-gnn.qmd
+        - chapters/04h-autoencoders.qmd
+        - chapters/04i-gan.qmd
+        - chapters/04j-diffusion.qmd
+        - chapters/04k-flow-matching.qmd
 
     - part: "Scientific Machine Learning"
       chapters:
+        - chapters/05-inverse-modeling.qmd
         - chapters/05a-pinn.qmd
         - chapters/05b-physics-ml-inversion.qmd
         - chapters/05c-deeponet.qmd
@@ -99,7 +103,7 @@ format:
     toc-title: "Table of Contents"
     fig-width: 6
     fig-height: 4
-    out-width: "100%"
+    out-width: "94%"
     colorlinks: true
     linkcolor: blue
     toccolor: blue
