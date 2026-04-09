@@ -24,3 +24,6 @@ Thumbs.db
 # Temp files
 tmp-pdfcrop-*
 figures/
+
+# Local notes
+/README.md
