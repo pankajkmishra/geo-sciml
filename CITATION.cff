@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Geoscientific Machine Learning"
+authors:
+  - family-names: Mishra
+    given-names: Pankaj K
+    orcid: https://orcid.org/0000-0003-2709-7230
+version: v0.03
+date-released: 2026-04-12
+doi: 10.5281/zenodo.19540496
+license: CC-BY-SA-4.0
+url: https://geo-sciml.com
+repository-code: https://github.com/pankajkmishra/geo-sciml
+abstract: >-
+  This book introduces geoscientific machine learning with Julia, combining
+  practical coding workflows with scientific reasoning for Earth-system problems.
+  It develops core machine-learning concepts, then advances to physics-informed
+  and operator-learning methods used in scientific machine learning. The emphasis
+  is on reproducible, computation-ready examples and on connecting data-driven
+  models to governing physics, inverse problems, and geoscience applications.
+keywords:
+  - geoscience
+  - machine learning
+  - scientific machine learning
+  - Julia
+  - geophysics
+  - inverse problems

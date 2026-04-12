@@ -27,7 +27,7 @@ The programming language used throughout is Julia [@bezanson2017julia]. The firs
 If you find this book useful, please consider citing the current web edition as:
 
 
-Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://geo-sciml.com
+Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://geo-sciml.com. DOI: [10.5281/zenodo.19540496](https://doi.org/10.5281/zenodo.19540496)
 
 
 ```bibtex
@@ -35,6 +35,7 @@ Mishra, P. K. (2026). *Geoscientific Machine Learning* [Online book]. https://ge
   title={Geoscientific Machine Learning},
   author={Pankaj K Mishra},
   url={https://geo-sciml.com},
+  doi={10.5281/zenodo.19540496},
   year={2026},
   note={Web edition}
 }

@@ -1,0 +1,34 @@
+{
+  "title": "Geoscientific Machine Learning",
+  "description": "This book introduces geoscientific machine learning with Julia, combining practical coding workflows with scientific reasoning for Earth-system problems. It develops core machine-learning concepts, then advances to physics-informed and operator-learning methods used in scientific machine learning. The emphasis is on reproducible, computation-ready examples and on connecting data-driven models to governing physics, inverse problems, and geoscience applications.",
+  "creators": [
+    {
+      "name": "Mishra, Pankaj K",
+      "orcid": "0000-0003-2709-7230",
+      "affiliation": "Geological Survey of Finland"
+    }
+  ],
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "CC-BY-SA-4.0",
+  "keywords": [
+    "geoscience",
+    "machine learning",
+    "scientific machine learning",
+    "Julia",
+    "geophysics",
+    "inverse problems"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://geo-sciml.com",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/pankajkmishra/geo-sciml",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
