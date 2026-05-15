@@ -167,11 +167,6 @@ Flow matching is especially appealing when:
 
 The main tradeoff is that the model must learn a good global velocity field. If that field is poor, ODE integration can drift into unrealistic regions of state space.
 
-## Geoscience applications
+## Geoscience milestones
 
-- **Posterior transport for inverse problems** — flow matching is a natural way to move samples from a simple prior toward complex posterior ensembles in ill-posed geophysical inference.
-- **Conditional geological generation** — deterministic transport maps can generate facies, permeability, or structural models conditioned on sparse control data while preserving multimodality.
-- **Fast sampling inside iterative workflows** — because flow models can often use relatively few solver steps, they are attractive when generation must be repeated many times inside inversion or uncertainty-propagation loops.
-- **Data assimilation and field reconstruction** — flow matching provides a clean framework for transporting coarse or noisy fields toward high-resolution, observation-consistent realizations.
-- **Bridging latent priors and physics-aware models** — the transport viewpoint fits naturally with later scientific machine learning chapters, where priors, constraints, and inverse objectives are combined.
-- **Overview** — flow matching is newer than GANs and diffusion in geoscience, but it is well aligned with the uncertainty-aware and inverse-problem-driven perspective emphasized in @bergen2019mlgeo and @dramsch2020rnnseismic.
+Flow matching is newer to the geosciences than either GANs or diffusion models, and there is not yet a canonical Earth-science reference. The broader machine-learning-in-geoscience reviews @bergen2019mlgeo and @dramsch2020rnnseismic are the closest pointers and frame the uncertainty-aware, inverse-problem-driven perspective into which flow matching is starting to be placed.

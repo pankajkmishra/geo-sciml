@@ -59,16 +59,11 @@ book:
 
     - part: "Scientific Machine Learning"
       chapters:
-        - chapters/05-inverse-modeling.qmd
         - chapters/05a-pinn.qmd
         - chapters/05b-physics-ml-inversion.qmd
         - chapters/05c-deeponet.qmd
         - chapters/05d-pi-deeponet.qmd
         - chapters/05e-fno.qmd
-
-    - part: "Applications"
-      chapters:
-        - chapters/06-applications.qmd
 
     - references.qmd
 

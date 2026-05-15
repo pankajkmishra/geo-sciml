@@ -217,8 +217,7 @@ GNNs are the right choice when:
 
 If your data is on a regular grid, a CNN is simpler and usually sufficient. If your data is sequential, use an RNN or transformer. GNNs fill the gap for irregular, relational data.
 
-## Geoscience applications
+## Geoscience milestones
 
-- **Weather forecasting** — @lam2023graphcast introduced GraphCast, a graph-neural-network-based model for medium-range global weather prediction. It represents the atmosphere as a graph on a multi-resolution mesh, enabling accurate 10-day forecasts at 0.25° resolution while running orders of magnitude faster than traditional numerical weather models.
-- **Hydrological networks** — @stanev2021gnnhydro applied GNNs to hydrological coherence analysis using remotely sensed water-level data, leveraging the natural graph structure of river networks and gauge station connectivity.
-- **Molecular and mineral property prediction** — in geochemistry, GNNs can predict properties of minerals and fluids directly from their molecular graph structures, following the same approach used successfully for drug discovery and materials science [@gilmer2017mpnn].
+- **Global weather forecasting** — @lam2023graphcast (GraphCast) is the milestone graph-neural-network result for medium-range weather prediction, outperforming ECMWF's HRES operational system on most metrics while running orders of magnitude faster.
+- **Hydrological networks** — @stanev2021gnnhydro applied GNNs to hydrological coherence analysis from remotely sensed water-level data, exploiting the natural graph structure of river networks and gauge connectivity.

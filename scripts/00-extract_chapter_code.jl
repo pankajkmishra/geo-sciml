@@ -79,7 +79,18 @@ end
 
 function main()
     # Export one script per chapter, mirroring the manuscript filenames.
-    chapter_paths = sort(filter(path -> endswith(path, ".qmd"), readdir(CHAPTERS_DIR; join = true)))
+    chapter_paths = if isempty(ARGS)
+        sort(filter(path -> endswith(path, ".qmd"), readdir(CHAPTERS_DIR; join = true)))
+    else
+        sort(map(ARGS) do arg
+            candidate = isabspath(arg) ? arg : joinpath(ROOT_DIR, arg)
+            if !isfile(candidate) && !endswith(candidate, ".qmd")
+                candidate = joinpath(CHAPTERS_DIR, arg * ".qmd")
+            end
+            isfile(candidate) || error("Chapter not found: $arg")
+            return candidate
+        end)
+    end
 
     for chapter_path in chapter_paths
         chunks = collect_julia_chunks(chapter_path)

@@ -2,63 +2,99 @@
 title: "Neural Networks"
 ---
 
-At this point you know how to read files, work with arrays and tables, and make figures. That is enough to start asking a more interesting question: can we build a model that learns a pattern directly from data instead of us writing the rule by hand?
+At this point you know how to read files, work with arrays and tables, and make figures. That is enough to start asking a more interesting question: can we build a model that learns a pattern directly from data instead of writing the rule by hand?
 
-That is the role of a **neural network**. A neural network is just a layered function with many adjustable parameters. During training, those parameters are nudged until the network maps inputs to outputs in a useful way. The idea is simple. What makes neural networks powerful is that with enough data, enough nonlinearity, and a sensible training setup, they can approximate very complicated relationships.
+That is the role of a **neural network**. A neural network is just a layered function with many adjustable parameters. During training, those parameters are nudged until the network maps inputs to outputs in a useful way. The idea is simple. What makes neural networks powerful is that with enough data, enough nonlinearity, and a sensible training setup, they can approximate very complicated relationships — a property made precise by classical universal-approximation results [@hornik1989universal; @cybenko1989approximation].
 
 For geoscience, this matters because many problems involve patterns that are real but hard to write down explicitly: seismic facies, weather evolution, surrogate models for PDE solvers, or relationships between sparse observations and hidden structure in the subsurface. Neural networks are not magic shortcuts around physics, but they are flexible function approximators that become extremely useful when combined with scientific knowledge.
 
 ## The basic picture
 
-At the smallest scale, a neuron takes an input vector $\mathbf{x}$, forms a weighted sum, adds a bias, and applies a nonlinear activation:
+At the smallest scale, a **neuron** takes an input vector $\mathbf{x}$, forms a weighted sum, adds a bias, and applies a nonlinear activation $\sigma$:
 
 $$
-z = \sigma\!\bigl(\mathbf{w}^\top \mathbf{x} + b\bigr)
+z \;=\; \sigma\!\bigl(\mathbf{w}^\top \mathbf{x} + b\bigr).
 $$
 
-One neuron is not very interesting. A layer of neurons can learn several features at once, and a stack of layers can build increasingly abstract representations. In practice, training a network always comes back to the same loop:
+The activation $\sigma$ is what turns a network from a glorified linear regression into a universal function approximator. Common choices are $\tanh$, the sigmoid $1/(1+e^{-x})$, and the rectified linear unit $\mathrm{ReLU}(x) = \max(0, x)$. Without $\sigma$, stacking layers would just compose linear maps and collapse back to a single linear map.
 
-1. Make a prediction from the input.
-2. Compare that prediction with the target.
-3. Measure the mismatch with a loss function.
-4. Adjust the parameters to reduce the loss.
+One neuron is not very interesting. A **layer** is a row of neurons computing different features of the same input, and a **network** is a stack of layers in which each layer's output becomes the next layer's input:
 
-That is the whole game. The rest of this part is about understanding what each of those steps really means.
+```
+                   ┌──────────┐     ┌──────────┐     ┌──────────┐
+   input  x   ───▶ │  layer 1 │ ──▶ │  layer 2 │ ──▶ │  layer L │ ───▶ output  ŷ
+  (vector)        │  W¹, b¹  │     │  W², b²  │     │  Wᴸ, bᴸ  │       (vector)
+                   └──────────┘     └──────────┘     └──────────┘
+                   nonlinearity     nonlinearity     (often linear
+                       σ                 σ            in the last layer)
+```
+
+Each layer applies the same neuron operation in vectorised form, $\mathbf{h}^{(l)} = \sigma\!\bigl(\mathbf{W}^{(l)} \mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}\bigr)$, with $\mathbf{h}^{(0)} = \mathbf{x}$. The collection of all weight matrices and bias vectors is the network's parameter set $\theta$.
+
+## How training actually works
+
+Training a network always comes back to the same loop:
+
+1. **Forward pass.** Push the input $\mathbf{x}$ through the network to get a prediction $\hat{\mathbf{y}} = f_\theta(\mathbf{x})$.
+2. **Compare.** Place $\hat{\mathbf{y}}$ next to the target $\mathbf{y}$.
+3. **Loss.** Summarise the mismatch as a single number $\mathcal{L}(\theta) = \ell(\hat{\mathbf{y}}, \mathbf{y})$ — mean squared error for regression, cross-entropy for classification, custom physical residuals later in this book.
+4. **Adjust.** Move $\theta$ in the direction that reduces $\mathcal{L}$.
+
+That last step is where neural networks earned their reputation. "Move in the direction that reduces the loss" means take a small step against the gradient,
+
+$$
+\theta \;\leftarrow\; \theta \;-\; \eta\, \nabla_\theta \mathcal{L}(\theta),
+$$
+
+with learning rate $\eta$. The gradient $\nabla_\theta \mathcal{L}$ is computed efficiently by **backpropagation** [@rumelhart1986backprop] — the chain rule applied systematically from the loss back through every layer — and in this book it is handled for us by Julia's automatic differentiation packages (`Zygote`, `Enzyme`). Variants like stochastic mini-batches and the **Adam** optimizer [@kingma2015adam] sharpen this idea, but the core recipe is just gradient descent on a differentiable function.
+
+The whole game is: differentiable model, differentiable loss, gradient step. The rest of this part is about understanding what each of those steps really means in practice.
 
 ## How this part is organized
 
-The next chapter gives you a first end-to-end example before any serious theory. That is intentional. It is easier to understand the moving parts once you have seen the whole workflow in action.
+The next chapter gives you a first end-to-end example before any serious theory. It is easier to understand the moving parts once you have seen the whole workflow in action.
 
-After that, we slow down and unpack the pieces one by one:
+After that, we slow down and unpack the pieces:
 
-- [Your First Neural Network](04a-nn-teaser.qmd) shows the full workflow: data, model, training, and prediction.
-- [Building Blocks of Neural Networks](04b-nn-basics.qmd) explains neurons, layers, losses, gradients, and optimizers.
-- The remaining chapters first cover major architecture families used throughout modern machine learning: multilayer perceptrons, convolutional networks, recurrent networks, transformers, and graph neural networks. The last group of chapters then shifts to generative modeling: autoencoders, GANs, diffusion models, and flow matching.
+- [Your First Neural Network](04a-nn-teaser.qmd) — full workflow on a small dataset: load, build, train, predict.
+- [Building Blocks of Neural Networks](04b-nn-basics.qmd) — neurons, layers, losses, gradients, and optimizers in detail.
+- [Multilayer Perceptrons](04c-mlp.qmd) — the fully-connected architecture and what it is and is not good for.
+- [Convolutional Neural Networks](04d-cnn.qmd) — translation-equivariant networks for gridded data like seismic sections and satellite imagery.
+- [Recurrent Neural Networks](04e-rnn.qmd) — networks with state, used for time series such as well logs and weather sequences.
+- [Transformers](04f-transformers.qmd) — attention-based models that have largely replaced RNNs for long-range dependencies.
+- [Graph Neural Networks](04g-gnn.qmd) — networks defined on irregular topologies such as station networks and unstructured meshes.
+- [Autoencoders](04h-autoencoders.qmd) — learn compressed representations and use them for denoising and anomaly detection.
+- [Generative Adversarial Networks](04i-gan.qmd) — a generator-versus-discriminator game for synthesising realistic samples.
+- [Diffusion Models](04j-diffusion.qmd) — generative models trained to reverse a gradual noising process.
+- [Flow Matching](04k-flow-matching.qmd) — a continuous-time formulation that frames generation as solving an ODE between distributions.
 
-The goal is not to turn you into a deep-learning theorist. The goal is to make the models legible enough that when they reappear later in scientific machine learning, they feel like tools you understand rather than black boxes.
+The first group of chapters covers the major **architecture families** used throughout modern machine learning. The last group shifts to **generative modelling**: networks that learn to sample from a distribution rather than predict a single label.
+
+The goal is not to turn you into a deep-learning theorist. The goal is to make these models legible enough that when they reappear later in scientific machine learning, they feel like tools you understand rather than black boxes.
 
 ## Notation used in this part
 
 To keep the mathematics readable, this part uses a few conventions consistently:
 
-- Bold symbols such as $\mathbf{x}$ and $\mathbf{h}$ denote vectors.
+- Bold symbols such as $\mathbf{x}$ and $\mathbf{h}$ denote vectors; matrices are bold capitals such as $\mathbf{W}$.
 - Superscripts in parentheses, such as $\mathbf{h}^{(l)}$, index layers or network depth.
 - Subscripts, such as $\mathbf{h}_t$, usually index time steps, samples, or nodes.
-- $\mathcal{L}$ denotes a loss function, while subscripts such as $\mathcal{L}_{\mathrm{data}}$ or $\mathcal{L}_{\mathrm{bc}}$ identify particular pieces of that loss.
+- $\theta$ collects every trainable parameter in the network.
+- $\mathcal{L}$ denotes a loss function, with subscripts such as $\mathcal{L}_{\mathrm{data}}$ or $\mathcal{L}_{\mathrm{bc}}$ naming particular pieces.
 
-These are not universal rules across all textbooks, but they will keep the notation in this book steady from chapter to chapter.
+These are not universal rules across all textbooks, but they will keep the notation steady from chapter to chapter and through the scientific-ML part later.
 
 ## What to watch for
 
 When you first learn neural networks, it is tempting to focus on architecture names and package syntax. Those matter, but the deeper questions are simpler:
 
 - What is the input, and what is the output?
-- What exactly is being learned?
-- What loss is being minimized?
+- What exactly is being learned: a label, a field, an operator, a distribution?
+- What loss is being minimised, and what does minimising it actually buy you?
 - What assumptions are hidden in the data split, the architecture, and the training loop?
 
-If you keep asking those questions, most neural-network papers become much easier to read.
+If you keep asking those questions, most neural-network papers become much easier to read — and most failure modes become much easier to diagnose.
 
 ## Summary
 
-Neural networks are flexible parameterized functions trained from data. In geoscience they become especially useful when they are paired with domain structure, physical constraints, and careful evaluation. The next chapter starts with a concrete example so you can see the workflow before we dissect the machinery.
+Neural networks are flexible parameterised functions trained from data by gradient descent on a differentiable loss. Backpropagation turns "compute the gradient" from a hand-derivation chore into a software primitive, and that is the single technical fact that makes the rest of this book possible. In geoscience these models become especially useful when paired with domain structure, physical constraints, and careful evaluation. The next chapter starts with a concrete example so you can see the workflow before we dissect the machinery.

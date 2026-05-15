@@ -143,12 +143,9 @@ This chapter demonstrates the mechanics of attention, not end-to-end benchmark p
 
 Transformers scale better to long sequences and large datasets, which explains their dominance in modern AI. For very long sequences, efficient variants (sparse attention, linear attention) reduce the $O(n^2)$ cost.
 
-## Geoscience applications
+## Geoscience milestones
 
-Transformers are rapidly entering geoscience, especially for tasks where long-range dependencies and large-scale data matter:
-
-- **Earthquake detection** — @mousavi2020earthquake introduced the Earthquake Transformer (EQTransformer), which uses attention mechanisms to simultaneously detect earthquakes and pick seismic phases from continuous waveform data, achieving superior performance over CNN and RNN baselines.
-- **Weather forecasting** — @bi2023pangu (Pangu-Weather) is a prominent example of the recent shift toward attention-heavy learned weather models for medium-range forecasting. By contrast, FourCastNet [@pathak2022fourcastnet] is an important fast weather model built on Fourier neural operators rather than a transformer, so it fits more naturally with the operator-learning material later in the book.
-- **Earth observation** — Vision transformers are being applied to satellite imagery for land-cover classification, change detection, and environmental monitoring, following the success of ViT [@dosovitskiy2021vit] in computer vision.
+- **Earthquake detection and phase picking** — @mousavi2020earthquake introduced the Earthquake Transformer (EQTransformer), the first widely adopted attention-based model for simultaneous detection and seismic-phase picking from continuous waveform data.
+- **Medium-range weather forecasting** — @bi2023pangu (Pangu-Weather) is the milestone result for transformer-based global weather prediction, demonstrating skillful forecasts up to 7 days from a 3D attention architecture trained on ERA5 reanalysis.
 
 The transformer is increasingly the architecture of choice for problems involving long sequences, multimodal data, or large-scale pre-training in geoscience.

@@ -165,11 +165,8 @@ RNNs are the natural choice when:
 
 For very long sequences (thousands of steps), **transformers** (next chapter) often outperform RNNs because they can attend to any part of the sequence without passing information step by step.
 
-## Geoscience applications
+## Geoscience milestones
 
-Recurrent networks have been applied to a wide range of sequential geoscience problems:
-
-- **Sequence modeling in seismology** — recurrent and hybrid sequence models are widely used for waveform analysis and event interpretation. @zhu2019phasenet is a closely related deep-learning benchmark for seismic arrival picking, though PhaseNet itself is primarily convolutional rather than recurrent.
-- **Climate and weather forecasting** — @ham2019enso used a CNN-LSTM hybrid to forecast the El Niño–Southern Oscillation (ENSO) up to 18 months ahead, significantly outperforming physics-based dynamical models.
-- **Precipitation nowcasting** — @shi2015convlstm introduced the ConvLSTM, combining convolutional and LSTM operations to predict radar echo sequences, a spatiotemporal forecasting task.
-- **Machine learning in geoscience overview** — @dramsch2020rnnseismic provides a comprehensive review of 70 years of machine learning in the geosciences, covering many recurrent-network applications in seismology, well-log analysis, and geophysical signal processing.
+- **ENSO forecasting** — @ham2019enso used a CNN-LSTM hybrid to forecast the El Niño–Southern Oscillation up to 18 months ahead, outperforming physics-based dynamical models and becoming a touchstone result for recurrent climate forecasting.
+- **Precipitation nowcasting** — @shi2015convlstm introduced ConvLSTM, the architecture that established recurrent networks for spatiotemporal Earth-system forecasting.
+- **ML-in-geoscience overview** — @dramsch2020rnnseismic reviews seventy years of machine learning in the geosciences, including the role of recurrent architectures in seismology and well-log analysis.

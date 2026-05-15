@@ -143,17 +143,11 @@ MLPs are the default starting point whenever:
 
 For data with spatial structure (images, grids), convolutional networks are usually better. For sequential data (time series), recurrent networks or transformers are preferred. The MLP remains the building block inside most of these architectures.
 
-## Geoscience applications
+## Geoscience milestones
 
-Multilayer perceptrons have been widely used in geoscience as flexible function approximators:
-
-- **Seismic picking and trace editing** — early feedforward networks were used for first-break refraction picking and seismic trace cleaning [@mccormack1993firstbreak].
-- **Velocity analysis and moveout correction** — MLPs were applied to automate NMO correction and velocity estimation in seismic processing [@calderon1998nmo].
-- **Reservoir characterization** — feedforward networks were used for reservoir and seismic characterization from waveform-derived attributes [@an2001reservoir; @an2005reservoir].
-- **Lithology classification** — borehole lithology inference from downhole logs was an early and influential classification use case [@benaouda1999lithology].
-- **Petrophysical prediction** — porosity and permeability estimation from well logs is a classic MLP regression task in rock physics and reservoir studies [@huang1996permeability; @huang1997porosity].
-- **Thermal-property estimation** — MLPs were also used to predict thermal conductivity from geophysical well logs [@goutorbe2006thermal].
-- **Geophysical inversion** — MLPs can serve as surrogate forward models, mapping model parameters to predicted data. Once trained, they replace expensive physics-based simulations and can be embedded inside iterative inversion schemes [@lopez2019emulator].
-- **Overview** — @bergen2019mlgeo and @reichstein2019deepgeo provide broad reviews of machine learning across the geosciences, including many regression and classification problems for which MLPs are natural baselines.
+- **First-break refraction picking** — @mccormack1993firstbreak is one of the earliest applications of feedforward neural networks to seismic processing.
+- **Petrophysical prediction from well logs** — @huang1996permeability established MLPs as a workhorse for permeability and porosity regression in rock physics.
+- **Lithology classification from downhole logs** — @benaouda1999lithology is the canonical reference for MLP-based lithology inference.
+- **Geoscience ML overview** — @bergen2019mlgeo and @reichstein2019deepgeo place MLPs in the wider context of machine learning across the Earth sciences.
 
 The MLP is rarely the final architecture for production geoscience workflows, but it is almost always the first model you should try. If an MLP solves the problem, the extra complexity of deeper architectures is unnecessary.

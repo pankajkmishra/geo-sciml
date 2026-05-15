@@ -68,138 +68,105 @@ where:
 
 If observational data is also available, a fourth term $\mathcal{L}_{\mathrm{data}}$ can be added, making the PINN a hybrid physics-data model.
 
+## NeuralPDE.jl: a symbolic interface for PINNs
+
+Writing the residual loss by hand — sampling collocation points, computing derivatives with `Zygote`, and balancing the weight factors — is instructive but quickly becomes tedious for non-trivial PDEs. The Julia package [`NeuralPDE.jl`](https://github.com/SciML/NeuralPDE.jl) automates this. The user states the PDE, boundary conditions, and domain symbolically through `ModelingToolkit.jl`; `NeuralPDE.jl` then discretizes the residual on collocation points, wires up automatic differentiation, and returns a standard `Optimization.jl` problem.
+
+The high-level workflow is:
+
+1. Declare independent variables, dependent variables, and differential operators.
+2. Write the PDE and the initial/boundary conditions as symbolic equations.
+3. Define the domain as a set of intervals.
+4. Build a `Lux` chain for $u_\theta$ and pass it to `PhysicsInformedNN`.
+5. Call `discretize` to obtain an `OptimizationProblem`.
+6. Solve it with any `Optimization.jl` optimizer (e.g. `Adam`, then `BFGS`).
+
 ## Code example: solving the 1D heat equation
 
 We solve the heat equation $\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}$ on $x \in [0, 1]$, $t \in [0, 1]$ with initial condition $u(x, 0) = \sin(\pi x)$ and boundary conditions $u(0, t) = u(1, t) = 0$. The exact solution is $u(x,t) = e^{-\alpha \pi^2 t} \sin(\pi x)$.
 
 ```{julia}
-using Lux, Random, Optimisers, Zygote, Statistics, Printf, CairoMakie
+using NeuralPDE, Lux, ModelingToolkit, Optimization, OptimizationOptimisers,
+      OptimizationOptimJL, Random, Printf, CairoMakie
+import ModelingToolkit: Interval
 
 rng = Xoshiro(42)
-α = 0.01f0   # thermal diffusivity
+α = 0.01
 
-# Exact solution for comparison
 u_exact(x, t) = exp(-α * π^2 * t) * sin(π * x)
 ```
 
 ```{julia}
-# Sample collocation points (interior), boundary points, and initial points
-n_interior = 1000
-n_bc = 200
-n_ic = 200
+#-----symbolic PDE description------
+@parameters x t
+@variables u(..)
+Dt  = Differential(t)
+Dxx = Differential(x)^2
 
-# Interior points: random (x, t) in (0,1) × (0,1)
-x_int = rand(rng, Float32, 1, n_interior)
-t_int = rand(rng, Float32, 1, n_interior)
+eq = Dt(u(x, t)) ~ α * Dxx(u(x, t))
 
-# Boundary: x = 0 and x = 1
-t_bc = rand(rng, Float32, 1, n_bc)
-x_bc_0 = zeros(Float32, 1, n_bc)
-x_bc_1 = ones(Float32, 1, n_bc)
+bcs = [u(x, 0) ~ sin(π * x),
+       u(0, t) ~ 0.0,
+       u(1, t) ~ 0.0]
 
-# Initial condition: t = 0
-x_ic = rand(rng, Float32, 1, n_ic)
-u_ic = sin.(π .* x_ic)
+domains = [x ∈ Interval(0.0, 1.0),
+           t ∈ Interval(0.0, 1.0)]
+
+@named pdesys = PDESystem(eq, bcs, domains, [x, t], [u(x, t)])
 ```
 
 ```{julia}
-# Build the PINN: input (x, t) → output u
-model = Chain(
-    Dense(2 => 32, tanh),
-    Dense(32 => 32, tanh),
-    Dense(32 => 32, tanh),
-    Dense(32 => 1)
-)
+#-----PINN architecture------
+chain = Chain(Dense(2, 32, tanh),
+              Dense(32, 32, tanh),
+              Dense(32, 32, tanh),
+              Dense(32, 1))
 
-ps, st = Lux.setup(rng, model)
+#-----collocation strategy------
+strategy = GridTraining(0.05)
+discretization = PhysicsInformedNN(chain, strategy)
+prob = discretize(pdesys, discretization)
 ```
 
 ```{julia}
-#-----PINN loss------
-function pinn_loss(model, ps, st, data)
-    x_i, t_i, x_b0, x_b1, t_b, x_ic_, u_ic_ = data
-    λᵣ = 1.0f0
-    λᵦ = 10.0f0
-    λ₀ = 10.0f0
-    
-    #-----PDE residual------
-    function u_pred(xt)
-        input = reshape(xt, 2, 1)
-        out, _ = model(input, ps, st)
-        return out[1]
-    end
-
-    residuals = zeros(Float32, n_interior)
-    for i in 1:n_interior
-        xt = Float32[x_i[i], t_i[i]]
-        grad1 = Zygote.gradient(x -> u_pred(x), xt)[1]
-        du_dt = grad1[2]
-        d2u_dx2 = Zygote.gradient(x -> Zygote.gradient(y -> u_pred(y), x)[1][1], xt)[1][1]
-        residuals[i] = du_dt - α * d2u_dx2
-    end
-
-    residual = reshape(residuals, 1, :)
-    loss_pde = mean(residual .^ 2)
-    
-    #-----boundary loss------
-    bc_input_0 = vcat(x_b0, t_b)
-    bc_input_1 = vcat(x_b1, t_b)
-    u_b0, _ = model(bc_input_0, ps, st)
-    u_b1, _ = model(bc_input_1, ps, st)
-    loss_bc = mean(u_b0 .^ 2) + mean(u_b1 .^ 2)
-    
-    #-----initial-condition loss------
-    ic_input = vcat(x_ic_, zeros(Float32, 1, size(x_ic_, 2)))
-    u_0, _ = model(ic_input, ps, st)
-    loss_ic = mean((u_0 .- u_ic_) .^ 2)
-    
-    total = λᵣ * loss_pde + λᵦ * loss_bc + λ₀ * loss_ic
-    return total, st, ()
-end
-```
-
-```{julia}
-# Train the PINN
-opt = Adam(0.001f0)
-tstate = Training.TrainState(model, ps, st, opt)
-
-data = (x_int, t_int, x_bc_0, x_bc_1, t_bc, x_ic, u_ic)
-
-for epoch in 1:500
-    _, loss, _, tstate = Training.single_train_step!(
-        AutoZygote(), pinn_loss, data, tstate
-    )
-    if epoch == 1 || epoch % 100 == 0
-        @printf "Epoch %4d  Loss = %.6f\n" epoch loss
-    end
-end
-```
-
-```{julia}
-# Compare PINN solution to exact solution
-nx, nt = 50, 50
-xs = Float32.(range(0, 1, length = nx))
-ts = Float32.(range(0, 1, length = nt))
-
-U_pinn = zeros(Float32, nx, nt)
-U_true = zeros(Float32, nx, nt)
-
-for (j, tj) in enumerate(ts)
-    input = vcat(reshape(xs, 1, :), fill(tj, 1, nx))
-    pred, _ = model(input, tstate.parameters, tstate.states)
-    U_pinn[:, j] = vec(pred)
-    U_true[:, j] = u_exact.(xs, tj)
+#-----training: Adam (warm start) then BFGS (sharpen)------
+iter = Ref(0)
+callback = function (p, l)
+    iter[] += 1
+    (iter[] == 1 || iter[] % 200 == 0) && @printf "iter %5d  loss = %.3e\n" iter[] l
+    return false
 end
 
-fig = Figure(size = (700, 300))
-ax1 = Axis(fig[1, 1], title = "PINN solution", xlabel = "x", ylabel = "t")
-heatmap!(ax1, xs, ts, U_pinn, colormap = :viridis)
+res  = Optimization.solve(prob, Adam(1f-2); callback = callback, maxiters = 1500)
+res  = Optimization.solve(remake(prob, u0 = res.u), BFGS();
+                          callback = callback, maxiters = 500)
+phi  = discretization.phi
+```
+
+```{julia}
+#-----evaluate the PINN solution on a grid------
+nx, nt = 80, 80
+xs = collect(range(0, 1, length = nx))
+ts = collect(range(0, 1, length = nt))
+
+U_pinn = [first(phi([xi, tj], res.u)) for xi in xs, tj in ts]
+U_true = [u_exact(xi, tj) for xi in xs, tj in ts]
+
+fig = Figure(size = (820, 280))
+ax1 = Axis(fig[1, 1], title = "PINN solution",  xlabel = "x", ylabel = "t")
 ax2 = Axis(fig[1, 2], title = "Exact solution", xlabel = "x", ylabel = "t")
-heatmap!(ax2, xs, ts, U_true, colormap = :viridis)
 ax3 = Axis(fig[1, 3], title = "Absolute error", xlabel = "x", ylabel = "t")
+heatmap!(ax1, xs, ts, U_pinn, colormap = :viridis)
+heatmap!(ax2, xs, ts, U_true, colormap = :viridis)
 heatmap!(ax3, xs, ts, abs.(U_pinn .- U_true), colormap = :hot)
 fig
 ```
+
+A few observations worth keeping in mind when comparing this to a hand-written PINN:
+
+- **No explicit residual code.** `NeuralPDE.jl` reads the symbolic equation and constructs the loss for us. Switching from the heat equation to a wave equation is a one-line change in `eq`.
+- **Strategy is configurable.** `GridTraining(0.05)` evaluates the residual on a fixed grid. Alternatives include `StochasticTraining`, `QuasiRandomTraining`, and `QuadratureTraining` — each with different bias/variance trade-offs for the residual estimator.
+- **Two-stage optimization.** It is common to use `Adam` first (cheap, noisy gradients) and finish with `BFGS` (sharper convergence near the minimum). The `remake` call hands the Adam solution to BFGS as a warm start.
 
 ## PINN strengths and limitations
 
@@ -215,13 +182,8 @@ fig
 - **Computational cost** — computing second-order derivatives through automatic differentiation is expensive. For problems where a traditional numerical solver is efficient, PINNs may not be competitive.
 - **Generalization** — a trained PINN solves **one specific instance** of a PDE (one set of boundary/initial conditions). To solve the same PDE with different conditions, you must retrain. This is where **neural operators** (next chapter) offer an advantage.
 
-## Geoscience applications
+## Geoscience milestones
 
-PINNs have gained significant traction in geoscience because many problems naturally combine sparse observational data with known physical laws:
-
-- **Seismic wave propagation** — @waheed2021pinnseismic developed PINNeik, a PINN that solves the eikonal equation for seismic travel-time computation with a mesh-free, differentiable formulation. @song2021pinnwavefield extended PINNs to solve the frequency-domain acoustic wave equation for anisotropic media.
-- **Seismic travel times** — @smith2020eikonet trained EikoNet, a deep neural network constrained by the eikonal equation, to predict seismic travel times in complex 3D velocity models.
-- **Seismic inversion** — @yang2021seismicinversion used deep learning for full-waveform inversion, embedding physical constraints to improve velocity model estimation from seismic data.
-- **Subsurface flow** — @zhu2021general_pinn_geoscience applied physics-constrained deep learning for high-dimensional surrogate modeling and uncertainty quantification in subsurface transport problems, demonstrating that PINNs can work without labeled data when the governing PDE is known.
-- **Geophysics overview** — @alkhalifah2021ml_geophysics provides a review of machine-learning methods for geophysics with emphasis on physics-informed approaches, covering seismic imaging, inversion, and interpretation.
-- **Weather and climate** — @kashinath2021physicsml presents case studies of physics-informed machine learning for weather and climate modeling, demonstrating how physical constraints improve forecast accuracy and physical consistency.
+- **Seismic travel times via the eikonal equation** — @smith2020eikonet (EikoNet) and @waheed2021pinnseismic (PINNeik) are the canonical references for embedding the eikonal equation in a PINN to compute travel times in heterogeneous 3D velocity models.
+- **Subsurface flow with physics-constrained deep learning** — @zhu2021general_pinn_geoscience established physics-constrained deep learning as a high-dimensional surrogate-modelling and uncertainty-quantification tool for subsurface transport.
+- **Physics-informed ML for geophysics — review** — @alkhalifah2021ml_geophysics surveys physics-informed approaches across seismic imaging, inversion, and interpretation.

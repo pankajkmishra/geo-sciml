@@ -169,10 +169,7 @@ fig
 | Generative modeling | VAE (sample from latent space to create new data) |
 | Feature learning | Use encoder output as features for downstream tasks |
 
-## Geoscience applications
+## Geoscience milestones
 
-- **Seismic denoising** — autoencoders trained to map noisy seismic traces to clean versions, effectively learning the noise characteristics of the acquisition system.
-- **Geological model compression** — high-dimensional 3D geological property models can be compressed to a low-dimensional latent space using autoencoders, making inversion and uncertainty quantification computationally feasible.
-- **Anomaly detection in monitoring data** — autoencoders trained on normal operating data (e.g., from geothermal wells or mining sensors) flag anomalies when reconstruction error exceeds a threshold.
-- **Subsurface modeling** — @lopez2019emulator used deep autoencoder-based approaches for inverse modeling of subsurface transport, where the autoencoder compresses the parameter space before inversion.
-- **Overview** — @bergen2019mlgeo discusses the role of representation learning and dimensionality reduction, of which autoencoders are a central tool, across geoscience disciplines.
+- **Subsurface inverse modeling** — @lopez2019emulator used deep autoencoder-based emulation for inverse modeling of subsurface transport, compressing the parameter space before inversion.
+- **Representation learning in Earth science** — @bergen2019mlgeo and @reichstein2019deepgeo place autoencoder-based dimensionality reduction inside the wider deep-learning landscape of the geosciences.

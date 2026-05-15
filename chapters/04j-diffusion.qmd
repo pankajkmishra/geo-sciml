@@ -170,11 +170,6 @@ Diffusion models are especially attractive when:
 
 Their main drawback is sampling cost: a diffusion model typically needs many denoising steps to generate one sample. That is often acceptable for offline uncertainty quantification, but it can be limiting inside large inverse loops unless acceleration tricks are used.
 
-## Geoscience applications
+## Geoscience milestones
 
-- **Seismic interpolation and denoising** — diffusion models are well matched to reconstructing missing or corrupted wavefield content because they learn realistic structure rather than only pointwise averages.
-- **Learned priors for inverse problems** — diffusion sampling can generate ensembles of geologically plausible subsurface models that are later conditioned on travel-time, waveform, or reservoir observations.
-- **Geomodel and facies generation** — diffusion models can represent multimodal geological uncertainty for channels, facies maps, and permeability fields without collapsing to a single realization.
-- **Remote sensing and Earth observation** — cloud removal, gap filling, downscaling, and super-resolution are natural conditional-generation tasks for diffusion models on spatial fields.
-- **Uncertainty-aware surrogate workflows** — because diffusion models generate ensembles rather than point estimates, they are attractive wherever geoscience decisions need uncertainty bands rather than one best model.
-- **Overview** — these applications fit the broader shift toward probabilistic, data-driven geoscience modeling reviewed in @bergen2019mlgeo and @dramsch2020rnnseismic.
+Diffusion models are very new to the geosciences and the field does not yet have a single canonical reference. The closest pointers are the broader machine-learning-in-geoscience reviews @bergen2019mlgeo and @dramsch2020rnnseismic, which place generative modelling in context but predate most of the diffusion uptake. Expect dedicated geoscience-diffusion milestones in the next few years rather than today.
